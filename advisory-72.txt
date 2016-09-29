@@ -1,57 +1,39 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title></title>
-<meta name="generator" content="HTML::TextToHTML v2.51"/>
-</head>
-<body>
-<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
-</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
-    white-space: -moz-pre-wrap; /</em> Firefox <em>/
-    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
-    white-space: -o-pre-wrap;   /</em> Opera 7 */
-    word-wrap: break-word;<br/>
-}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 72&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; Remote command Injection in Ruby Gem lipsiadmin 5.1.9&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2013-06-03&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="http://rubygems.org/gems/lipsiadmin">http://rubygems.org/gems/lipsiadmin</a>"&gt;<a href="http://rubygems.org/gems/lipsiadmin&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">http://rubygems.org/gems/lipsiadmin&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;Davide DAgostino&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2013-06-05&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; <a href="mailto:info@daddye.it">info@daddye.it</a>&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;Lipsiadmin is a new revolutionary admin for your projects. Lipsiadmin is based on Ext Js 3+. framework (with prototype adapter) and is ready for Rails 2.+&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;The function method Attachment.run() is used to convert images ie resize, create thumbnails etc by passing the user supplied filename as an argument to various command line utilities supplied by ImageMagick. Shell meta characters aren&amp;#039;t sanitized allowing a remote user to inject commands into the shell via &amp;#039;;&amp;#039;.
-</p><p>lipsiadmin-5.1.9/lib/data_base/attachment/attach.rb
-</p>
-<pre>
- 74       def run(cmd, params = &amp;quot;&amp;quot;, expected_outcodes = 0)
- 75         command = %Q&amp;lt;<strong>{%Q[</strong>{path_for_command(cmd)} <strong>{params}].gsub(/\s+/, &amp;quot; &amp;quot;)}&amp;gt;
- 76         command = &amp;quot;</strong>{command} 2&amp;gt;<strong>{bit_bucket}&amp;quot; if Attachment.options[:swallow_stderr]
- 77         output = `</strong>{command}`
- 78         unless [expected_outcodes].flatten.include?($?.exitstatus)
- 79           raise AttachmentCommandLineError, &amp;quot;Error while running #{cmd}&amp;quot;
- 80         end
- 81         output
- 82       end</pre>
-<p>From ./lib/data_base/attachment/geometry.rb:
-</p><pre>
-     15       # Uses ImageMagick to determing the dimensions of a file, passed in as either a
-     16       <strong> File or path.
-     17       def self.from_file(file)
-     18         file = file.path if file.respond_to? &amp;quot;path&amp;quot;
-     19         geometry = begin
-     20                      Attachment.run(&amp;quot;identify&amp;quot;, %Q[-format &amp;quot;%wx%h&amp;quot; &amp;quot;</strong>{file}&amp;quot;[0]])
-     21                    rescue AttachmentCommandLineError
-     22                      &amp;quot;&amp;quot;
-     23                    end
-From ./lib/data_base/attachment/thumbnail.rb:
-46         command = &amp;lt;&amp;lt;-end_command
-     47           &amp;quot;#{ File.expand_path(src.path) }[0]&amp;quot;
-     48           <strong>{ transformation_command }
-     49           &amp;quot;</strong>{ File.expand_path(dst.path) }&amp;quot;
-     50         end_command
-     51 
-     52         begin
-     53           success = Attachment.run(&amp;quot;convert&amp;quot;, command.gsub(/\s+/, &amp;quot; &amp;quot;))
-     54         rescue AttachmentCommandLineError
-     55           raise AttachmentError, &amp;quot;There was an error processing the thumbnail for #{@basename}&amp;quot; if @whiny
-     56         end
-</pre>
-<p>&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=72"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://www.vapid.dhs.org/advisories/lipsiadmin-5.1.9-cmd-exec.html">http://www.vapid.dhs.org/advisories/lipsiadmin-5.1.9-cmd-exec.html</a>"&gt;<a href="http://www.vapid.dhs.org/advisories/lipsiadmin-5.1.9-cmd-exec.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://www.vapid.dhs.org/advisories/lipsiadmin-5.1.9-cmd-exec.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
-&lt;/html&gt;
-</p>
-
-</body>
-</html>
+                                Advisory #: 72
+Title: Remote command Injection in Ruby Gem lipsiadmin 5.1.9
+Author:Larry W. Cashdollar, @_larry0
+Date: 2013-06-03
+Download Site: http://rubygems.org/gems/lipsiadmin
+Vendor:Davide DAgostino
+Vendor Notified: 2013-06-05
+Vendor Contact: info@daddye.it
+Description: Lipsiadmin is a new revolutionary admin for your projects.
+Lipsiadmin is based on Ext Js 3+. framework (with prototype adapter) and is
+ready for Rails 2.+
+Vulnerability:
+The function method Attachment.run() is used to convert images ie resize,
+create thumbnails etc by passing the user supplied filename as an argument to
+various command line utilities supplied by ImageMagick. Shell meta characters
+aren't sanitized allowing a remote user to inject commands into the shell via
+';'. lipsiadmin-5.1.9/lib/data_base/attachment/attach.rb 74 def run(cmd, params
+= "", expected_outcodes = 0) 75 command = %Q<#{%Q[#{path_for_command(cmd)} #
+{params}].gsub(/\s+/, " ")}> 76 command = "#{command} 2>#{bit_bucket}" if
+Attachment.options[:swallow_stderr] 77 output = `#{command}` 78 unless
+[expected_outcodes].flatten.include?($?.exitstatus) 79 raise
+AttachmentCommandLineError, "Error while running #{cmd}" 80 end 81 output 82
+end From ./lib/data_base/attachment/geometry.rb: 15 # Uses ImageMagick to
+determing the dimensions of a file, passed in as either a 16 # File or path. 17
+def self.from_file(file) 18 file = file.path if file.respond_to? "path" 19
+geometry = begin 20 Attachment.run("identify", %Q[-format "%wx%h" "#{file}"
+[0]]) 21 rescue AttachmentCommandLineError 22 "" 23 end From ./lib/data_base/
+attachment/thumbnail.rb: 46 command = <<-end_command 47 "#{ File.expand_path
+(src.path) }[0]" 48 #{ transformation_command } 49 "#{ File.expand_path
+(dst.path) }" 50 end_command 51 52 begin 53 success = Attachment.run("convert",
+command.gsub(/\s+/, " ")) 54 rescue AttachmentCommandLineError 55 raise
+AttachmentError, "There was an error processing the thumbnail for #{@basename}"
+if @whiny 56 end
+CVE-
+JSON:Export
+Exploit Code:
+   1.  
+Screen Shots:
+Advisory: http://www.vapid.dhs.org/advisories/lipsiadmin-5.1.9-cmd-exec.html

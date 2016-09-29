@@ -1,24 +1,23 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title></title>
-<meta name="generator" content="HTML::TextToHTML v2.51"/>
-</head>
-<body>
-<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
-</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
-    white-space: -moz-pre-wrap; /</em> Firefox <em>/
-    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
-    white-space: -o-pre-wrap;   /</em> Opera 7 */
-    word-wrap: break-word;<br/>
-}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 48&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; Remote command Injection in Creme Fraiche 0.6 Ruby Gem&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2013-05-14&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="http://rubygems.org/gems/cremefraiche">http://rubygems.org/gems/cremefraiche</a>, <a href="http://www.uplawski.eu/technology/cremefraiche/">http://www.uplawski.eu/technology/cremefraiche/</a>"&gt;<a href="http://rubygems.org/gems/cremefraiche">http://rubygems.org/gems/cremefraiche</a>, <a href="http://www.uplawski.eu/technology/cremefraiche/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">http://www.uplawski.eu/technology/cremefraiche/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;Michael Uplawski &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2013-05-14&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; <a href="mailto:michael.uplawski@uplawski.eu">michael.uplawski@uplawski.eu</a>&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;Converts Email to PDF files.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;The following lines pass unsanitized user input directly to the command line. A malicious email attachment with a file name consisting of shell meta characters could inject commands into the shell.
-</p><p>If the attacker is allowed to specify a filename (via a web gui) commands could be injected that way as well.
-</p><p>218 cmd = &amp;quot;pdftk %s updateinfo %s output %s&amp;quot; %[pdf, infofile, tfile] 
-219 @log.debug(&amp;#039;pdftk-command is &amp;#039; &amp;lt;&amp;lt; cmd) 
-220 pdftkresult = system( cmd)&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-2013-2090&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=48"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://vapid.dhs.org/advisories/cremefraiche-cmd-inj.html">http://vapid.dhs.org/advisories/cremefraiche-cmd-inj.html</a>"&gt;<a href="http://vapid.dhs.org/advisories/cremefraiche-cmd-inj.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://vapid.dhs.org/advisories/cremefraiche-cmd-inj.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
-&lt;/html&gt;
-</p>
-
-</body>
-</html>
+                                Advisory #: 48
+Title: Remote command Injection in Creme Fraiche 0.6 Ruby Gem
+Author:Larry W. Cashdollar, @_larry0
+Date: 2013-05-14
+Download Site: http://rubygems.org/gems/cremefraiche,_http://www.uplawski.eu/
+technology/cremefraiche/
+Vendor:Michael Uplawski
+Vendor Notified: 2013-05-14
+Vendor Contact: michael.uplawski@uplawski.eu
+Description: Converts Email to PDF files.
+Vulnerability:
+The following lines pass unsanitized user input directly to the command line. A
+malicious email attachment with a file name consisting of shell meta characters
+could inject commands into the shell. If the attacker is allowed to specify a
+filename (via a web gui) commands could be injected that way as well. 218 cmd =
+"pdftk %s updateinfo %s output %s" %[pdf, infofile, tfile] 219 @log.debug
+('pdftk-command is ' << cmd) 220 pdftkresult = system( cmd)
+CVE-2013-2090
+JSON:Export
+Exploit Code:
+   1.  
+Screen Shots:
+Advisory: http://vapid.dhs.org/advisories/cremefraiche-cmd-inj.html

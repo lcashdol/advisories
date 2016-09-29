@@ -1,84 +1,59 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title></title>
-<meta name="generator" content="HTML::TextToHTML v2.51"/>
-</head>
-<body>
-<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
-</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
-    white-space: -moz-pre-wrap; /</em> Firefox <em>/
-    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
-    white-space: -o-pre-wrap;   /</em> Opera 7 */
-    word-wrap: break-word;<br/>
-}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 36&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; Fileutils 0.7 Ruby Gem remote command execution and insecure file handling in /tmp&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2013-02-24&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="http://rubygems.org/gems/fileutils">http://rubygems.org/gems/fileutils</a>"&gt;<a href="http://rubygems.org/gems/fileutils&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">http://rubygems.org/gems/fileutils&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;Stefaan Colman&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2013-02-24&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; <a href="mailto:slicertje@gmail.com">slicertje@gmail.com</a>&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;A set of utility classes to extract meta data from different file types.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;Handles files insecurely in /tmp, a directory is created for that file extension say &amp;#039;zip&amp;#039; and files are maniplated there. This directory can be hijacked and the contents manipulated by a malicious user.
-</p><p>in ./lib/file_utils.rb
-</p><pre>
- 15     def zip (target, *sources)
- 16         targetdir = &amp;quot;{FileUtils::Config.tmp_dir}/zip&amp;quot;
- 17         id = 1
- 18         while File.exists?(targetdir)
- 19             targetdir = &amp;quot;{FileUtils::Config.tmp_dir}/zip#{id}&amp;quot;
- 20             id += 1
- 21         end
- 22         FileUtils.mkdir(targetdir)
-</pre>
-<p>where Config.tmp_dir = /tmp
-</p><p>in ./lib/file_utils/config.rb
-</p><pre>
-  5         def self.tmp_dir
-  6             @tmp_dir ||= &amp;#039;/tmp&amp;#039;
-  7         end
-</pre>
-<p>Remote command execution:<br/>
-From file_utils.rb, doesn&amp;#039;t sanitize input on URLs passed to CutyCapt for execution. If a URL contains shell characters say a &amp;#039;;&amp;#039; followed by a command a remote attacker execute a command on the clients system if they are enticed to click an encoded url like:
-</p><p>need to test URL encoding not sure if this is valid.
-<a href="http://bla.net.org;id&amp;gt;/tmp/o">http://bla.net.org;id&amp;gt;/tmp/o</a>; -&amp;gt; <a href="http://tinyurl.com/a5scxzz">http://tinyurl.com/a5scxzz</a>
-</p><pre>
-  7     def capture (url, target)
-  8         command = FileUtils::Config::Xvfb.command(File.dirname(__FILE__) + &amp;quot;/../bin/CutyCapt --min-width=1024 --min-height=768 --url={url} --out={target}&amp;quot;)
-  9         `#{command}`
- 10     end
-</pre>
-<p>partial PoC if client is tricked into using malicious URL:
-</p><p>irb(main):001:0&amp;gt; `xvfb-run --server-args=&amp;quot;-screen 0,1024x768x24&amp;quot; ./CutyCapt --url=<a href="http://www.example.org;id&amp;gt;/tmp/foo">http://www.example.org;id&amp;gt;/tmp/foo</a>; --out=/tmp/tempf` xvfb-run: error: Xvfb failed to start
-sh: 1: --out=/tmp/tempf: not found<br/>
-=&amp;gt; &amp;quot;&amp;quot;<br/>
-irb(main):002:0&amp;gt;
-</p><p>root@ubuntu:~/CutyCapt/cutycapt/CutyCapt ls -l /tmp/foo -rw-r--r-- 1 root root 39 Feb 27 02:56 /tmp/foo root@ubuntu:~/CutyCapt/cutycapt/CutyCapt cat /tmp/foo uid=0(root) gid=0(root) groups=0(root)
-root@ubuntu:~/CutyCapt/cutycapt/CutyCapt#
-</p><p>Michael Scherer of Redhat.com found other issues during a discussion about the above issues I found:
-</p><p>1.) In fact, there is the same similar problem in another file :
-result = `#{FileUtils::Config::OpenOffice.python} #{command} #{source} #{target} #{FileUtils::Config::OpenOffice.port}`
-</p><p>I quickly checked using irb ( a quick command line to type ruby snippet, and yes, using funky chars result in funky results.
-</p><p>2.) There is another issue in<br/>
-# Generates a temp filepath for the given extension def temp (extension)
-</p><p>path = &amp;quot;{FileUtils::Config.tmp_dir}/tmp.{extension}&amp;quot; id = 1
-while File.exists?(path)
-</p><pre>
-        path = &amp;quot;{FileUtils::Config.tmp_dir}/tmp.{id}.#{extension}&amp;quot;
-        id += 1
-</pre>
-<p>end
-</p><p>since someone could just create the file at the last moment, and make a link so the script would overwrite an arbitrary file.
-</p><p>Details for above vulnererabilites:
-</p><p>on (1) file_utils.rb the /tmp file issue is between lines 86 - 92.
-</p><p>in file
-</p><pre>
-86     def temp (extension)
- 87         path = &amp;quot;{FileUtils::Config.tmp_dir}/tmp.{extension}&amp;quot;
- 88         id = 1
- 89         while File.exists?(path)
- 90             path = &amp;quot;{FileUtils::Config.tmp_dir}/tmp.{id}.#{extension}&amp;quot;
- 91             id += 1
- 92         end
-</pre>
-<p>And on (2) the file name is ./lib/file_utils/open_office.rb
-</p><p>on line 27, if the filename being converted contains characters like ; a command can be injected as well.
-</p><p>27 result = `#{FileUtils::Config::OpenOffice.python} #{command} #{source} #{target} #{FileUtils::Config::OpenOffice.port}`&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-2013-2516&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=36"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://www.vapid.dhs.org/advisories/file_utils_ruby_gem.html">http://www.vapid.dhs.org/advisories/file_utils_ruby_gem.html</a>"&gt;<a href="http://www.vapid.dhs.org/advisories/file_utils_ruby_gem.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://www.vapid.dhs.org/advisories/file_utils_ruby_gem.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
-&lt;/html&gt;
-</p>
-
-</body>
-</html>
+                                Advisory #: 36
+Title: Fileutils 0.7 Ruby Gem remote command execution and insecure file
+handling in /tmp
+Author:Larry W. Cashdollar, @_larry0
+Date: 2013-02-24
+Download Site: http://rubygems.org/gems/fileutils
+Vendor:Stefaan Colman
+Vendor Notified: 2013-02-24
+Vendor Contact: slicertje@gmail.com
+Description: A set of utility classes to extract meta data from different file
+types.
+Vulnerability:
+Handles files insecurely in /tmp, a directory is created for that file
+extension say 'zip' and files are maniplated there. This directory can be
+hijacked and the contents manipulated by a malicious user. in ./lib/
+file_utils.rb 15 def zip (target, *sources) 16 targetdir = "{FileUtils::
+Config.tmp_dir}/zip" 17 id = 1 18 while File.exists?(targetdir) 19 targetdir =
+"{FileUtils::Config.tmp_dir}/zip#{id}" 20 id += 1 21 end 22 FileUtils.mkdir
+(targetdir) where Config.tmp_dir = /tmp in ./lib/file_utils/config.rb 5 def
+self.tmp_dir 6 @tmp_dir ||= '/tmp' 7 end Remote command execution: From
+file_utils.rb, doesn't sanitize input on URLs passed to CutyCapt for execution.
+If a URL contains shell characters say a ';' followed by a command a remote
+attacker execute a command on the clients system if they are enticed to click
+an encoded url like: need to test URL encoding not sure if this is valid. http:
+//bla.net.org;id>/tmp/o; -> http://tinyurl.com/a5scxzz 7 def capture (url,
+target) 8 command = FileUtils::Config::Xvfb.command(File.dirname(__FILE__) +
+"/../bin/CutyCapt --min-width=1024 --min-height=768 --url={url} --out=
+{target}") 9 `#{command}` 10 end partial PoC if client is tricked into using
+malicious URL: irb(main):001:0> `xvfb-run --server-args="-screen 0,1024x768x24"
+./CutyCapt --url=http://www.example.org;id>/tmp/foo; --out=/tmp/tempf` xvfb-
+run: error: Xvfb failed to start sh: 1: --out=/tmp/tempf: not found => "" irb
+(main):002:0> root@ubuntu:~/CutyCapt/cutycapt/CutyCapt ls -l /tmp/foo -rw-r--r-
+- 1 root root 39 Feb 27 02:56 /tmp/foo root@ubuntu:~/CutyCapt/cutycapt/CutyCapt
+cat /tmp/foo uid=0(root) gid=0(root) groups=0(root) root@ubuntu:~/CutyCapt/
+cutycapt/CutyCapt# Michael Scherer of Redhat.com found other issues during a
+discussion about the above issues I found: 1.) In fact, there is the same
+similar problem in another file : result = `#{FileUtils::Config::
+OpenOffice.python} #{command} #{source} #{target} #{FileUtils::Config::
+OpenOffice.port}` I quickly checked using irb ( a quick command line to type
+ruby snippet, and yes, using funky chars result in funky results. 2.) There is
+another issue in # Generates a temp filepath for the given extension def temp
+(extension) path = "{FileUtils::Config.tmp_dir}/tmp.{extension}" id = 1 while
+File.exists?(path) path = "{FileUtils::Config.tmp_dir}/tmp.{id}.#{extension}"
+id += 1 end since someone could just create the file at the last moment, and
+make a link so the script would overwrite an arbitrary file. Details for above
+vulnererabilites: on (1) file_utils.rb the /tmp file issue is between lines 86
+- 92. in file 86 def temp (extension) 87 path = "{FileUtils::Config.tmp_dir}/
+tmp.{extension}" 88 id = 1 89 while File.exists?(path) 90 path = "{FileUtils::
+Config.tmp_dir}/tmp.{id}.#{extension}" 91 id += 1 92 end And on (2) the file
+name is ./lib/file_utils/open_office.rb on line 27, if the filename being
+converted contains characters like ; a command can be injected as well. 27
+result = `#{FileUtils::Config::OpenOffice.python} #{command} #{source} #
+{target} #{FileUtils::Config::OpenOffice.port}`
+CVE-2013-2516
+JSON:Export
+Exploit Code:
+   1.  
+Screen Shots:
+Advisory: http://www.vapid.dhs.org/advisories/file_utils_ruby_gem.html

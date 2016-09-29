@@ -1,35 +1,49 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title></title>
-<meta name="generator" content="HTML::TextToHTML v2.51"/>
-</head>
-<body>
-<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
-</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
-    white-space: -moz-pre-wrap; /</em> Firefox <em>/
-    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
-    white-space: -o-pre-wrap;   /</em> Opera 7 */
-    word-wrap: break-word;<br/>
-}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 80&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; Xitami Webserver clear text password storage Vulnerability&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2001-11-23&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="http://www.imatix.com/">http://www.imatix.com/</a>"&gt;<a href="http://www.imatix.com/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">http://www.imatix.com/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;<a href="http://en.wikipedia.org/wiki/Xitami&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">http://en.wikipedia.org/wiki/Xitami&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2001-11-23&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; <a href="http://en.wikipedia.org/wiki/Xitami&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">http://en.wikipedia.org/wiki/Xitami&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;Xitami is a Web and FTP server, originally developed by iMatix Corporation as a free, open-source product from 1996 to 2000. It ran as a single process with a small footprint. It was not as fast as the fastest servers but scaled well. It supported several web application protocols and was very portable. It also had a web interface to configure the web/FTP server.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;The webserver administrator password is stored clear-text in a world readable file. A local user can use the webserver admin password to gain control of a (default) root owned process. The server can then be reconfigured by the malicious user (locally unless configured to allow remote administration) to read sensitive system file and execute commands as root.
-</p><p>Vulnerable Packages/Systems: Xitami Webserver 2.4d9, 2.5b5 beta
-</p><p>I tested using the source packages suni24d9.tgz, suni25b5.tgz obtained from xitami.com on a RedHat 6.2 i386 system.
-</p><p>During installation the administrator is asked to enter an account and username password used to access the web administrator function. By default administration of the webserver is only allowed from localhost. This information is stored in a file called default.aut
-</p><p>[lwcash@mathom xitami]$ ls -l defaults.aut - -rw-r--r-- 1 root root 107 Nov 23 10:56 defaults.aut
-</p><p>If the server is configured by default (just hitting enter when asked to enable remote web administration) then a local user can use the admin password stored in the above file to reconfigure the webserver and among other things change the cgi-bin directory to /tmp/cgi-bin. By default the server runs as root and does not drop privledges.
-</p><p>I did the following.
-</p><p>echo &amp;quot;#!/bin/sh&amp;quot; &amp;gt; /tmp/cgi-bin/test.cgi echo &amp;quot;chmod 666 /etc/passwd&amp;quot; &amp;gt;&amp;gt; /tmp/cgi-bin/test.cgi
-</p><p>The following URL will execute our cgi as root: <a href="http://localhost/tmp/cgi-bin/test.sh">http://localhost/tmp/cgi-bin/test.sh</a>
-</p><p>If the server has been configured to allow remote administration, then the above url can be accessed remotely.
-</p><dl>
-  <dt>Recommendations</dt>
-<dd></dd></dl>
-<p>Configuration files that store sensitive information should have very restrictive file permissions. Passwords should never be stored in clear-text, they should be stored at least as a one way hash.
-</p><p>I suspect by the wording used during installation, that many administrators might enable remote web administration since it seems to be almost suggested by the installation script. You might want to change the wording around to discourage it.
-</p><p>I suspect changing the permissions of default.aut to read only for root would help a little, but did not test it.&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE- 2001-1481 &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=80"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://www.vapid.dhs.org/advisories/xitami_stored_cleartext_password.html">http://www.vapid.dhs.org/advisories/xitami_stored_cleartext_password.html</a>"&gt;<a href="http://www.vapid.dhs.org/advisories/xitami_stored_cleartext_password.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://www.vapid.dhs.org/advisories/xitami_stored_cleartext_password.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
-&lt;/html&gt;
-</p>
-
-</body>
-</html>
+                                Advisory #: 80
+Title: Xitami Webserver clear text password storage Vulnerability
+Author:Larry W. Cashdollar, @_larry0
+Date: 2001-11-23
+Download Site: http://www.imatix.com/
+Vendor:http://en.wikipedia.org/wiki/Xitami
+Vendor Notified: 2001-11-23
+Vendor Contact: http://en.wikipedia.org/wiki/Xitami
+Description: Xitami is a Web and FTP server, originally developed by iMatix
+Corporation as a free, open-source product from 1996 to 2000. It ran as a
+single process with a small footprint. It was not as fast as the fastest
+servers but scaled well. It supported several web application protocols and was
+very portable. It also had a web interface to configure the web/FTP server.
+Vulnerability:
+The webserver administrator password is stored clear-text in a world readable
+file. A local user can use the webserver admin password to gain control of a
+(default) root owned process. The server can then be reconfigured by the
+malicious user (locally unless configured to allow remote administration) to
+read sensitive system file and execute commands as root. Vulnerable Packages/
+Systems: Xitami Webserver 2.4d9, 2.5b5 beta I tested using the source packages
+suni24d9.tgz, suni25b5.tgz obtained from xitami.com on a RedHat 6.2 i386
+system. During installation the administrator is asked to enter an account and
+username password used to access the web administrator function. By default
+administration of the webserver is only allowed from localhost. This
+information is stored in a file called default.aut [lwcash@mathom xitami]$ ls -
+l defaults.aut - -rw-r--r-- 1 root root 107 Nov 23 10:56 defaults.aut If the
+server is configured by default (just hitting enter when asked to enable remote
+web administration) then a local user can use the admin password stored in the
+above file to reconfigure the webserver and among other things change the cgi-
+bin directory to /tmp/cgi-bin. By default the server runs as root and does not
+drop privledges. I did the following. echo "#!/bin/sh" > /tmp/cgi-bin/test.cgi
+echo "chmod 666 /etc/passwd" >> /tmp/cgi-bin/test.cgi The following URL will
+execute our cgi as root: http://localhost/tmp/cgi-bin/test.sh If the server has
+been configured to allow remote administration, then the above url can be
+accessed remotely. Recommendations: Configuration files that store sensitive
+information should have very restrictive file permissions. Passwords should
+never be stored in clear-text, they should be stored at least as a one way
+hash. I suspect by the wording used during installation, that many
+administrators might enable remote web administration since it seems to be
+almost suggested by the installation script. You might want to change the
+wording around to discourage it. I suspect changing the permissions of
+default.aut to read only for root would help a little, but did not test it.
+CVE- 2001-1481
+JSON:Export
+Exploit Code:
+   1.  
+Screen Shots:
+Advisory: http://www.vapid.dhs.org/advisories/
+xitami_stored_cleartext_password.html

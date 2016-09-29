@@ -1,63 +1,39 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title></title>
-<meta name="generator" content="HTML::TextToHTML v2.51"/>
-</head>
-<body>
-<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
-</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
-    white-space: -moz-pre-wrap; /</em> Firefox <em>/
-    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
-    white-space: -o-pre-wrap;   /</em> Opera 7 */
-    word-wrap: break-word;<br/>
-}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 168&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; XSS and SQLi in Huge IT Joomla Slider v1.0.9 extension&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2016-07-22&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="http://extensions.joomla.org/extensions/extension/photos-a-images/slider">http://extensions.joomla.org/extensions/extension/photos-a-images/slider</a>"&gt;<a href="http://extensions.joomla.org/extensions/extension/photos-a-images/slider&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">http://extensions.joomla.org/extensions/extension/photos-a-images/slider&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;huge-it.com&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2016-07-22&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;Huge-IT Slider extension is one of the powerful products that our company offer. It gives style and charm to your site and help to attract the attention of visitors to certain parts of the content.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;The attacker must be logged in with at least manager level access or access to the administrative panel to exploit this vulnerability.
-</p><p>XSS in ./admin/views/slider/tmpl/default.php via id variable:
-275:                    &amp;lt;a class=&amp;quot;modal&amp;quot; rel=&amp;quot;{handler: &amp;#039;iframe&amp;#039;, size: {x: 800, y: 500}}&amp;quot; href=&amp;quot;index.php?option=com_slider&amp;amp;view=video&amp;amp;tmpl=component&amp;amp;pid=&amp;lt;?php echo $_GET[&amp;#039;id&amp;#039;]; ?&amp;gt;&amp;quot; title=&amp;quot;Video&amp;quot; &amp;gt;
-</p><p>SQL Injection in the following sections of code:
-</p><p>in file ./admin/models/slider.php
-</p><pre>
-53:        $id_cat = JRequest::getVar(&amp;#039;id&amp;#039;);
-54-        $query = $db-&amp;gt;getQuery(true);
-55-        $query-&amp;gt;select(&amp;#039;<strong>__huge_itslider_images.name as name,&amp;</strong>039;
-56-                . &amp;#039;<strong>__huge_itslider_images.id ,&amp;</strong>039;
-57-                . &amp;#039;<strong>__huge_itslider_sliders.name as portName,&amp;</strong>039;
-58-                . &amp;#039;slider_id, <strong>__huge_itslider_images.description as description,image_url,sl_url,sl_type,link_target,</strong>__huge_itslider_images.ordering,<strong>__huge_itslider_images.published,published_in_sl_width&amp;</strong>039;);
---
-69:        $id_cat = JRequest::getVar(&amp;#039;id&amp;#039;);
-70-        $query = $db-&amp;gt;getQuery(true);
-71-        $query-&amp;gt;select(&amp;#039;*&amp;#039;);
-72-        $query-&amp;gt;from(&amp;#039;<strong>__huge_itslider_images&amp;</strong>039;);
-73-        $query-&amp;gt;where(&amp;#039;slider_id=&amp;#039; . $id_cat);
-74-        $db-&amp;gt;setQuery($query);
---
-117:        $id_cat = JRequest::getVar(&amp;#039;id&amp;#039;);
-118-
-119-        $query = $db-&amp;gt;getQuery(true);
-120-        $query-&amp;gt;update(&amp;#039;<strong>__huge_itslider_sliders&amp;</strong>039;)-&amp;gt;set(&amp;#039;name =&amp;quot;&amp;#039; . $name . &amp;#039;&amp;quot;&amp;#039;)
-121-                -&amp;gt;set(&amp;#039;sl_height=&amp;quot;&amp;#039; . $sl_height . &amp;#039;&amp;quot;&amp;#039;)-&amp;gt;set(&amp;#039;slider_list_effects_s=&amp;quot;&amp;#039; . $slider_effects_list . &amp;#039;&amp;quot;&amp;#039;)
-122-                -&amp;gt;set(&amp;#039;pause_on_hover=&amp;quot;&amp;#039; . $pause_on_hover . &amp;#039;&amp;quot;&amp;#039;)
---
-133:        $id_cat = JRequest::getVar(&amp;#039;id&amp;#039;);
-134-        $query = $db-&amp;gt;getQuery(true);
-135-        $query-&amp;gt;update(&amp;#039;<strong>__huge_itslider_sliders&amp;</strong>039;)-&amp;gt;set(&amp;#039;slider_list_effects_s =&amp;quot;&amp;#039; . $styleName . &amp;#039;&amp;quot;&amp;#039;)-&amp;gt;where(&amp;#039;id=&amp;quot;&amp;#039; . $id_cat . &amp;#039;&amp;quot;&amp;#039;);
-136-        $db-&amp;gt;setQuery($query);
-137-        $db-&amp;gt;execute();
-</pre>
-<p>138-    }<br/>
---
-</p><pre>
-182:        $id_cat = JRequest::getVar(&amp;#039;removeslide&amp;#039;);
-183:        $id = JRequest::getVar(&amp;#039;id&amp;#039;);
-184-        $db = JFactory::getDBO();
-185-        $query = $db-&amp;gt;getQuery(true);
-186-        $query-&amp;gt;delete(&amp;#039;<strong>__huge_itslider_images&amp;</strong>039;)-&amp;gt;where(&amp;#039;id =&amp;#039; . $id_cat);
-187-        $db-&amp;gt;setQuery($query);
-188-        $db-&amp;gt;execute();&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-2016-1000121 2016-1000122&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=168"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;XSS&lt;span style="color: #339933;"&gt;:&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;http&lt;span style="color: #339933;"&gt;:&lt;/span&gt;&lt;span style="color: #666666; font-style: italic;"&gt;//192.168.0.125/administrator/index.php?option=com_slider&amp;amp;view=slider&amp;amp;id=1%20--%20%22%3E%3Cscript%3Ealert(1);%3C/script%3E&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;SQLi&lt;span style="color: #339933;"&gt;:&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;http&lt;span style="color: #339933;"&gt;:&lt;/span&gt;&lt;span style="color: #666666; font-style: italic;"&gt;//192.168.0.125/administrator/index.php?option=com_slider&amp;amp;view=slider&amp;amp;id=HERE&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href=""&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt;
-</pre>
-<p>&lt;/html&gt;
-</p>
-
-</body>
-</html>
+                                                              Advisory #: 168
+Title: XSS and SQLi in Huge IT Joomla Slider v1.0.9 extension
+Author:Larry W. Cashdollar, @_larry0
+Date: 2016-07-22
+Download Site: http://extensions.joomla.org/extensions/extension/photos-a-images/slider
+Vendor:huge-it.com
+Vendor Notified: 2016-07-22
+Vendor Contact:
+Description: Huge-IT Slider extension is one of the powerful products that our company offer. It gives style and charm to your site and help
+to attract the attention of visitors to certain parts of the content.
+Vulnerability:
+The attacker must be logged in with at least manager level access or access to the administrative panel to exploit this vulnerability. XSS
+in ./admin/views/slider/tmpl/default.php via id variable: 275: <a class="modal" rel="{handler: 'iframe', size: {x: 800, y: 500}}"
+href="index.php?option=com_slider&view=video&tmpl=component&pid=<?php echo $_GET['id']; ?>" title="Video" > SQL Injection in the following
+sections of code: in file ./admin/models/slider.php 53: $id_cat = JRequest::getVar('id'); 54- $query = $db->getQuery(true); 55- $query-
+>select('#__huge_itslider_images.name as name,' 56- . '#__huge_itslider_images.id ,' 57- . '#__huge_itslider_sliders.name as portName,' 58-
+. 'slider_id, #__huge_itslider_images.description as
+description,image_url,sl_url,sl_type,link_target,#__huge_itslider_images.ordering,#__huge_itslider_images.published,published_in_sl_width');
+-- 69: $id_cat = JRequest::getVar('id'); 70- $query = $db->getQuery(true); 71- $query->select('*'); 72- $query->from
+('#__huge_itslider_images'); 73- $query->where('slider_id=' . $id_cat); 74- $db->setQuery($query); -- 117: $id_cat = JRequest::getVar('id');
+118- 119- $query = $db->getQuery(true); 120- $query->update('#__huge_itslider_sliders')->set('name ="' . $name . '"') 121- ->set
+('sl_height="' . $sl_height . '"')->set('slider_list_effects_s="' . $slider_effects_list . '"') 122- ->set('pause_on_hover="' .
+$pause_on_hover . '"') -- 133: $id_cat = JRequest::getVar('id'); 134- $query = $db->getQuery(true); 135- $query->update
+('#__huge_itslider_sliders')->set('slider_list_effects_s ="' . $styleName . '"')->where('id="' . $id_cat . '"'); 136- $db->setQuery($query);
+137- $db->execute(); 138- } -- 182: $id_cat = JRequest::getVar('removeslide'); 183: $id = JRequest::getVar('id'); 184- $db = JFactory::
+getDBO(); 185- $query = $db->getQuery(true); 186- $query->delete('#__huge_itslider_images')->where('id =' . $id_cat); 187- $db->setQuery
+($query); 188- $db->execute();
+CVE-2016-1000121 2016-1000122
+JSON:Export
+Exploit Code:
+   1. XSS:
+   2.  
+   3. http://192.168.0.125/administrator/index.php?option=com_slider&view=slider&id=1%20--%20%22%3E%3Cscript%3Ealert(1);%3C/script%3E
+   4.  
+   5. SQLi:
+   6.  
+   7. http://192.168.0.125/administrator/index.php?option=com_slider&view=slider&id=HERE
+Screen Shots:
+Advisory:

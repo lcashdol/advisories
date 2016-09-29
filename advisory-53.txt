@@ -1,54 +1,49 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title></title>
-<meta name="generator" content="HTML::TextToHTML v2.51"/>
-</head>
-<body>
-<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
-</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
-    white-space: -moz-pre-wrap; /</em> Firefox <em>/
-    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
-    white-space: -o-pre-wrap;   /</em> Opera 7 */
-    word-wrap: break-word;<br/>
-}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 53&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; Command Injection flickrcaptionr v1.1.0 ruby gem&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2014-02-09&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="http://rubygems.org/gems/flickrcaptionr">http://rubygems.org/gems/flickrcaptionr</a>"&gt;<a href="http://rubygems.org/gems/flickrcaptionr&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">http://rubygems.org/gems/flickrcaptionr&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;James Harrison&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2014-02-09&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; <a href="mailto:james@talkunafraid.co.uk">james@talkunafraid.co.uk</a>&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;flickrcaptionr is a gem which lets you easily retrieve images (from flickr and other sources), resize them (cropping etc as desired), and overlay classic "image macro" text on them. It can be used as a web service, command-line tool or as a library in your application.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;Command injection in the user supplied variables for out_filename and possibly width / height.  Also /tmp 
-file clobbering with /tmp/caption-tmp.png.
-</p><p>From lib/flickrcaptionr/processor.rb:
-</p><pre>
-      res = `convert &amp;#039;<strong>{path}&amp;</strong>039; -resize <strong>{width.to_i.to_s}x</strong>{height.to_i.to_s}^ -gravity center -extent <strong>{width.to_i.to_s}x</strong>{height.to_i.to_s} &amp;#039;<strong>{out_filename}&amp;</strong>039;`
-      if !File.exists?(out_filename)
-        raise Flickrcaptionr::ResizeFailedException, &amp;quot;Failed to write output file, check your ImageMagick installation and output path setting&amp;quot;
-      end
-</pre>
-<p>    end<br/>
-    return out_filename<br/>
-  end<br/>
-  # Add some funky macro text to an image.
-  # Takes an optional hash of :font_path, :font_size and :font_stroke (defaults: bundled Coda Heavy font, 36, 2)
-  def add_text!(path, text, opts={})<br/>
-    out_filename = File.expand_path(path)
-    <strong> Now pull the basename out and add our size string
-    out_filename = File.join(File.dirname(out_filename), File.basename(out_filename).gsub(/(.+)\.([A-Za-z0-9]{3,4})$/,&amp;</strong>039;\1-&amp;#039;+Digest::SHA1.hexdigest(text+opts.to_s)+&amp;#039;.\2&amp;#039;))
-    <strong> Generate our text layer<br/>
-    if File.exists?(out_filename)<br/>
-      puts &amp;quot;Already added text to this image, not doing it again&amp;quot;
-    else
-</p><pre>
-      escaped_text = text.gsub(&amp;</strong>039;&amp;quot;&amp;#039;,&amp;quot;&amp;#039;&amp;#039;&amp;quot;).gsub(/[^A-Za-z0-9 &amp;#039;\-\.,\?\!]/,&amp;quot;&amp;quot;)
-      puts &amp;quot;Adding text &amp;#039;<strong>{escaped_text}&amp;</strong>039; to <strong>{path} (original text &amp;</strong>039;<strong>{text}&amp;</strong>039;)&amp;quot;
-      `convert -background none -fill white -font &amp;quot;<strong>{opts[:font_path] ? opts[:font_path] : (File.join(File.dirname(__FILE__), &amp;</strong>039;..&amp;#039;, &amp;#039;..&amp;#039;, &amp;#039;fonts&amp;#039;, &amp;#039;Coda-Heavy.ttf&amp;#039; ))}&amp;quot; -stroke black -strokewidth #{opts[:font_stroke] ? opts[:font_stroke].to_s : 2.to_s} -pointsize #{opts[:font_size] ? opts[:font_size].to_s : 36.to_s} -size <strong>{((Dimensions.width(path)-10).to_s)}  -gravity Center caption:&amp;quot;</strong>{escaped_text}&amp;quot; /tmp/caption-tmp.png`
-      if !File.exists?(&amp;#039;/tmp/caption-tmp.png&amp;#039;)
-        raise Flickrcaptionr::TextGenerationFailedException, &amp;quot;Couldn&amp;#039;t generate text to overlay! Check your ImageMagick installation and that /tmp is writeable.&amp;quot;
-      end
-      `composite /tmp/caption-tmp.png &amp;#039;<strong>{path}&amp;</strong>039; -compose atop -gravity South &amp;#039;<strong>{out_filename}&amp;</strong>039;`
-      if !File.exists?(out_filename)
-        raise Flickrcaptionr::CompositionFailedException, &amp;quot;Failed to write output composite file, check your ImageMagick installation and output path setting&amp;quot;
-      end
-      `rm -rf /tmp/caption-tmp.png`&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=53"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;Needs PoC&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://www.vapid.dhs.org/advisories/flickrcaptionr-cmd-inj.html">http://www.vapid.dhs.org/advisories/flickrcaptionr-cmd-inj.html</a>"&gt;<a href="http://www.vapid.dhs.org/advisories/flickrcaptionr-cmd-inj.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://www.vapid.dhs.org/advisories/flickrcaptionr-cmd-inj.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
-</pre>
-<p>&lt;/html&gt;
-</p>
-
-</body>
-</html>
+                                Advisory #: 53
+Title: Command Injection flickrcaptionr v1.1.0 ruby gem
+Author:Larry W. Cashdollar, @_larry0
+Date: 2014-02-09
+Download Site: http://rubygems.org/gems/flickrcaptionr
+Vendor:James Harrison
+Vendor Notified: 2014-02-09
+Vendor Contact: james@talkunafraid.co.uk
+Description: flickrcaptionr is a gem which lets you easily retrieve images
+(from flickr and other sources), resize them (cropping etc as desired), and
+overlay classic "image macro" text on them. It can be used as a web service,
+command-line tool or as a library in your application.
+Vulnerability:
+Command injection in the user supplied variables for out_filename and possibly
+width / height. Also /tmp file clobbering with /tmp/caption-tmp.png. From lib/
+flickrcaptionr/processor.rb: res = `convert '#{path}' -resize #
+{width.to_i.to_s}x#{height.to_i.to_s}^ -gravity center -extent #
+{width.to_i.to_s}x#{height.to_i.to_s} '#{out_filename}'` if !File.exists?
+(out_filename) raise Flickrcaptionr::ResizeFailedException, "Failed to write
+output file, check your ImageMagick installation and output path setting" end
+end return out_filename end # Add some funky macro text to an image. # Takes an
+optional hash of :font_path, :font_size and :font_stroke (defaults: bundled
+Coda Heavy font, 36, 2) def add_text!(path, text, opts={}) out_filename =
+File.expand_path(path) # Now pull the basename out and add our size string
+out_filename = File.join(File.dirname(out_filename), File.basename
+(out_filename).gsub(/(.+)\.([A-Za-z0-9]{3,4})$/,'\1-'+Digest::SHA1.hexdigest
+(text+opts.to_s)+'.\2')) # Generate our text layer if File.exists?
+(out_filename) puts "Already added text to this image, not doing it again" else
+escaped_text = text.gsub('"',"''").gsub(/[^A-Za-z0-9 '\-\.,\?\!]/,"") puts
+"Adding text '#{escaped_text}' to #{path} (original text '#{text}')" `convert -
+background none -fill white -font "#{opts[:font_path] ? opts[:font_path] :
+(File.join(File.dirname(__FILE__), '..', '..', 'fonts', 'Coda-Heavy.ttf' ))}" -
+stroke black -strokewidth #{opts[:font_stroke] ? opts[:font_stroke].to_s :
+2.to_s} -pointsize #{opts[:font_size] ? opts[:font_size].to_s : 36.to_s} -size
+#{((Dimensions.width(path)-10).to_s)} -gravity Center caption:"#{escaped_text}"
+/tmp/caption-tmp.png` if !File.exists?('/tmp/caption-tmp.png') raise
+Flickrcaptionr::TextGenerationFailedException, "Couldn't generate text to
+overlay! Check your ImageMagick installation and that /tmp is writeable." end
+`composite /tmp/caption-tmp.png '#{path}' -compose atop -gravity South '#
+{out_filename}'` if !File.exists?(out_filename) raise Flickrcaptionr::
+CompositionFailedException, "Failed to write output composite file, check your
+ImageMagick installation and output path setting" end `rm -rf /tmp/caption-
+tmp.png`
+CVE-
+JSON:Export
+Exploit Code:
+   1. Needs PoC
+Screen Shots:
+Advisory: http://www.vapid.dhs.org/advisories/flickrcaptionr-cmd-inj.html

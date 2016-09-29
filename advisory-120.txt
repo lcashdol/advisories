@@ -1,32 +1,25 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title></title>
-<meta name="generator" content="HTML::TextToHTML v2.51"/>
-</head>
-<body>
-<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
-</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
-    white-space: -moz-pre-wrap; /</em> Firefox <em>/
-    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
-    white-space: -o-pre-wrap;   /</em> Opera 7 */
-    word-wrap: break-word;<br/>
-}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 120&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; wow-moodboard-lite v1.1.1.1 Wordpress plugin has an open redirect&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2015-05-10&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="https://wordpress.org/plugins/wow-moodboard-lite/">https://wordpress.org/plugins/wow-moodboard-lite/</a>"&gt;<a href="https://wordpress.org/plugins/wow-moodboard-lite/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">https://wordpress.org/plugins/wow-moodboard-lite/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;mschot &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2015-05-19&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; <a href="https://profiles.wordpress.org/mschot/&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">https://profiles.wordpress.org/mschot/&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;A mood board is a type of collage consisting of images, text, and samples of objects in a composition. They may be physical or digital, and can be "extremely effective" presentation tools.
-</p><p>&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;wowproxy.php doesn&amp;rsquo;t require any authentication to the proxy images function.   Users can be misled to a malicious link
-via this feature.
-</p><p>26 // Get the url of the image to be proxied
-27 $url = ( isset( $_POST[ &amp;#039;url&amp;#039; ] ) ) ? $_POST[ &amp;#039;url&amp;#039; ] : ( isset( $_GET[ &amp;#039;url    &amp;#039; ] ) ? $_GET[ &amp;#039;url&amp;#039; ] : false );
-</p><p>39 function proxyimages( $url )<br/>
-40 {
-</p><pre>
-41         header( &amp;quot;Location: &amp;quot;.$url );
-42         exit;
-</pre>
-<p>43 }<br/>
-&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-2015-4070&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=120"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;http&lt;span style="color: #339933;"&gt;:&lt;/span&gt;&lt;span style="color: #666666; font-style: italic;"&gt;//<a href="http://www.vapidlabs.internal/wp-content/plugins/adsense-click-fraud-monitoring/phpwhois/whois.php?query=%27%3Cscript%3Ealert%281%29%3B%3C%2Fscript%3E&amp;amp;output=nice&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">www.vapidlabs.internal/wp-content/plugins/adsense-click-fraud-monitoring/phpwhois/whois.php?query=%27%3Cscript%3Ealert%281%29%3B%3C%2Fscript%3E&amp;amp;output=nice&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://www.vapid.dhs.org/advisory.php?v=120">http://www.vapid.dhs.org/advisory.php?v=120</a>"&gt;<a href="http://www.vapid.dhs.org/advisory.php?v=120&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://www.vapid.dhs.org/advisory.php?v=120&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
-&lt;/html&gt;
-</p>
-
-</body>
-</html>
+                                Advisory #: 120
+Title: wow-moodboard-lite v1.1.1.1 Wordpress plugin has an open redirect
+Author:Larry W. Cashdollar, @_larry0
+Date: 2015-05-10
+Download Site: https://wordpress.org/plugins/wow-moodboard-lite/
+Vendor:mschot
+Vendor Notified: 2015-05-19
+Vendor Contact: https://profiles.wordpress.org/mschot/
+Description: A mood board is a type of collage consisting of images, text, and
+samples of objects in a composition. They may be physical or digital, and can
+be "extremely effective" presentation tools.
+Vulnerability:
+wowproxy.php doesn’t require any authentication to the proxy images function.
+Users can be misled to a malicious link via this feature. 26 // Get the url of
+the image to be proxied 27 $url = ( isset( $_POST[ 'url' ] ) ) ? $_POST[ 'url'
+] : ( isset( $_GET[ 'url ' ] ) ? $_GET[ 'url' ] : false ); 39 function
+proxyimages( $url ) 40 { 41 header( "Location: ".$url ); 42 exit; 43 }
+CVE-2015-4070
+JSON:Export
+Exploit Code:
+   1. http://www.vapidlabs.internal/wp-content/plugins/adsense-click-fraud-
+      monitoring/phpwhois/
+      whois.php?query=%27%3Cscript%3Ealert%281%29%3B%3C%2Fscript%3E&output=nice
+Screen Shots:
+Advisory: http://www.vapid.dhs.org/advisory.php?v=120

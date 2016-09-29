@@ -1,36 +1,26 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title></title>
-<meta name="generator" content="HTML::TextToHTML v2.51"/>
-</head>
-<body>
-<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
-</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
-    white-space: -moz-pre-wrap; /</em> Firefox <em>/
-    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
-    white-space: -o-pre-wrap;   /</em> Opera 7 */
-    word-wrap: break-word;<br/>
-}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 63&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; Vulnerability Report for Ruby Gem karo-2.3.8&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2014-06-01&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href=" <a href="http://rubygems.org/gems/karo">http://rubygems.org/gems/karo</a>"&gt; <a href="http://rubygems.org/gems/karo&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">http://rubygems.org/gems/karo&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt; rahul.trikha[at]gmail.com&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2014-06-25&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt;  rahul.trikha[at]gmail.com&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;SSH toolbox to make running logs, sync, cache commands easier for a given rails app&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;From: ./karo-2.3.8/lib/karo/db.rb
-</p><p>Line 76 and 95 passes unsanitized user supplied input to the command line. If this gem is used in the context of a rails application malicious input could lead to remote command injection.
-</p><pre>
-073-      host = &amp;quot;{@configuration[&amp;quot;user&amp;quot;]}@{@configuration[&amp;quot;host&amp;quot;]}&amp;quot;
-74-      cmd  = &amp;quot;ssh #{host} cat {server_db_config_file}&amp;quot;
-75-
-76:      server_db_config_output = `{cmd}`
-</pre>
-<p>79-<br/>
---<br/>
-89- def drop_and_create_local_database(local_db_config)
-</p><pre>
-90-      command = case local_db_config[&amp;quot;adapter&amp;quot;]
-91-      when &amp;quot;mysql2&amp;quot;
-93-      when &amp;quot;postgresql&amp;quot;
-95-          dropdb -h #{local_db_config[&amp;quot;host&amp;quot;]} -U #{local_db_config[&amp;quot;username&amp;quot;]} --if-exists #{local_db_config[&amp;quot;database&amp;quot;]}&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=63"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://www.vapid.dhs.org/advisories/karo-2.3.8.html">http://www.vapid.dhs.org/advisories/karo-2.3.8.html</a>"&gt;<a href="http://www.vapid.dhs.org/advisories/karo-2.3.8.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://www.vapid.dhs.org/advisories/karo-2.3.8.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
-</pre>
-<p>&lt;/html&gt;
-</p>
-
-</body>
-</html>
+                                Advisory #: 63
+Title: Vulnerability Report for Ruby Gem karo-2.3.8
+Author:Larry W. Cashdollar, @_larry0
+Date: 2014-06-01
+Download Site: http://rubygems.org/gems/karo
+Vendor: rahul.trikha[at]gmail.com
+Vendor Notified: 2014-06-25
+Vendor Contact: rahul.trikha[at]gmail.com
+Description: SSH toolbox to make running logs, sync, cache commands easier for
+a given rails app
+Vulnerability:
+From: ./karo-2.3.8/lib/karo/db.rb Line 76 and 95 passes unsanitized user
+supplied input to the command line. If this gem is used in the context of a
+rails application malicious input could lead to remote command injection. 073-
+host = "{@configuration["user"]}@{@configuration["host"]}" 74- cmd = "ssh #
+{host} cat {server_db_config_file}" 75- 76: server_db_config_output = `{cmd}`
+79- -- 89- def drop_and_create_local_database(local_db_config) 90- command =
+case local_db_config["adapter"] 91- when "mysql2" 93- when "postgresql" 95-
+dropdb -h #{local_db_config["host"]} -U #{local_db_config["username"]} --if-
+exists #{local_db_config["database"]}
+CVE-
+JSON:Export
+Exploit Code:
+   1.  
+Screen Shots:
+Advisory: http://www.vapid.dhs.org/advisories/karo-2.3.8.html

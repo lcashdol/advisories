@@ -1,49 +1,32 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title></title>
-<meta name="generator" content="HTML::TextToHTML v2.51"/>
-</head>
-<body>
-<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
-</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
-    white-space: -moz-pre-wrap; /</em> Firefox <em>/
-    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
-    white-space: -o-pre-wrap;   /</em> Opera 7 */
-    word-wrap: break-word;<br/>
-}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 64&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; Remote Command Injection Karteek Docsplit 0.5.4&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2013-04-01&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="https://rubygems.org/gems/karteek-docsplit">https://rubygems.org/gems/karteek-docsplit</a>"&gt;<a href="https://rubygems.org/gems/karteek-docsplit&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">https://rubygems.org/gems/karteek-docsplit&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;N/A <a href="http://xforce.iss.net/xforce/xfdb/83277&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">http://xforce.iss.net/xforce/xfdb/83277&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2013-04-01&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; <a href="https://github.com/rubysec/ruby-advisory-db/blob/master/gems/karteek-docsplit/OSVDB-92117.yml&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">https://github.com/rubysec/ruby-advisory-db/blob/master/gems/karteek-docsplit/OSVDB-92117.yml&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;Splits documents up into pdf files.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;User supplied input isn&amp;#039;t sanitized against shell metacharacters and is fed directly to the shell. If the user is tricked into extracting a file with shell characters in the name code can be executed remotely.
-</p><p>./karteek-docsplit-0.5.4/lib/docsplit/text_extractor.rb
-</p><pre>
- 59     def extract_from_ocr(pdf, pages)
- 60       tempdir = Dir.mktmpdir
- 61       base_path = File.join(@output, @pdf_name)
- 62       if pages
- 63         pages.each do |page|
- 64           tiff = &amp;quot;{tempdir}/{@pdf_name}{page}.tif&amp;quot;
- 65           file = &amp;quot;{basepath}{page}&amp;quot;
- 66           run &amp;quot;MAGICKTMPDIR={tempdir} OMP_NUM_THREADS=2 gm convert -despeckle +adjoin #{MEMORY_ARGS} #{OCR_FLAGS} {pdf}[{page - 1}] #{tiff} 2&amp;gt;&amp;amp;1&amp;quot;
- 67           run &amp;quot;tesseract <strong>{tiff} {file} -l eng 2&amp;gt;&amp;amp;1&amp;quot;
- 68           clean_text(file + &amp;</strong>039;.txt&amp;#039;) if @clean_ocr
- 69           FileUtils.remove_entry_secure tiff
- 70         end
- 71       else
- 72         tiff = &amp;quot;{tempdir}/{@pdf_name}.tif&amp;quot;
- 73         run &amp;quot;MAGICK_TMPDIR={tempdir} OMP_NUM_THREADS=2 gm convert -despeckle #{MEMORY_ARGS} #{OCR_FLAGS} #{pdf} #{tiff} 2&amp;gt;&amp;amp;1&amp;quot;
- 74         run &amp;quot;tesseract #{tiff} <strong>{base_path} -l eng 2&amp;gt;&amp;amp;1&amp;quot;
- 75         clean_text(base_path + &amp;</strong>039;.txt&amp;#039;) if @clean_ocr
- 76       end
-</pre>
-<p>Run is defined as:
-</p><pre>
- 94     def run(command)
- 95       result = `#{command}`
- 96       raise ExtractionFailed, result if $? != 0
- 97       result
- 98     end&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-2013-1933&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=64"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://www.vapid.dhs.org/advisories/karteek-docsplit-cmd-inject.html">http://www.vapid.dhs.org/advisories/karteek-docsplit-cmd-inject.html</a>"&gt;<a href="http://www.vapid.dhs.org/advisories/karteek-docsplit-cmd-inject.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://www.vapid.dhs.org/advisories/karteek-docsplit-cmd-inject.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
-</pre>
-<p>&lt;/html&gt;
-</p>
-
-</body>
-</html>
+                                Advisory #: 64
+Title: Remote Command Injection Karteek Docsplit 0.5.4
+Author:Larry W. Cashdollar, @_larry0
+Date: 2013-04-01
+Download Site: https://rubygems.org/gems/karteek-docsplit
+Vendor:N/A http://xforce.iss.net/xforce/xfdb/83277
+Vendor Notified: 2013-04-01
+Vendor Contact: https://github.com/rubysec/ruby-advisory-db/blob/master/gems/
+karteek-docsplit/OSVDB-92117.yml
+Description: Splits documents up into pdf files.
+Vulnerability:
+User supplied input isn't sanitized against shell metacharacters and is fed
+directly to the shell. If the user is tricked into extracting a file with shell
+characters in the name code can be executed remotely. ./karteek-docsplit-0.5.4/
+lib/docsplit/text_extractor.rb 59 def extract_from_ocr(pdf, pages) 60 tempdir =
+Dir.mktmpdir 61 base_path = File.join(@output, @pdf_name) 62 if pages 63
+pages.each do |page| 64 tiff = "{tempdir}/{@pdf_name}{page}.tif" 65 file = "
+{basepath}{page}" 66 run "MAGICKTMPDIR={tempdir} OMP_NUM_THREADS=2 gm convert -
+despeckle +adjoin #{MEMORY_ARGS} #{OCR_FLAGS} {pdf}[{page - 1}] #{tiff} 2>&1"
+67 run "tesseract #{tiff} {file} -l eng 2>&1" 68 clean_text(file + '.txt') if
+@clean_ocr 69 FileUtils.remove_entry_secure tiff 70 end 71 else 72 tiff = "
+{tempdir}/{@pdf_name}.tif" 73 run "MAGICK_TMPDIR={tempdir} OMP_NUM_THREADS=2 gm
+convert -despeckle #{MEMORY_ARGS} #{OCR_FLAGS} #{pdf} #{tiff} 2>&1" 74 run
+"tesseract #{tiff} #{base_path} -l eng 2>&1" 75 clean_text(base_path + '.txt')
+if @clean_ocr 76 end Run is defined as: 94 def run(command) 95 result = `#
+{command}` 96 raise ExtractionFailed, result if $? != 0 97 result 98 end
+CVE-2013-1933
+JSON:Export
+Exploit Code:
+   1.  
+Screen Shots:
+Advisory: http://www.vapid.dhs.org/advisories/karteek-docsplit-cmd-inject.html

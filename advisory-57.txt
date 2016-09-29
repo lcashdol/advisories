@@ -1,34 +1,41 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title></title>
-<meta name="generator" content="HTML::TextToHTML v2.51"/>
-</head>
-<body>
-<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
-</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
-    white-space: -moz-pre-wrap; /</em> Firefox <em>/
-    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
-    white-space: -o-pre-wrap;   /</em> Opera 7 */
-    word-wrap: break-word;<br/>
-}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 57&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; IBM Informix File Clobbering during Install&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @<u>larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2006-10-01&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="http://www14.software.ibm.com/webapp/download/preconfig.jsp?id=2013-03-26+02%3A55%3A11.385011R&amp;S</u>TACT=&amp;S_CMP">http://www14.software.ibm.com/webapp/download/preconfig.jsp?id=2013-03-26+02%3A55%3A11.385011R&amp;S_TACT=&amp;S_CMP</a>="&gt;<a href="http://www14.software.ibm.com/webapp/download/preconfig.jsp?id=2013-03-26+02%3A55%3A11.385011R&amp;S_TACT=&amp;S_CMP=&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">http://www14.software.ibm.com/webapp/download/preconfig.jsp?id=2013-03-26+02%3A55%3A11.385011R&amp;S_TACT=&amp;S_CMP=&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;IBM&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2006-10-01&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;IBM Informix Dynamic Server (IDS) is a strategic data server in the IBM Information Management Software portfolio that provides blazing online transaction processing (OLTP) performance, legendary reliability, and nearly hands-free administration to businesses of all sizes. IDS 10 offers significant improvements in performance, availability, security, and manageability over previous versions, including patent-pending technology that virtually eliminates downtime and automates many of the tasks associated with deploying mission-critical enterprise systems.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;During installation the installserver script creates a file in /tmp called installserver.txt an unprivileged user can symlink this file to another file causing the target file have the contents of installserver.txt appened to it.
-</p><p>vapid:/tmp# ls -l /tmp/installserver.txt lrwxrwxrwx 1 lwc lwc 11 Oct 1 18:27 /tmp/installserver.txt -&amp;gt; /etc/passwd
-</p><p>After installation the contents of installserver.txt was appened to /etc/passwd.
-</p><p>The default file permissions of the installation package are too open, an unprivileged user can take advantage of an installation by a privileged user by injecting code into the installer script.
-</p><p>nobody@vapid:/home/auditor/test$ ls -l total 273168
--rw-rw-rw- 1 root root 10328050 Aug 1 2005 Gls.rpm 
--rw-rw-rw- 1 32100 1360 5125418 Aug 1 2005 IIF.jar 
--rw-rw-rw- 1 root root 84374286 Aug 1 2005 IIFServer.rpm 
--rw-rw-rw- 1 root root 786557 Aug 1 2005 Message.rpm 
-drwxrwxrwx 2 32100 1360 4096 Aug 1 2005 doc 
--rw-r--r-- 1 auditor auditor 140032000 Oct 1 18:21 iif.10.00.UC3R1TL.Linux.tar 
--rwxr-xr-x 1 32100 1360 4424 Aug 1 2005 install_rpm 
--rwxrwxrwx 1 32100 1360 38727685 Oct 1 18:46 installserver 
--rwxr-xr-x 1 32100 1360 5069 Aug 1 2005 server.ini
-&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-2006-5163&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=57"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://www.vapid.dhs.org/advisories/ibm_informix_dynamic_server_file_clobbber_during_install.html">http://www.vapid.dhs.org/advisories/ibm_informix_dynamic_server_file_clobbber_during_install.html</a>"&gt;<a href="http://www.vapid.dhs.org/advisories/ibm_informix_dynamic_server_file_clobbber_during_install.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://www.vapid.dhs.org/advisories/ibm_informix_dynamic_server_file_clobbber_during_install.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
-&lt;/html&gt;
-</p>
-
-</body>
-</html>
+                                Advisory #: 57
+Title: IBM Informix File Clobbering during Install
+Author:Larry W. Cashdollar, @_larry0
+Date: 2006-10-01
+Download Site: http://www14.software.ibm.com/webapp/download/
+preconfig.jsp?id=2013-03-26+02%3A55%3A11.385011R&S_TACT=&S_CMP=
+Vendor:IBM
+Vendor Notified: 2006-10-01
+Vendor Contact:
+Description: IBM Informix Dynamic Server (IDS) is a strategic data server in
+the IBM Information Management Software portfolio that provides blazing online
+transaction processing (OLTP) performance, legendary reliability, and nearly
+hands-free administration to businesses of all sizes. IDS 10 offers significant
+improvements in performance, availability, security, and manageability over
+previous versions, including patent-pending technology that virtually
+eliminates downtime and automates many of the tasks associated with deploying
+mission-critical enterprise systems.
+Vulnerability:
+During installation the installserver script creates a file in /tmp called
+installserver.txt an unprivileged user can symlink this file to another file
+causing the target file have the contents of installserver.txt appened to it.
+vapid:/tmp# ls -l /tmp/installserver.txt lrwxrwxrwx 1 lwc lwc 11 Oct 1 18:27 /
+tmp/installserver.txt -> /etc/passwd After installation the contents of
+installserver.txt was appened to /etc/passwd. The default file permissions of
+the installation package are too open, an unprivileged user can take advantage
+of an installation by a privileged user by injecting code into the installer
+script. nobody@vapid:/home/auditor/test$ ls -l total 273168 -rw-rw-rw- 1 root
+root 10328050 Aug 1 2005 Gls.rpm -rw-rw-rw- 1 32100 1360 5125418 Aug 1 2005
+IIF.jar -rw-rw-rw- 1 root root 84374286 Aug 1 2005 IIFServer.rpm -rw-rw-rw- 1
+root root 786557 Aug 1 2005 Message.rpm drwxrwxrwx 2 32100 1360 4096 Aug 1 2005
+doc -rw-r--r-- 1 auditor auditor 140032000 Oct 1 18:21
+iif.10.00.UC3R1TL.Linux.tar -rwxr-xr-x 1 32100 1360 4424 Aug 1 2005 install_rpm
+-rwxrwxrwx 1 32100 1360 38727685 Oct 1 18:46 installserver -rwxr-xr-x 1 32100
+1360 5069 Aug 1 2005 server.ini
+CVE-2006-5163
+JSON:Export
+Exploit Code:
+   1.  
+Screen Shots:
+Advisory: http://www.vapid.dhs.org/advisories/
+ibm_informix_dynamic_server_file_clobbber_during_install.html

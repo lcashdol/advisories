@@ -1,32 +1,28 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title></title>
-<meta name="generator" content="HTML::TextToHTML v2.51"/>
-</head>
-<body>
-<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
-</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
-    white-space: -moz-pre-wrap; /</em> Firefox <em>/
-    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
-    white-space: -o-pre-wrap;   /</em> Opera 7 */
-    word-wrap: break-word;<br/>
-}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 33&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; Remote command execution in Ruby Gem Command Wrap&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @<u>larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2013-03-15&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="http://rubygems.org/gems/command</u>wrap">http://rubygems.org/gems/command_wrap</a>"&gt;<a href="http://rubygems.org/gems/command_wrap&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">http://rubygems.org/gems/command_wrap&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;Stefaan Colman&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2013-03-15&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; <a href="mailto:slicertje@gmail.com">slicertje@gmail.com</a>&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;A set of utility classes to extract meta data from different file types&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;Commands executed if the remote URL or filename contains the shell character &amp;#039;;&amp;#039;. The commands will be executed as the client user if tricked into using the malicious URL or filename.
-</p><p>Examining the following lines:
-</p><p>command_wrap.rb-7- def self.capture (url, target)
-</p><pre>
-command_wrap.rb-8-        command = CommandWrap::Config::Xvfb.command(File.dirname(__FILE__) + &amp;quot;/../bin/CutyCapt --min-width=1024 --min-height=768 --url={url} --out={target}&amp;quot;)
-<a href="ftp://command_wrap.rb/9">command_wrap.rb:9</a>:        `#{command}`
-</pre>
-<p>command_wrap.rb-10- end<br/>
-command_wrap.rb-11-<br/>
---<br/>
-command_wrap.rb-72- command = CommandWrap::Config::Xvfb.command(File.dirname(__FILE__) + &amp;quot;/../bin/wkhtmltopdf --quiet --print-media-type #{source} #{params} #{target}&amp;quot;) command_wrap.rb-73-
-<a href="ftp://command_wrap.rb/74">command_wrap.rb:74</a>: `#{command}`
-</p><p>Untrusted data is passed to the command line.&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-2013-1875&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=33"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://www.vapid.dhs.org/advisories/command-wrap-remoteexec.html">http://www.vapid.dhs.org/advisories/command-wrap-remoteexec.html</a>"&gt;<a href="http://www.vapid.dhs.org/advisories/command-wrap-remoteexec.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://www.vapid.dhs.org/advisories/command-wrap-remoteexec.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
-&lt;/html&gt;
-</p>
-
-</body>
-</html>
+                                Advisory #: 33
+Title: Remote command execution in Ruby Gem Command Wrap
+Author:Larry W. Cashdollar, @_larry0
+Date: 2013-03-15
+Download Site: http://rubygems.org/gems/command_wrap
+Vendor:Stefaan Colman
+Vendor Notified: 2013-03-15
+Vendor Contact: slicertje@gmail.com
+Description: A set of utility classes to extract meta data from different file
+types
+Vulnerability:
+Commands executed if the remote URL or filename contains the shell character
+';'. The commands will be executed as the client user if tricked into using the
+malicious URL or filename. Examining the following lines: command_wrap.rb-7-
+def self.capture (url, target) command_wrap.rb-8- command = CommandWrap::
+Config::Xvfb.command(File.dirname(__FILE__) + "/../bin/CutyCapt --min-
+width=1024 --min-height=768 --url={url} --out={target}") command_wrap.rb:9: `#
+{command}` command_wrap.rb-10- end command_wrap.rb-11- -- command_wrap.rb-72-
+command = CommandWrap::Config::Xvfb.command(File.dirname(__FILE__) + "/../bin/
+wkhtmltopdf --quiet --print-media-type #{source} #{params} #{target}")
+command_wrap.rb-73- command_wrap.rb:74: `#{command}` Untrusted data is passed
+to the command line.
+CVE-2013-1875
+JSON:Export
+Exploit Code:
+   1.  
+Screen Shots:
+Advisory: http://www.vapid.dhs.org/advisories/command-wrap-remoteexec.html

