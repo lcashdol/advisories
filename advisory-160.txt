@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title></title>
+<meta name="generator" content="HTML::TextToHTML v2.51"/>
+</head>
+<body>
+<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
+</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
+    white-space: -moz-pre-wrap; /</em> Firefox <em>/
+    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
+    white-space: -o-pre-wrap;   /</em> Opera 7 */
+    word-wrap: break-word;<br/>
+}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 160&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; Reflected XSS &amp; Blind SQLi in wordpress plugin eshop v6.3.14&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2016-01-27&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="https://wordpress.org/plugins/eshop">https://wordpress.org/plugins/eshop</a>"&gt;<a href="https://wordpress.org/plugins/eshop&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">https://wordpress.org/plugins/eshop&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;Richard Pedley &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2016-01-29&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; <a href="http://elfden.co.uk/&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">http://elfden.co.uk/&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;An accessible Shopping Cart plugin. eShop is an accessible shopping cart plugin for WordPress, packed with various features.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;The following code snippets do not sanitize user input before passing back to the browser via $_GET request.
+</p><p><a href="http://plugins.svn.wordpress.org/eshop/trunk/eshop-orders.php">http://plugins.svn.wordpress.org/eshop/trunk/eshop-orders.php</a>
+</p><p>From eshop-orders.php XSS via page &amp;amp; action variables:
+</p><pre>
+144                        $apge=get_admin_url().&amp;#039;admin.php?page=&amp;#039;.$_GET[&amp;#039;page&amp;#039;].&amp;#039;&amp;amp;amp;action=&amp;#039;.$<u>GET[&amp;#039;action&amp;#039;];
+145                         echo &amp;#039;&amp;lt;ul id=&amp;quot;eshopsubmenu&amp;quot; class=&amp;quot;stuffbox&amp;quot;&amp;gt;&amp;#039;;
+146                         echo &amp;#039;&amp;lt;li&amp;gt;&amp;lt;span&amp;gt;&amp;#039;.</u><u>(&amp;#039;Sort Orders by &amp;amp;raquo;&amp;#039;,&amp;#039;eshop&amp;#039;).&amp;#039;&amp;lt;/span&amp;gt;&amp;lt;/li&amp;gt;&amp;#039;;
+147                         echo &amp;#039;&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;&amp;#039;.$apge.&amp;#039;&amp;amp;amp;by=da&amp;quot;&amp;#039;.$cda.&amp;#039;&amp;gt;&amp;#039;.</u><u>(&amp;#039;Date Ascending&amp;#039;,&amp;#039;eshop&amp;#039;).&amp;#039;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;&amp;#039;;
+148                         echo &amp;#039;&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;&amp;#039;.$apge.&amp;#039;&amp;amp;amp;by=dd&amp;quot;&amp;#039;.$cdd.&amp;#039;&amp;gt;&amp;#039;.</u><u>(&amp;#039;Date Descending&amp;#039;,&amp;#039;eshop&amp;#039;).&amp;#039;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;&amp;#039;;
+149                         echo &amp;#039;&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;&amp;#039;.$apge.&amp;#039;&amp;amp;amp;by=tn&amp;quot;&amp;#039;.$ctn.&amp;#039;&amp;gt;&amp;#039;.</u><u>(&amp;#039;ID Number&amp;#039;,&amp;#039;eshop&amp;#039;).&amp;#039;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;&amp;#039;;
+150                         echo &amp;#039;&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;&amp;#039;.$apge.&amp;#039;&amp;amp;amp;by=ca&amp;quot;&amp;#039;.$cca.&amp;#039;&amp;gt;&amp;#039;.</u><u>(&amp;#039;Company&amp;#039;,&amp;#039;eshop&amp;#039;).&amp;#039;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;&amp;#039;;
+151                         echo &amp;#039;&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;&amp;#039;.$apge.&amp;#039;&amp;amp;amp;by=na&amp;quot;&amp;#039;.$cna.&amp;#039;&amp;gt;&amp;#039;.</u>_(&amp;#039;Customer&amp;#039;,&amp;#039;eshop&amp;#039;).&amp;#039;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;&amp;#039;;
+152                         echo &amp;#039;&amp;lt;/ul&amp;gt;&amp;#039;;</pre>
+
+<p>244 &amp;lt;input type=&amp;quot;hidden&amp;quot; name=&amp;quot;action&amp;quot; value=&amp;quot;&amp;lt;?php echo $_GET[&amp;#039;action&amp;#039;];
+?&amp;gt;&amp;quot; /&amp;gt;
+</p>
+<p>303 $phpself=&amp;#039;?page=&amp;#039;.$_GET[&amp;#039;page&amp;#039;];
+.<br/>
+503         echo &amp;quot;&amp;lt;div id=\&amp;quot;eshopformfloat\&amp;quot;&amp;gt;&amp;lt;form id=\&amp;quot;orderstatus\&amp;quot;
+action=\&amp;quot;&amp;quot;.$phpself.&amp;quot;\&amp;quot; method=\&amp;quot;post\&amp;quot;&amp;gt;&amp;quot;;
+504         ?&amp;gt;<br/>
+.<br/>
+515 &amp;lt;input type=&amp;quot;hidden&amp;quot; name=&amp;quot;action&amp;quot; value=&amp;quot;&amp;lt;?php echo $_GET[&amp;#039;action&amp;#039;];?&amp;gt;&amp;quot; /&amp;gt;
+.<br/>
+.
+</p><p>586   $downloadable .=&amp;#039;&amp;#039;.$dlinfo-&amp;gt;downloads.&amp;#039;&amp;lt;a href=&amp;quot;&amp;#039;.$phpself.&amp;#039;&amp;amp;amp;view=&amp;#039;.$view.&amp;#039;&amp;amp;amp;adddown=&amp;#039;.$dlinfo-&amp;gt;id.&amp;#039;&amp;quot; title=&amp;quot;&amp;#039;.__(&amp;#039;Increase download allowance by 1&amp;#039;,&amp;#039;eshop&amp;#039;).&amp;#039;&amp;quot;&amp;gt;&amp;#039;.__(&amp;#039;Increase&amp;#039;,&amp;#039;eshop&amp;#039;).&amp;#039;&amp;lt;/a&amp;gt;, &amp;lt;a
+href=&amp;quot;&amp;#039;.$phpself.&amp;#039;&amp;amp;amp;view=&amp;#039;.$view.&amp;#039;&amp;amp;amp;decdown=&amp;#039;.$dlinfo-&amp;gt;id.&amp;#039;&amp;quot; title=&amp;quot;&amp;#039;.__(&amp;#039;Decrea    se download allowance by 1&amp;#039;,&amp;#039;eshop&amp;#039;).&amp;#039;&amp;quot;&amp;gt;&amp;#039;.__(&amp;#039;Decrease&amp;#039;,&amp;#039;eshop&amp;#039;).&amp;#039;&amp;lt;/a&amp;gt;&amp;lt;/span&amp;gt;&amp;#039;;
+587          <br/>
+.<br/>
+.
+</p><h1><a name="section_1">642                 echo &amp;#039;&amp;lt;strong&amp;gt;&amp;#039;.__(&amp;#039;Email:&amp;#039;,&amp;#039;eshop&amp;#039;).&amp;#039;&amp;lt;/strong&amp;gt;&amp;#039;.&amp;quot; &amp;lt;a href=\&amp;quot;&amp;quot;.$phpself.&amp;quot;&amp;amp;amp;viewemail=&amp;quot;.$view.&amp;quot;\&amp;quot; title=\&amp;quot;&amp;quot;.__(&amp;#039;Send a form email&amp;#039;,&amp;#039;eshop&amp;#039;).&amp;quot;\&amp;quot;    &amp;gt;&amp;quot;.$drow-&amp;gt;email.&amp;#039;&amp;lt;/a&amp;gt; &amp;lt;small class=&amp;quot;noprint&amp;quot;&amp;gt;&amp;#039;.__(&amp;#039;(sends a form email)&amp;#039;,&amp;#039;eshop&amp;#039;).&amp;quot;&amp;lt;/small&amp;gt;&amp;lt;br /&amp;gt;\n&amp;quot;;</a></h1>
+<p>.<br/>
+746         if($status==&amp;#039;Deleted&amp;#039;){$delete=&amp;quot;&amp;lt;p class=\&amp;quot;delete noprint\&amp;quot;&amp;gt;&amp;lt;a href=\&amp;quot;&amp;quot;.$phpself.&amp;quot;&amp;amp;amp;delid=&amp;quot;.$view.&amp;quot;\&amp;quot;&amp;gt;&amp;quot;.__(&amp;#039;Completely delete this order?&amp;#039;,&amp;#039;eshop&amp;#039;).&amp;quot;&amp;lt;    /a&amp;gt;&amp;lt;br /&amp;gt;&amp;quot;.__(&amp;#039;&amp;lt;small&amp;gt;&amp;lt;strong&amp;gt;Warning:&amp;lt;/strong&amp;gt; this order will be completely deleted and cannot be recovered at a later
+date.&amp;lt;/small&amp;gt;&amp;#039;,&amp;#039;eshop&amp;#039;).&amp;quot;&amp;lt;/p&amp;gt;&amp;quot;;}else{$de    lete=&amp;#039;&amp;#039;;};
+</p>
+
+<p>Blind SQL Injection &amp;amp; requires authenticated user to Wordpress.
+</p><p>From eshop-orders.php, requires admin user:
+</p><p>287 if (!function_exists(&amp;#039;deleteorder&amp;#039;)) {
+</p><pre>
+288         function deleteorder($delid){
+289                 global $wpdb;
+290                 $dtable=$wpdb-&amp;gt;prefix.&amp;#039;eshop_orders&amp;#039;;
+291                 $itable=$wpdb-&amp;gt;prefix.&amp;#039;eshop_order_items&amp;#039;;
+292                 $dltable=$wpdb-&amp;gt;prefix.&amp;#039;eshop_download_orders&amp;#039;;
+293                 $checkid=$wpdb-&amp;gt;get_var(&amp;quot;Select checkid From $dtable where id=&amp;#039;$delid&amp;#039; &amp;amp;&amp;amp; status=&amp;#039;Deleted&amp;#039;&amp;quot;);</pre>
+<h1><a name="section_2">.</a></h1>
+<p>392 eshop_admin_mode();
+</p><p>393 if(isset($_GET[&amp;#039;delid&amp;#039;]) &amp;amp;&amp;amp; !isset($_GET[&amp;#039;view&amp;#039;])){
+394         deleteorder($_GET[&amp;#039;delid&amp;#039;]);
+</p>
+<p>From eshop-orders.php, Requires a regular logged in user:
+</p><p>The following code allows SQL injection via the unsanitized $view variable.
+354 if(isset($_GET[&amp;#039;view&amp;#039;])){
+</p><pre>
+355         $view=$<u>GET[&amp;#039;view&amp;#039;];
+356         $status=$wpdb-&amp;gt;get</u>var(&amp;quot;Select status From $dtable where
+</pre>
+<p>id=&amp;#039;$view&amp;#039;&amp;rdquo;);
+</p><p>SQL injection points via POST to mark &amp;amp; change:
+</p><p>421 if(isset($_POST[&amp;#039;mark&amp;#039;]) &amp;amp;&amp;amp; !isset($_POST[&amp;#039;change&amp;#039;])){
+</p><pre>
+422         $mark=$_POST[&amp;#039;mark&amp;#039;];
+423         $checkid=$<u>POST[&amp;#039;checkid&amp;#039;];
+424         $query2=$wpdb-&amp;gt;get</u>results(&amp;quot;UPDATE $dtable set status=&amp;#039;$mark&amp;#039; where checkid=&amp;#039;$checkid&amp;#039;&amp;quot;);
+425         do_action( &amp;#039;eshop_order_status_updated&amp;#039;, $checkid, $mark );
+426         echo &amp;#039;&amp;lt;div class=&amp;quot;updated fade&amp;quot;&amp;gt;&amp;#039;.__(&amp;#039;Order status changed successfully.&amp;#039;,&amp;#039;eshop&amp;#039;).&amp;#039;&amp;lt;/div&amp;gt;&amp;#039;;
+</pre>
+<p>427 }<br/>
+.<br/>
+.<br/>
+429 if(isset($_POST[&amp;#039;change&amp;#039;])){
+</p><pre>
+430         if(isset($_POST[&amp;#039;move&amp;#039;]) &amp;amp;&amp;amp; $_POST[&amp;#039;move&amp;#039;][0]!=&amp;#039;&amp;#039;){
+431                 foreach($_POST[&amp;#039;move&amp;#039;] as $v=&amp;gt;$ch){
+432                         $mark=$<u>POST[&amp;#039;mark&amp;#039;];
+433                         $query2=$wpdb-&amp;gt;get</u>results(&amp;quot;UPDATE $dtable set status=&amp;#039;$mark&amp;#039; where checkid=&amp;#039;$ch&amp;#039;&amp;quot;);
+434                         do_action( &amp;#039;eshop_order_status_updated&amp;#039;, $ch,$mark );
+</pre>
+<p>&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-2016-0765 2016-0769&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=160"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;XSS CVE&lt;span style="color: #339933;"&gt;-&lt;/span&gt;&lt;span style="color: #cc66cc;"&gt;2016&lt;/span&gt;&lt;span style="color: #339933;"&gt;-&lt;/span&gt;&lt;span style="color: #208080;"&gt;0765&lt;/span&gt; &lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;SQLI &lt;span style="color: #cc66cc;"&gt;2016&lt;/span&gt;&lt;span style="color: #339933;"&gt;-&lt;/span&gt;&lt;span style="color:#800080;"&gt;0769&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; [&lt;a href="/m/eshop.png"&gt;eshop.png&lt;/a&gt;]&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href=""&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt;
+&lt;/html&gt;
+</p>
+
+</body>
+</html>

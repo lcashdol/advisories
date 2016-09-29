@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title></title>
+<meta name="generator" content="HTML::TextToHTML v2.51"/>
+</head>
+<body>
+<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
+</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
+    white-space: -moz-pre-wrap; /</em> Firefox <em>/
+    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
+    white-space: -o-pre-wrap;   /</em> Opera 7 */
+    word-wrap: break-word;<br/>
+}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 67&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; Vulnerability Report for Ruby Gem kompanee-recipes-0.1.4&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2014-06-01&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="http://rubygems.org/gems/kompanee-recipes">http://rubygems.org/gems/kompanee-recipes</a>"&gt;<a href="http://rubygems.org/gems/kompanee-recipes&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">http://rubygems.org/gems/kompanee-recipes&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;thekompanee.com&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2014-06-25&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; <a href="mailto:accounts+rubygems@thekompanee.com">accounts+rubygems@thekompanee.com</a>&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;These are the common recipes we've been using here at The Kompanee. Packaged as a gem.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;From: ./kompanee-recipes-0.1.4/lib/kompanee-recipes/heroku.rb
+</p><p>If this Gem is used in the context of a Rails application it maybe possible for a remote user to inject commands into the shell via #{password} #{user} #{deploy_name} #{application} variables if that data is user supplied.
+</p><pre>
+032-      task :install do
+33:        `heroku domains:add #{deploy_name}`
+34-      end
+35-
+37-        Removes the domain for the application from the Heroku server.
+39-      task :remove do
+40:        `heroku domains:remove #{deploy_name}`
+41-      end
+42-
+43-      namespace :addon do
+--
+47-        task :install do
+48:          `heroku addons:add custom_domains:basic`
+49-        end
+50-
+54-        task :remove do
+55:          `heroku addons:remove custom_domains:basic`
+56-        end
+57-      end
+</pre>
+<p>58- end<br/>
+--
+</p><pre>
+87-        [internal] Creates a Heroku credentials file.
+89-      task :create do
+90:        `if [ ! -d #{heroku_credentials_path} ]; then mkdir -p #{heroku_credentials_path}; fi`
+91:        `echo #{user} &amp;gt; #{heroku_credentials_file}`
+92:        `echo #{password} &amp;gt;&amp;gt; #{heroku_credentials_file}`
+93-      end
+94-
+96-        [internal] Switches the credentials file to either the current use or the
+99-      task :switch do
+--
+119-      restart the application.
+121-    task :default do
+122:      `git push heroku #{branch}`
+123-      deploy.migrate
+124-      deploy.restart
+</pre>
+<p>125- end<br/>
+--<br/>
+128- Restarts the application.<br/>
+130- task :restart do<br/>
+131: `heroku restart`<br/>
+132- end<br/>
+133-<br/>
+135- Runs the migrate rake task.<br/>
+137- task :migrate do<br/>
+138: `heroku rake db:migrate`<br/>
+139- end<br/>
+140-<br/>
+--<br/>
+144- namespace :rollback do
+</p><pre>
+145-      task :default do
+146:        `heroku rollback`
+147-        deploy.restart
+148-      end
+</pre>
+<p>149- end<br/>
+--<br/>
+151- namespace :web do
+</p><pre>
+152-      desc &amp;quot;Removes the maintenance page to resume normal site operation.&amp;quot;
+153-      task :enable do
+154:        `heroku maintenance:off`
+155-      end
+156-
+158-      task :disable do
+159:        `heroku maintenance:on`
+160-      end
+</pre>
+<p>161- end<br/>
+162-<br/>
+--<br/>
+169-<br/>
+170- heroku.domain.install<br/>
+171-<br/>
+173- deploy.default<br/>
+174- end<br/>
+175- end<br/>
+--<br/>
+177- namespace :website do<br/>
+179- task :install do<br/>
+180: `heroku create #{application}` 181- end
+182-<br/>
+183- desc &amp;quot;Completely removes application from Heroku&amp;quot; 184- task :remove do
+185: `heroku destroy --confirm #{application}` 186- end
+187- end<br/>
+188-<br/>
+189- namespace :db do<br/>
+191- task :drop do<br/>
+192: `heroku pg:reset`<br/>
+193- end<br/>
+194-<br/>
+195- namespace :backup do
+</p><pre>
+197-      task :default do
+198:        `heroku pgbackups:capture`
+199-      end
+200-
+201-      namespace :addon do
+--
+205-        task :install do
+206:          `heroku addons:add pgbackups:basic`
+207-        end
+208-
+212-        task :remove do
+213:          `heroku addons:remove pgbackups:basic`
+214-        end
+215-      end
+</pre>
+<p>216- end<br/>
+--<br/>
+219- task :reset_and_seed do
+</p><pre>
+221-      db.backup
+222:      `heroku pg:reset`
+223:      `heroku rake db:seed`
+</pre>
+<p>224- end<br/>
+225-<br/>
+226- desc &amp;quot;Seed database&amp;quot;<br/>
+227- task :seed do
+</p><pre>
+229-      db.backup
+230:      `heroku rake db:seed`
+</pre>
+<p>231- end<br/>
+232- end<br/>
+233-<br/>
+235- task :shell do<br/>
+236: `heroku shell`<br/>
+237- end<br/>
+238-<br/>
+240- task :invoke do<br/>
+242- end<br/>
+243-end&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=67"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://www.vapid.dhs.org/advisories/kompanee-recipes-0.1.4.html">http://www.vapid.dhs.org/advisories/kompanee-recipes-0.1.4.html</a>"&gt;<a href="http://www.vapid.dhs.org/advisories/kompanee-recipes-0.1.4.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://www.vapid.dhs.org/advisories/kompanee-recipes-0.1.4.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
+&lt;/html&gt;
+</p>
+
+</body>
+</html>

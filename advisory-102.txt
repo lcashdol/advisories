@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title></title>
+<meta name="generator" content="HTML::TextToHTML v2.51"/>
+</head>
+<body>
+<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
+</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
+    white-space: -moz-pre-wrap; /</em> Firefox <em>/
+    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
+    white-space: -o-pre-wrap;   /</em> Opera 7 */
+    word-wrap: break-word;<br/>
+}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 102&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; Remote Command Injection in Ruby Gem sfpagent 0.4.14&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2014-04-14&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href=" <a href="http://rubygems.org/gems/sfpagent">http://rubygems.org/gems/sfpagent</a>"&gt; <a href="http://rubygems.org/gems/sfpagent&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">http://rubygems.org/gems/sfpagent&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;Herry16&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2014-04-16&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; <a href="mailto:herry13@gmail.com">herry13@gmail.com</a>&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;A Ruby implementation of SFP agent.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;The list variable generated from the user supplied JSON[body] input is passed directly to the system() shell on line 649. If a user supplies a module name with shell metacharacters like ; they might be able to execute shell commands on the remote system as the sfpagent running user id.
+From sfpagent-0.4.14/lib/sfpagent/bsig.rb:
+</p><pre>
+637                         code, body = get_data(address, port, &amp;#039;/modules&amp;#039;)
+638                         raise Exception, &amp;quot;Unable to get modules list from {name}&amp;quot; if code.to_i != 200
+639 
+640                         modules = JSON[body]
+641                         list = &amp;#039;&amp;#039;
+642                         schemata.each { |m|
+643                                 list += &amp;quot;{m} &amp;quot; if File.exist?(&amp;quot;{modules_dir}/{m}&amp;quot;) and
+644                                                    (not modules.has_key?(m) or modules[m] != get_local_module_hash(m, modules_dir).to_s)
+645                         }
+646 
+647                         return true if list == &amp;#039;&amp;#039;
+648 
+649                         if system(&amp;quot;cd #{modules_dir}; #{install_module} #{address} #{port} #{list} 1&amp;gt;/dev/null 2&amp;gt;/tmp/install_module.error&amp;quot;)
+650                                 Sfp::Agent.logger.info &amp;quot;Push modules #{list}to #{name} [OK]&amp;quot;
+651                         else
+652                                 Sfp::Agent.logger.warn &amp;quot;Push modules #{list}to #{name} [Failed]&amp;quot;
+653                         end
+654 
+655                         return true
+</pre>
+<p>&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-2014-2888&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=102"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://www.vapid.dhs.org/advisories/spfagent-remotecmd.html">http://www.vapid.dhs.org/advisories/spfagent-remotecmd.html</a>"&gt;<a href="http://www.vapid.dhs.org/advisories/spfagent-remotecmd.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://www.vapid.dhs.org/advisories/spfagent-remotecmd.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
+&lt;/html&gt;</p>
+
+</body>
+</html>

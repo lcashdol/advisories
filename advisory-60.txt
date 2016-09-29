@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title></title>
+<meta name="generator" content="HTML::TextToHTML v2.51"/>
+</head>
+<body>
+<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
+</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
+    white-space: -moz-pre-wrap; /</em> Firefox <em>/
+    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
+    white-space: -o-pre-wrap;   /</em> Opera 7 */
+    word-wrap: break-word;<br/>
+}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 60&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; Irix Midikeys local root Vulnerability &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 1999-05-19&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="http://www.sgi.com/">www.sgi.com</a>"&gt;<a href="http://www.sgi.com/">www.sgi.com</a>&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;<a href="http://www.sgi.com/">www.sgi.com</a>&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 1999-05-19&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;Midikeys is a sound editing program for SGI IRIX 6.x.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;I have been auditing our IRIX boxes and found a new vulerability. This has been verified for IRIX 6.4 and 6.3 by other sources. Their has been a response from SGI here is the advisory. Aleph1 has compiled some very usefull information as well.
+</p><p>On IRIX 6.5 systems (IRIX Release 6.5 IP28 )
+</p><pre>
+        # uname -a
+        IRIX64 devel 6.5 05190004
+</pre>
+<p>The setuid root binary midikeys can be used to read any file on the system using its gui interface. It can also be used to edit anyfile on the system, or execute a rootshell by changing your editor environment variable to a command in the CDE. I was able to get from guest account access to root access using the following procedure. Any local account will do.
+</p><p>From an unpriviledged account (guest).
+</p><pre>
+        devel 25% id
+        uid=998 gid=998(guest)
+</pre>
+<p>2) Execute the midikeys application with display set to your host.
+</p><pre>
+        devel 26% ./midikeys
+        devel 27% Xlib:  extension &amp;quot;GLX&amp;quot; missing on display &amp;quot;grinch:0.0&amp;quot;.
+        Xlib:  extension &amp;quot;GLX&amp;quot; missing on display &amp;quot;grinch:0.0&amp;quot;.
+</pre>
+<p>3) under the midikeys window click sounds and then midi songs. This will open a file manager type interface.
+</p><p>4) You can enter the path and filename of files you which to read. including root owned with group/world read/write permissions unset.
+</p><p>5) If you select a file like &amp;quot;/usr/share/data/music/README&amp;quot; it will appear in a text editor. Use the text editor to open /etc/passwd and make modifications at will. Save and enjoy.
+</p><p>So I removed the &amp;#039;*&amp;#039; from sysadm...
+</p><pre>
+          $ su sysadm
+          # id
+          uid=0(root) gid=0(sys)
+          devel 28%  ls -l /usr/sbin/midikeys
+          -rwsr-xr-x    1 root     root      218712 Jan 10 17:19 /usr/sbin/midikeys
+</pre>
+<p>I have tested this on 2 IRIX 6.5 and 1 6.2 host with success.
+</p><p>To fix: # chmod -s /usr/sbin/midikeys
+</p><p>SGI addressed this issue in the following document:
+</p><p><a href="ftp://sgigate.sgi.com/security/19990501-01-A">ftp://sgigate.sgi.com/security/19990501-01-A</a>
+</p><p>&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-1999-0765&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=60"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://www.vapid.dhs.org/advisories/irix_midikeys_local_root_vulnerability.html">http://www.vapid.dhs.org/advisories/irix_midikeys_local_root_vulnerability.html</a>"&gt;<a href="http://www.vapid.dhs.org/advisories/irix_midikeys_local_root_vulnerability.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://www.vapid.dhs.org/advisories/irix_midikeys_local_root_vulnerability.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
+&lt;/html&gt;
+</p>
+
+</body>
+</html>

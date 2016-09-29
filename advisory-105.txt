@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title></title>
+<meta name="generator" content="HTML::TextToHTML v2.51"/>
+</head>
+<body>
+<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
+</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
+    white-space: -moz-pre-wrap; /</em> Firefox <em>/
+    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
+    white-space: -o-pre-wrap;   /</em> Opera 7 */
+    word-wrap: break-word;<br/>
+}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 105&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; Fastlink Software's TheServer http server clear text password&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2002-10-14&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="http://www.fastlinksoftware.com/">http://www.fastlinksoftware.com/</a> "&gt;<a href="http://www.fastlinksoftware.com/">http://www.fastlinksoftware.com/</a> &lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;<a href="http://www.fastlinksoftware.com/">http://www.fastlinksoftware.com/</a> &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2002-10-14&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; <a href="http://www.fastlinksoftware.com/">http://www.fastlinksoftware.com/</a> &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;A quick note on Fastlink Software&amp;#039;s TheServer http server. I was not going to write this up since it is a silly problem but this server is listed in the netcraft survey so people are using it. TheServer is a very small and simple webserver for the Windows platform it consists of a single executable and configuration file. 
+TheServer stores the password for log file accesss in cleartext. This password is stored in the server.ini file. Which by default resides in the servers root directory. This is a VERY simple webserver for Windows 98/95 if the server is setup to log, then the password is also sent to the logfile when accessing the server logs remotely. The risk is 
+you can have someone else parsing your weblogs that you never intended. 
+</p><p>Hello Larry; 
+</p><p>    I&amp;#039;m the developer of TheServer. I&amp;#039;ve posted information about the 
+security issue you wrote about on Security Tracker on my website at 
+<a href="http://www.fastlinksoftware.com">http://www.fastlinksoftware.com</a> under the FAQ section. The information I 
+posted is as follows: <br/>
+Q: How do I prevent people from downloading my SERVER.INI file and 
+getting my system password? <br/>
+A: Make a folder below the root of your web pages and place SERVER.EXE 
+and SERVER.INI there. <br/>
+Set the &amp;#039;root&amp;#039; field in the SERVER.INI file to the folder where your web 
+pages start. <br/>
+Add a &amp;#039;restrict&amp;#039; line for the new folder you created. 
+Example: <br/>
+Your web pages are in c:\web <br/>
+Make a folder called &amp;#039;bin&amp;#039; under c:\web. 
+Place SERVER.EXE and SERVER.INI in the &amp;#039;bin&amp;#039; folder. 
+Edit the SERVER.INI file and change the &amp;#039;root&amp;#039; field as follows: 
+root=c:\web <br/>
+Add a line in the SERVER.INI file that would appear as follows: 
+restrict=bin <br/>
+With the above example when TheServer starts it will look for the 
+starting web page in &amp;#039;c:\web&amp;#039; and access will be restricted to the &amp;#039;bin&amp;#039; 
+folder that contains the SERVER.INI file. 
+Thanks, <br/>
+Allen Rodgers. &lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-2002-2389&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=105"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://www.vapid.dhs.org/advisories/theserver_cleartext_password.html">http://www.vapid.dhs.org/advisories/theserver_cleartext_password.html</a>"&gt;<a href="http://www.vapid.dhs.org/advisories/theserver_cleartext_password.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://www.vapid.dhs.org/advisories/theserver_cleartext_password.html&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
+&lt;/html&gt;
+</p>
+
+</body>
+</html>

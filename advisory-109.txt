@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title></title>
+<meta name="generator" content="HTML::TextToHTML v2.51"/>
+</head>
+<body>
+<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
+</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
+    white-space: -moz-pre-wrap; /</em> Firefox <em>/
+    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
+    white-space: -o-pre-wrap;   /</em> Opera 7 */
+    word-wrap: break-word;<br/>
+}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 109&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; Persistent XSS in Media File Renamer V1.7.0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2014-01-31&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="https://wordpress.org/plugins/media-file-renamer/">https://wordpress.org/plugins/media-file-renamer/</a>"&gt;<a href="https://wordpress.org/plugins/media-file-renamer/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">https://wordpress.org/plugins/media-file-renamer/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;Jordy Meow&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2014-02-04&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; <a href="http://www.meow.fr/#&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">http://www.meow.fr/#&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;This plugins allows you to rename physically the media files by updating their titles. It also updates theirs links in the posts automatically.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;The following functions do not sanitize input before being echoed out: 
+In file mfrh_class.settings-api.php:
+</p><pre>
+166     function callback_multicheck( $args ) {
+167         $value = $this-&amp;gt;get_option( $args[&amp;#039;id&amp;#039;], $args[&amp;#039;section&amp;#039;], $args[&amp;#039;std&amp;#039;] );
+168         
+169         $html = &amp;#039;&amp;#039;;
+170         foreach ( $args[&amp;#039;options&amp;#039;] as $key =&amp;gt; $label ) {
+171             $checked = isset( $value[$key] ) ? $value[$key] : &amp;#039;0&amp;#039;;
+172             $html .= sprintf( &amp;#039;&amp;#039;, $args[&amp;#039;section&amp;#039;], $a    rgs[&amp;#039;id&amp;#039;], $key, checked( $checked, $key, false ) );
+173             $html .= sprintf( &amp;#039; %3$s
+&amp;#039;, $args[&amp;#039;section&amp;#039;], $args[&amp;#039;id&amp;#039;], $label, $key );
+174         }   
+175         $html .= sprintf( &amp;#039; %s&amp;#039;, $args[&amp;#039;desc&amp;#039;] );
+176         
+177         echo $html;
+178     }   </pre>
+
+<p>    function callback_radio( $args ) {<br/>
+186 <br/>
+187         $value = $this-&amp;gt;get_option( $args[&amp;#039;id&amp;#039;], $args[&amp;#039;section&amp;#039;], $args[&amp;#039;std&amp;#039;] );
+188         
+</p><pre>
+189         $html = &amp;#039;&amp;#039;;
+190         foreach ( $args[&amp;#039;options&amp;#039;] as $key =&amp;gt; $label ) {
+191             $html .= sprintf( &amp;#039;&amp;#039;, $args[&amp;#039;section&amp;#039;], $args[&amp;#039;id&amp;#039;], $    key, checked( $value, $key, false ) );
+192             $html .= sprintf( &amp;#039; %3$s
+&amp;#039;, $args[&amp;#039;section&amp;#039;], $args[&amp;#039;id&amp;#039;], $label, $key );
+193         }   
+194         $html .= sprintf( &amp;#039; %s&amp;#039;, $args[&amp;#039;desc&amp;#039;] );
+195         
+196         echo $html;
+197     }</pre>
+
+<p> function callback_wysiwyg( $args ) {<br/>
+250 
+</p><pre>
+251         $value = wpautop( $this-&amp;gt;get_option( $args[&amp;#039;id&amp;#039;], $args[&amp;#039;section&amp;#039;], $args[&amp;#039;std&amp;#039;] ) );
+252         $size = isset( $args[&amp;#039;size&amp;#039;] ) &amp;amp;&amp;amp; !is_null( $args[&amp;#039;size&amp;#039;] ) ? $args[&amp;#039;size&amp;#039;] : &amp;#039;500px&amp;#039;;
+253 
+254         echo &amp;#039;
+</pre>
+<p>&amp;#039;;<br/>
+255 <br/>
+256         wp_editor( $value, $args[&amp;#039;section&amp;#039;] . &amp;#039;[&amp;#039; . $args[&amp;#039;id&amp;#039;] . &amp;#039;]&amp;#039;, array( &amp;#039;teeny&amp;#039; =&amp;gt; true, &amp;#039;textarea_rows&amp;#039; =&amp;gt; 10 ) );
+257 <br/>
+258         echo &amp;#039;<br/>
+&amp;#039;;<br/>
+259 <br/>
+260         echo sprintf( &amp;#039;<br/>
+ %s&amp;#039;, $args[&amp;#039;desc&amp;#039;] );<br/>
+261     }
+</p>
+<p> If a user with permission to add media or edit media uploads a file with &amp;quot;&amp;lt;script&amp;gt;alert(1)&amp;lt;/script&amp;gt;&amp;quot; as the title they can XSS the site admin user.&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-2014-2040&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=109"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; [&lt;a href="/m/xss.png"&gt;xss.png&lt;/a&gt;]&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href="<a href="http://www.vapid.dhs.org/advisories/wordpress/plugins/MediaFileRenamer-1.7.0/">http://www.vapid.dhs.org/advisories/wordpress/plugins/MediaFileRenamer-1.7.0/</a>"&gt;<a href="http://www.vapid.dhs.org/advisories/wordpress/plugins/MediaFileRenamer-1.7.0/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt">http://www.vapid.dhs.org/advisories/wordpress/plugins/MediaFileRenamer-1.7.0/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt</a>;
+&lt;/html&gt;
+</p>
+
+</body>
+</html>

