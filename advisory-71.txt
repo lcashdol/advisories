@@ -1,31 +1,38 @@
-                                Advisory #: 71
-Title: Vulnerability Report for Ruby Gem lingq-0.3.1
-Author:Larry W. Cashdollar, @_larry0
-Date: 2014-06-01
-Download Site: http://rubygems.org/gems/lingq
-Vendor: ethan.vizitei[at]gmail.com
-Vendor Notified: 2014-06-25
-Vendor Contact: ethan.vizitei[at]gmail.com
-Description: Gem for interacting with the API of lingq.com. It's a language
-learning website, and it's pretty useful, but I want to be able to work on my
-flashcards offline. This gem is being written to be included in a desktop
-client (and maybe eventually a mobile client), but will certainly still be
-useful as a standalone api wrapper for other projects that want to interact
-with Lingq.com
-Vulnerability:
-From: ./lingq-0.3.1/lib/lingq/client.rb Line 46 exposes the lingq.com API key
-to the command line via #{@apikey} variable. If this Gem is used in the context
-of a rails application a remote user may be able to inject commands into the
-shell via special meta characters like ; and & as the variables are not
-sanitized. 08- attr_reader :target_language 9- attr_reader :languages 10- 11:
-def initialize(api_key) 12: @apikey = api_key 13- load_languages! 14- end 15- -
-- 43- put_with_language("lingqs/",word.params) 44- 46: system_call("curl -X PUT
--d id={word.id};status={word.status};hint={word.hint};fragment=#{word.fragment}
-http://www.lingq.com/api_v2/#{@target_language}/lingqs/?apikey=#{@apikey}") 47-
-end
-CVE-
-JSON:Export
-Exploit Code:
-   1.  
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/lingq-0.3.1.html
+
+                               Advisory #: 71
+
+   Title: Vulnerability Report for Ruby Gem lingq-0.3.1
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2014-06-01
+   Download Site: http://rubygems.org/gems/lingq
+   Vendor: ethan.vizitei[at]gmail.com
+   Vendor Notified: 2014-06-25
+   Vendor Contact: ethan.vizitei[at]gmail.com
+   Description: Gem for interacting with the API of lingq.com. It's a
+   language learning website, and it's pretty useful, but I want to be
+   able to work on my flashcards offline. This gem is being written to be
+   included in a desktop client (and maybe eventually a mobile client),
+   but will certainly still be useful as a standalone api wrapper for
+   other projects that want to interact with Lingq.com
+   Vulnerability:
+   From: ./lingq-0.3.1/lib/lingq/client.rb Line 46 exposes the lingq.com
+   API key to the command line via #{@apikey} variable. If this Gem is
+   used in the context of a rails application a remote user may be able to
+   inject commands into the shell via special meta characters like ; and &
+   as the variables are not sanitized. 08- attr_reader :target_language 9-
+   attr_reader :languages 10- 11: def initialize(api_key) 12: @apikey =
+   api_key 13- load_languages! 14- end 15- -- 43-
+   put_with_language("lingqs/",word.params) 44- 46: system_call("curl -X
+   PUT -d
+   id={word.id};status={word.status};hint={word.hint};fragment=#{word.frag
+   ment}
+   http://www.lingq.com/api_v2/#{@target_language}/lingqs/?apikey=#{@apike
+   y}") 47- end
+   CVE-
+   JSON: Export
+   Exploit Code:
+
+    1.
+
+   Screen Shots:
+   Advisory: http://www.vapid.dhs.org/advisories/lingq-0.3.1.html

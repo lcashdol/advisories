@@ -1,34 +1,41 @@
-                                Advisory #: 51
-Title: PrimeBase Database 4.2 poor file permissions
-Author:Larry W. Cashdollar, @_larry0
-Date: 2003-09-01
-Download Site: http://www.primebase.com/en/index.html
-Vendor:SNAP Innovation primebase.com
-Vendor Notified: 2003-09-13
-Vendor Contact: http://www.primebase.com/index.php/en/contact
-Description: The PrimeBase Database Server is a relational Database Management
-System (DBMS) for Mac, UNIX and Windows platforms. The PrimeBase Database
-Server supports all common database access standards (PBT, SQL, ODBC, JDBC,
-PHP, Perl, RealBasic, EOF and DAL) and protocols (TCP/IP, Shared Memory and
-Appletalk)
-Vulnerability:
-Local attackers can exploit these vulnerabilities to clobber root owned system
-files and modify software binaries. This could possibly lead to a denial of
-service or system compromise. 1. Poor use of temporary files during
-installation. I noticed the PrimeBase install script creates the following
-files in /tmp: [nobody $] ln -s /etc/shadow /tmp/PrimeBase.log Then if a
-malicious user has previous knowledge of the administrators installation of
-PrimeBase the contents of /etc/shadow will be overwritten with the contents of
-PrimeBase.log. LOG="/tmp/PrimeBase.log" echo "$str:[y/n]" | tee $LOG echo
-"PrimeBase Installation: $now" >> $LOG 2. Poor default file permissions. A
-malicious local user could manipulate the binaries for PrimeBase used by the
-administrator and execute arbitrary code. The attacker would need to wait until
-the Database was restarted or the system rebooted. root@Fester local]# ls -ld /
-usr/local/primebase drwxrwxrwx 6 root root 4096 Sep 1 13:57 primebase
-CVE-
-JSON:Export
-Exploit Code:
-   1.  
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/
-firebird_database_symlink_attack.html
+
+                               Advisory #: 51
+
+   Title: PrimeBase Database 4.2 poor file permissions
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2003-09-01
+   Download Site: http://www.primebase.com/en/index.html
+   Vendor: SNAP Innovation primebase.com
+   Vendor Notified: 2003-09-13
+   Vendor Contact: http://www.primebase.com/index.php/en/contact
+   Description: The PrimeBase Database Server is a relational Database
+   Management System (DBMS) for Mac, UNIX and Windows platforms. The
+   PrimeBase Database Server supports all common database access standards
+   (PBT, SQL, ODBC, JDBC, PHP, Perl, RealBasic, EOF and DAL) and protocols
+   (TCP/IP, Shared Memory and Appletalk)
+   Vulnerability:
+   Local attackers can exploit these vulnerabilities to clobber root owned
+   system files and modify software binaries. This could possibly lead to
+   a denial of service or system compromise. 1. Poor use of temporary
+   files during installation. I noticed the PrimeBase install script
+   creates the following files in /tmp: [nobody $] ln -s /etc/shadow
+   /tmp/PrimeBase.log Then if a malicious user has previous knowledge of
+   the administrators installation of PrimeBase the contents of
+   /etc/shadow will be overwritten with the contents of PrimeBase.log.
+   LOG="/tmp/PrimeBase.log" echo "$str:[y/n]" | tee $LOG echo "PrimeBase
+   Installation: $now" >> $LOG 2. Poor default file permissions. A
+   malicious local user could manipulate the binaries for PrimeBase used
+   by the administrator and execute arbitrary code. The attacker would
+   need to wait until the Database was restarted or the system rebooted.
+   root@Fester local]# ls -ld /usr/local/primebase drwxrwxrwx 6 root root
+   4096 Sep 1 13:57 primebase
+   CVE-
+   JSON: Export
+   Exploit Code:
+
+    1.
+
+   Screen Shots:
+   Advisory:
+   http://www.vapid.dhs.org/advisories/firebird_database_symlink_attack.ht
+   ml

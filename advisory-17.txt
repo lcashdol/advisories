@@ -1,31 +1,37 @@
-                                Advisory #: 17
-Title: Ruby Gem as-1.0 Password exposure
-Author:Larry W. Cashdollar, @_larry0
-Date: 2014-09-25
-Download Site: http://rubygems.org/gems/as
-Vendor:Another Service
-Vendor Notified: 2014-09-25
-Vendor Contact: samuel.hassine@anotherservice.com
-Description: as-1.0 is a command line interface to automate deployment and
-management of servers for https://www.anotherservice.com/.
-Vulnerability:
-./as-1.0/lib/vmc/micro/vmrun.rb command = "-gu #{@user} -gp #{@password}
-runProgramInGuest" 2- args = '/usr/bin/test -e /var/vcap/micro/offline' 3- #
-why not use run_command? 4: result = %x{#{@vmrun} #{command} #{@vmx} #{args}} -
-6- if result.include?('Guest program exited with non-zero exit code: 1') 7-
-return falseÂ­0- def ready? 1- command = "-gu root -gp 'ca$hc0w'
-runProgramInGuest" 2- args = '/usr/bin/test -e /var/vcap/micro/micro.json' 3:
-result = %x{#{@vmrun} #{command} #{@vmx} #{args}} 4- 5- if result.include?
-('Invalid user name or password for the guest OS') || $?.exitstatus == 06-
-return true ./as-1.0/lib/vmc/micro.rb 7- def run_command(command, args=nil) - #
-TODO switch to using posix-spawn instead 9: result = %x{#{command} #{args}
-2>&1} 0- unless $?.exitstatus == 0- if block_given? 2- yield This gem exposes
-users login credentials to the process table. If the as-1.0 software is used in
-the context of a gem or wrapped behind sudo it would be vulnerable to command
-injection as well.
-CVE-
-JSON:Export
-Exploit Code:
-   1. ps -ef |grep runProgram
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/as-v1.0.html
+
+                               Advisory #: 17
+
+   Title: Ruby Gem as-1.0 Password exposure
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2014-09-25
+   Download Site: http://rubygems.org/gems/as
+   Vendor: Another Service
+   Vendor Notified: 2014-09-25
+   Vendor Contact: samuel.hassine@anotherservice.com
+   Description: as-1.0 is a command line interface to automate deployment
+   and management of servers for https://www.anotherservice.com/.
+   Vulnerability:
+   ./as-1.0/lib/vmc/micro/vmrun.rb command = "-gu #{@user} -gp
+   #{@password} runProgramInGuest" 2- args = '/usr/bin/test -e
+   /var/vcap/micro/offline' 3- # why not use run_command? 4: result =
+   %x{#{@vmrun} #{command} #{@vmx} #{args}} -6- if result.include?('Guest
+   program exited with non-zero exit code: 1') 7- return falseÂ0- def
+   ready? 1- command = "-gu root -gp 'ca$hc0w' runProgramInGuest" 2- args
+   = '/usr/bin/test -e /var/vcap/micro/micro.json' 3: result =
+   %x{#{@vmrun} #{command} #{@vmx} #{args}} 4- 5- if
+   result.include?('Invalid user name or password for the guest OS') ||
+   $?.exitstatus == 06- return true ./as-1.0/lib/vmc/micro.rb 7- def
+   run_command(command, args=nil) - # TODO switch to using posix-spawn
+   instead 9: result = %x{#{command} #{args} 2>&1} 0- unless $?.exitstatus
+   == 0- if block_given? 2- yield This gem exposes users login credentials
+   to the process table. If the as-1.0 software is used in the context of
+   a gem or wrapped behind sudo it would be vulnerable to command
+   injection as well.
+   CVE-
+   JSON: Export
+   Exploit Code:
+
+    1. ps -ef |grep runProgram
+
+   Screen Shots:
+   Advisory: http://www.vapid.dhs.org/advisories/as-v1.0.html

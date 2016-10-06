@@ -1,29 +1,35 @@
-                                Advisory #: 94
-Title: Vulnerabilities in YingZhi Python Programming Language for iOS
-Author:Larry W. Cashdollar, @_larry0
-Date: 2014-05-14
-Download Site: http://www.iphoneappstorm.com/iphone-apps/utilities/
-com.yingzhi.python/yingzhipython.php?id=493505744_http://sosilen.blog.163.com/
-Vendor:XiaoWen Huang
-Vendor Notified: 2014-05-14
-Vendor Contact: http://sosilen.blog.163.com/profile/
-Description: Python Interpreter is a native python development application for
-the iPad/iPhone. It is available for iOS 4 and above.
-Vulnerability:
-The product is packaged with its own httpd and ftpd servers. Enabling the local
-daemons for development by Touching Computer<->This Machine starts up an httpd
-server and ftpd server, both daemons are bound to device IP not localhost.
-Vulnerabilities httpd server allows upload of arbitrary files to root WWW
-directory. Browsing to http://<target_ip>:8080/ presents an index page in which
-anyone can upload files to the web servers root directory. ftp server
-vulnerable to ../ bug The ftp server doesn't sanitize user input and allows
-remote users to read and possibly write to the devices storage. ftp://
-192.168.0.24:10000/../../../../../../../private/etc/passwd The ftp server
-doesn't bother authenticating users, any username/password combination will
-allow you in.
-CVE-2013-5655
-JSON:Export
-Exploit Code:
-   1.  
-Screen Shots: [screen1.gif][screen2.gif]
-Advisory: http://www.vapid.dhs.org/advisories/python_for_ipad.html
+
+                               Advisory #: 94
+
+   Title: Vulnerabilities in YingZhi Python Programming Language for iOS
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2014-05-14
+   Download Site:
+   http://www.iphoneappstorm.com/iphone-apps/utilities/com.yingzhi.python/
+   yingzhipython.php?id=493505744 http://sosilen.blog.163.com/
+   Vendor: XiaoWen Huang
+   Vendor Notified: 2014-05-14
+   Vendor Contact: http://sosilen.blog.163.com/profile/
+   Description: Python Interpreter is a native python development
+   application for the iPad/iPhone. It is available for iOS 4 and above.
+   Vulnerability:
+   The product is packaged with its own httpd and ftpd servers. Enabling
+   the local daemons for development by Touching Computer<->This Machine
+   starts up an httpd server and ftpd server, both daemons are bound to
+   device IP not localhost. Vulnerabilities httpd server allows upload of
+   arbitrary files to root WWW directory. Browsing to
+   http://<target_ip>:8080/ presents an index page in which anyone can
+   upload files to the web servers root directory. ftp server vulnerable
+   to ../ bug The ftp server doesn't sanitize user input and allows remote
+   users to read and possibly write to the devices storage.
+   ftp://192.168.0.24:10000/../../../../../../../private/etc/passwd The
+   ftp server doesn't bother authenticating users, any username/password
+   combination will allow you in.
+   CVE-2013-5655
+   JSON: Export
+   Exploit Code:
+
+    1.
+
+   Screen Shots: [screen1.gif][screen2.gif]
+   Advisory: http://www.vapid.dhs.org/advisories/python_for_ipad.html

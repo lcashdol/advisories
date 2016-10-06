@@ -1,25 +1,30 @@
-                                Advisory #: 56
-Title: Vulnerability Report for Ruby Gem gyazo-1.0.0
-Author:Larry W. Cashdollar, @_larry0
-Date: 2014-06-01
-Download Site: http://rubygems.org/gems/gyazo
-Vendor:Toshiyuki Masui
-Vendor Notified: 2014-06-25
-Vendor Contact: masui[at]pitecan.com
-Description: Upload an image to Gyazo.com.
-Vulnerability:
-From: ./gyazo-1.0.0/lib/gyazo/client.rb If this Gem is used in the context of a
-rails app a malicious user may inject commands via #{imagefile} and #{tmpfile}
-using shell meta characters like ; and sending an escaped \". 0through the
-{imagefile} name if the raw option is not set. Also file names are time based
-and predictable leading to file clobbering vulnerabilities as the running
-process username. 57 unless opts[:raw] 58 tmpfile = "/tmp/gyazo_upload_
-{Time.now.to_i}_{Time.now.usec}.png" 59 if File.exist? imagefile 60 system
-"sips -s format png \"{imagefile}\" --out \"#{tmpfile}\" > /dev/null" 61 end 62
-end
-CVE-2014-4994
-JSON:Export
-Exploit Code:
-   1.  
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/gyazo-1.0.0.html
+
+                               Advisory #: 56
+
+   Title: Vulnerability Report for Ruby Gem gyazo-1.0.0
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2014-06-01
+   Download Site: http://rubygems.org/gems/gyazo
+   Vendor: Toshiyuki Masui
+   Vendor Notified: 2014-06-25
+   Vendor Contact: masui[at]pitecan.com
+   Description: Upload an image to Gyazo.com.
+   Vulnerability:
+   From: ./gyazo-1.0.0/lib/gyazo/client.rb If this Gem is used in the
+   context of a rails app a malicious user may inject commands via
+   #{imagefile} and #{tmpfile} using shell meta characters like ; and
+   sending an escaped \". 0through the {imagefile} name if the raw option
+   is not set. Also file names are time based and predictable leading to
+   file clobbering vulnerabilities as the running process username. 57
+   unless opts[:raw] 58 tmpfile =
+   "/tmp/gyazo_upload_{Time.now.to_i}_{Time.now.usec}.png" 59 if
+   File.exist? imagefile 60 system "sips -s format png \"{imagefile}\"
+   --out \"#{tmpfile}\" > /dev/null" 61 end 62 end
+   CVE-2014-4994
+   JSON: Export
+   Exploit Code:
+
+    1.
+
+   Screen Shots:
+   Advisory: http://www.vapid.dhs.org/advisories/gyazo-1.0.0.html

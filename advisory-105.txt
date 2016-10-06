@@ -1,40 +1,48 @@
-                                Advisory #: 105
-Title: Fastlink Software's TheServer http server clear text password
-Author:Larry W. Cashdollar, @_larry0
-Date: 2002-10-14
-Download Site: http://www.fastlinksoftware.com/
-Vendor:http://www.fastlinksoftware.com/
-Vendor Notified: 2002-10-14
-Vendor Contact: http://www.fastlinksoftware.com/
-Description:
-Vulnerability:
-A quick note on Fastlink Software's TheServer http server. I was not going to
-write this up since it is a silly problem but this server is listed in the
-netcraft survey so people are using it. TheServer is a very small and simple
-webserver for the Windows platform it consists of a single executable and
-configuration file. TheServer stores the password for log file accesss in
-cleartext. This password is stored in the server.ini file. Which by default
-resides in the servers root directory. This is a VERY simple webserver for
-Windows 98/95 if the server is setup to log, then the password is also sent to
-the logfile when accessing the server logs remotely. The risk is you can have
-someone else parsing your weblogs that you never intended. Hello Larry; I'm the
-developer of TheServer. I've posted information about the security issue you
-wrote about on Security Tracker on my website at http://
-www.fastlinksoftware.com under the FAQ section. The information I posted is as
-follows: Q: How do I prevent people from downloading my SERVER.INI file and
-getting my system password? A: Make a folder below the root of your web pages
-and place SERVER.EXE and SERVER.INI there. Set the 'root' field in the
-SERVER.INI file to the folder where your web pages start. Add a 'restrict' line
-for the new folder you created. Example: Your web pages are in c:\web Make a
-folder called 'bin' under c:\web. Place SERVER.EXE and SERVER.INI in the 'bin'
-folder. Edit the SERVER.INI file and change the 'root' field as follows:
-root=c:\web Add a line in the SERVER.INI file that would appear as follows:
-restrict=bin With the above example when TheServer starts it will look for the
-starting web page in 'c:\web' and access will be restricted to the 'bin' folder
-that contains the SERVER.INI file. Thanks, Allen Rodgers.
-CVE-2002-2389
-JSON:Export
-Exploit Code:
-   1.  
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/theserver_cleartext_password.html
+
+                               Advisory #: 105
+
+   Title: Fastlink Software's TheServer http server clear text password
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2002-10-14
+   Download Site: http://www.fastlinksoftware.com/
+   Vendor: http://www.fastlinksoftware.com/
+   Vendor Notified: 2002-10-14
+   Vendor Contact: http://www.fastlinksoftware.com/
+   Description:
+   Vulnerability:
+   A quick note on Fastlink Software's TheServer http server. I was not
+   going to write this up since it is a silly problem but this server is
+   listed in the netcraft survey so people are using it. TheServer is a
+   very small and simple webserver for the Windows platform it consists of
+   a single executable and configuration file. TheServer stores the
+   password for log file accesss in cleartext. This password is stored in
+   the server.ini file. Which by default resides in the servers root
+   directory. This is a VERY simple webserver for Windows 98/95 if the
+   server is setup to log, then the password is also sent to the logfile
+   when accessing the server logs remotely. The risk is you can have
+   someone else parsing your weblogs that you never intended. Hello Larry;
+   I'm the developer of TheServer. I've posted information about the
+   security issue you wrote about on Security Tracker on my website at
+   http://www.fastlinksoftware.com under the FAQ section. The information
+   I posted is as follows: Q: How do I prevent people from downloading my
+   SERVER.INI file and getting my system password? A: Make a folder below
+   the root of your web pages and place SERVER.EXE and SERVER.INI there.
+   Set the 'root' field in the SERVER.INI file to the folder where your
+   web pages start. Add a 'restrict' line for the new folder you created.
+   Example: Your web pages are in c:\web Make a folder called 'bin' under
+   c:\web. Place SERVER.EXE and SERVER.INI in the 'bin' folder. Edit the
+   SERVER.INI file and change the 'root' field as follows: root=c:\web Add
+   a line in the SERVER.INI file that would appear as follows:
+   restrict=bin With the above example when TheServer starts it will look
+   for the starting web page in 'c:\web' and access will be restricted to
+   the 'bin' folder that contains the SERVER.INI file. Thanks, Allen
+   Rodgers.
+   CVE-2002-2389
+   JSON: Export
+   Exploit Code:
+
+    1.
+
+   Screen Shots:
+   Advisory:
+   http://www.vapid.dhs.org/advisories/theserver_cleartext_password.html

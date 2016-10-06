@@ -1,27 +1,36 @@
-                                Advisory #: 61
-Title: jspec-steventux 3.3.2.1 /tmp vulnerability
-Author:Larry W. Cashdollar, @_larry0
-Date: 2014-01-01
-Download Site: http://rubygems.org/gems/jspec-steventux
-Vendor:original author TJ Holowaychuk, adaptation for CI testing by S Laing
-Vendor Notified: 2014-01-01
-Vendor Contact: steve.laing@gmail.com
-Description: JSpec is a minimalistic JavaScript behavior driven development
-framework, providing simple installation, extremely low learning curve,
-absolutely no pollution to core prototypes, async request support, and
-incredibly sexy syntax, tons of matchers and much more.
-Vulnerability:
-The install function creates unsafely a temp file in /tmp to store the download
-of rhino.zip, a malicious local user could replace this file with one of their
-own installing a modified jar file. If a remote user can control #{uri} they
-can inject commands directly into the shell as no santization of the variable
-is done. jspec-steventux-3.3.2.1/src/installables.rb: 145 def install 146 say
-"... fetching #{uri}"; `curl #{uri} -o /tmp/rhino.zip 2> /dev/nu ll` 147 say
-"... decompressing"; `unzip /tmp/rhino.zip -d /tmp` 148 say "... installing to
-#{path}"; `mv /tmp/rhino1_7R2/js.jar #{path}` 149 end
-CVE-
-JSON:Export
-Exploit Code:
-   1.  
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/jspec-steventux-tmp-file.html
+
+                               Advisory #: 61
+
+   Title: jspec-steventux 3.3.2.1 /tmp vulnerability
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2014-01-01
+   Download Site: http://rubygems.org/gems/jspec-steventux
+   Vendor: original author TJ Holowaychuk, adaptation for CI testing by S
+   Laing
+   Vendor Notified: 2014-01-01
+   Vendor Contact: steve.laing@gmail.com
+   Description: JSpec is a minimalistic JavaScript behavior driven
+   development framework, providing simple installation, extremely low
+   learning curve, absolutely no pollution to core prototypes, async
+   request support, and incredibly sexy syntax, tons of matchers and much
+   more.
+   Vulnerability:
+   The install function creates unsafely a temp file in /tmp to store the
+   download of rhino.zip, a malicious local user could replace this file
+   with one of their own installing a modified jar file. If a remote user
+   can control #{uri} they can inject commands directly into the shell as
+   no santization of the variable is done.
+   jspec-steventux-3.3.2.1/src/installables.rb: 145 def install 146 say
+   "... fetching #{uri}"; `curl #{uri} -o /tmp/rhino.zip 2> /dev/nu ll`
+   147 say "... decompressing"; `unzip /tmp/rhino.zip -d /tmp` 148 say
+   "... installing to #{path}"; `mv /tmp/rhino1_7R2/js.jar #{path}` 149
+   end
+   CVE-
+   JSON: Export
+   Exploit Code:
+
+    1.
+
+   Screen Shots:
+   Advisory:
+   http://www.vapid.dhs.org/advisories/jspec-steventux-tmp-file.html

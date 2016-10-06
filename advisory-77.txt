@@ -1,26 +1,32 @@
-                                Advisory #: 77
-Title: insecure temp file creation during installation of Netscape 6
-Author:Larry W. Cashdollar, @_larry0
-Date: 2001-10-01
-Download Site: http://www.sun.com/solaris/netscape/index.html
-Vendor:Netscape
-Vendor Notified: 2001-10-01
-Vendor Contact: bugtraq
-Description: Netscape is a common web browser available for multiple operating
-systems.
-Vulnerability:
-During installation of Netscape 6.01a for Solaris 2.7/8 Sparc, I noticed the
-file /tmp/admin.3842 was created with mode 644. As you already know if this
-package is installed by root in multiuser mode a malicious user could use this
-to overwrite system files etc.. Here is the dangerous code: # grep tmp
-ns6install cat >/tmp/admin.$$ <<EOF /usr/sbin/pkgrm -n -a /tmp/admin.$$ $
-{pkg}.* 2>&1 /usr/sbin/pkgadd -n -a /tmp/admin.$$ -d `pwd` $pkg 2>&1 A
-temporary work around would be to shut the system down into single user mode,
-clean out /tmp and then install.
-CVE-2001-1066
-JSON:Export
-Exploit Code:
-   1.  
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/
-netscape_6.01a_file_clobbering_vulnerability.html
+
+                               Advisory #: 77
+
+   Title: insecure temp file creation during installation of Netscape 6
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2001-10-01
+   Download Site: http://www.sun.com/solaris/netscape/index.html
+   Vendor: Netscape
+   Vendor Notified: 2001-10-01
+   Vendor Contact: bugtraq
+   Description: Netscape is a common web browser available for multiple
+   operating systems.
+   Vulnerability:
+   During installation of Netscape 6.01a for Solaris 2.7/8 Sparc, I
+   noticed the file /tmp/admin.3842 was created with mode 644. As you
+   already know if this package is installed by root in multiuser mode a
+   malicious user could use this to overwrite system files etc.. Here is
+   the dangerous code: # grep tmp ns6install cat >/tmp/admin.$$ <<EOF
+   /usr/sbin/pkgrm -n -a /tmp/admin.$$ ${pkg}.* 2>&1 /usr/sbin/pkgadd -n
+   -a /tmp/admin.$$ -d `pwd` $pkg 2>&1 A temporary work around would be to
+   shut the system down into single user mode, clean out /tmp and then
+   install.
+   CVE-2001-1066
+   JSON: Export
+   Exploit Code:
+
+    1.
+
+   Screen Shots:
+   Advisory:
+   http://www.vapid.dhs.org/advisories/netscape_6.01a_file_clobbering_vuln
+   erability.html

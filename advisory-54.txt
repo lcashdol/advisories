@@ -1,24 +1,31 @@
-                                Advisory #: 54
-Title: Remote Command Injection in fog-dragonfly-0.8.2 Ruby Gem
-Author:Larry W. Cashdollar, @_larry0
-Date: 2013-09-01
-Download Site: https://rubygems.org/gems/fog-dragonfly
-Vendor:Mark Evans, Cyril Mougel
-Vendor Notified: 2013-09-01
-Vendor Contact: cyril.mougel@gmail.com
-Description: Dragonfly is an on-the-fly Rack-based image handling framework. It
-is suitable for use with Rails, Sinatra and other web frameworks. Although it's
-mainly used for images, it can handle any content type.
-Vulnerability:
-Unescaped user supplied input is passed to the command line for shell
-execution: from fog-dragonfly-0.8.2/lib/dragonfly/imagemagickutils.rb: 20 def
-convert(tempobject, args='', format=nil) 21 tempfile = newtempfile(format) 22
-run "#{convertcommand} #{args} #{tempobject.path} #{tempfile.path}" 23 tempfile
-24 end . . . 61 def run(command) 62 log.debug("Running command: #{command}") if
-ImageMagickUtils.log_commands 63 begin 64 result = #{command}
-CVE-2013-5671
-JSON:Export
-Exploit Code:
-   1.  
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/fog-dragonfly-0.8.2-cmd-inj.html
+
+                               Advisory #: 54
+
+   Title: Remote Command Injection in fog-dragonfly-0.8.2 Ruby Gem
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2013-09-01
+   Download Site: https://rubygems.org/gems/fog-dragonfly
+   Vendor: Mark Evans, Cyril Mougel
+   Vendor Notified: 2013-09-01
+   Vendor Contact: cyril.mougel@gmail.com
+   Description: Dragonfly is an on-the-fly Rack-based image handling
+   framework. It is suitable for use with Rails, Sinatra and other web
+   frameworks. Although it's mainly used for images, it can handle any
+   content type.
+   Vulnerability:
+   Unescaped user supplied input is passed to the command line for shell
+   execution: from fog-dragonfly-0.8.2/lib/dragonfly/imagemagickutils.rb:
+   20 def convert(tempobject, args='', format=nil) 21 tempfile =
+   newtempfile(format) 22 run "#{convertcommand} #{args}
+   #{tempobject.path} #{tempfile.path}" 23 tempfile 24 end . . . 61 def
+   run(command) 62 log.debug("Running command: #{command}") if
+   ImageMagickUtils.log_commands 63 begin 64 result = #{command}
+   CVE-2013-5671
+   JSON: Export
+   Exploit Code:
+
+    1.
+
+   Screen Shots:
+   Advisory:
+   http://www.vapid.dhs.org/advisories/fog-dragonfly-0.8.2-cmd-inj.html

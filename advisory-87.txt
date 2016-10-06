@@ -1,31 +1,38 @@
-                                   Advisory #: 87
-Title: PatchLink Update Unix Client File clobbering vulnerability
-Author:Larry W. Cashdollar, @_larry0
-Date: 2008-01-17
-Download Site: http://lumension.com/patch-management.jsp?rpLangCode=1&rpMenuId=118443
-Vendor:http://lumension.com
-Vendor Notified: 2008-01-17
-Vendor Contact: bugtraq
-Description: PatchLink UpdateÃ¢âÂ¢ provides rapid, accurate and secure patch
-management, allowing you to proactively manage threats by automating the collection,
-analysis and delivery of patches throughout your enterprise. PatchLink Update
-significantly decreases the costs involved in securing your organization from worms,
-Trojans, viruses and other malicious threats.
-Vulnerability:
-The log rotation utility "logtrimmer" utilizes space in /tmp improperly and is
-subject to a symlink attack. By creating a targeted symlink a non root user can
-clobber root owned files causing DoS.
-CVE-2008-0525
-JSON:Export
-Exploit Code:
-   1. nobody:/tmp> ln -s /etc/shadow patchlink.tmp
-   2.  
-   3. After logs are rotated
-   4.  
-   5. /etc/shadow will be size 0, since patchlink.tmp is removed by logtrimmer after
-      the log rotation process has finished.
-   6.  
-   7.  
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/
-patchlink_update_unix_client_file_clobber_vulnerability.html
+
+                               Advisory #: 87
+
+   Title: PatchLink Update Unix Client File clobbering vulnerability
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2008-01-17
+   Download Site:
+   http://lumension.com/patch-management.jsp?rpLangCode=1&rpMenuId=118443
+   Vendor: http://lumension.com
+   Vendor Notified: 2008-01-17
+   Vendor Contact: bugtraq
+   Description: PatchLink Updateâ„¢ provides rapid, accurate and secure
+   patch management, allowing you to proactively manage threats by
+   automating the collection, analysis and delivery of patches throughout
+   your enterprise. PatchLink Update significantly decreases the costs
+   involved in securing your organization from worms, Trojans, viruses and
+   other malicious threats.
+   Vulnerability:
+   The log rotation utility "logtrimmer" utilizes space in /tmp improperly
+   and is subject to a symlink attack. By creating a targeted symlink a
+   non root user can clobber root owned files causing DoS.
+   CVE-2008-0525
+   JSON: Export
+   Exploit Code:
+
+    1. nobody:/tmp> ln -s /etc/shadow patchlink.tmp
+    2.
+    3. After logs are rotated
+    4.
+    5. /etc/shadow will be size 0, since patchlink.tmp is removed by
+       logtrimmer after the log rotation process has finished.
+    6.
+    7.
+
+   Screen Shots:
+   Advisory:
+   http://www.vapid.dhs.org/advisories/patchlink_update_unix_client_file_c
+   lobber_vulnerability.html

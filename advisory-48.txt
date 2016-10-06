@@ -1,23 +1,28 @@
-                                Advisory #: 48
-Title: Remote command Injection in Creme Fraiche 0.6 Ruby Gem
-Author:Larry W. Cashdollar, @_larry0
-Date: 2013-05-14
-Download Site: http://rubygems.org/gems/cremefraiche,_http://www.uplawski.eu/
-technology/cremefraiche/
-Vendor:Michael Uplawski
-Vendor Notified: 2013-05-14
-Vendor Contact: michael.uplawski@uplawski.eu
-Description: Converts Email to PDF files.
-Vulnerability:
-The following lines pass unsanitized user input directly to the command line. A
-malicious email attachment with a file name consisting of shell meta characters
-could inject commands into the shell. If the attacker is allowed to specify a
-filename (via a web gui) commands could be injected that way as well. 218 cmd =
-"pdftk %s updateinfo %s output %s" %[pdf, infofile, tfile] 219 @log.debug
-('pdftk-command is ' << cmd) 220 pdftkresult = system( cmd)
-CVE-2013-2090
-JSON:Export
-Exploit Code:
-   1.  
-Screen Shots:
-Advisory: http://vapid.dhs.org/advisories/cremefraiche-cmd-inj.html
+
+                               Advisory #: 48
+
+   Title: Remote command Injection in Creme Fraiche 0.6 Ruby Gem
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2013-05-14
+   Download Site: http://rubygems.org/gems/cremefraiche,
+   http://www.uplawski.eu/technology/cremefraiche/
+   Vendor: Michael Uplawski
+   Vendor Notified: 2013-05-14
+   Vendor Contact: michael.uplawski@uplawski.eu
+   Description: Converts Email to PDF files.
+   Vulnerability:
+   The following lines pass unsanitized user input directly to the command
+   line. A malicious email attachment with a file name consisting of shell
+   meta characters could inject commands into the shell. If the attacker
+   is allowed to specify a filename (via a web gui) commands could be
+   injected that way as well. 218 cmd = "pdftk %s updateinfo %s output %s"
+   %[pdf, infofile, tfile] 219 @log.debug('pdftk-command is ' << cmd) 220
+   pdftkresult = system( cmd)
+   CVE-2013-2090
+   JSON: Export
+   Exploit Code:
+
+    1.
+
+   Screen Shots:
+   Advisory: http://vapid.dhs.org/advisories/cremefraiche-cmd-inj.html

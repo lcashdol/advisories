@@ -1,28 +1,35 @@
-                                Advisory #: 33
-Title: Remote command execution in Ruby Gem Command Wrap
-Author:Larry W. Cashdollar, @_larry0
-Date: 2013-03-15
-Download Site: http://rubygems.org/gems/command_wrap
-Vendor:Stefaan Colman
-Vendor Notified: 2013-03-15
-Vendor Contact: slicertje@gmail.com
-Description: A set of utility classes to extract meta data from different file
-types
-Vulnerability:
-Commands executed if the remote URL or filename contains the shell character
-';'. The commands will be executed as the client user if tricked into using the
-malicious URL or filename. Examining the following lines: command_wrap.rb-7-
-def self.capture (url, target) command_wrap.rb-8- command = CommandWrap::
-Config::Xvfb.command(File.dirname(__FILE__) + "/../bin/CutyCapt --min-
-width=1024 --min-height=768 --url={url} --out={target}") command_wrap.rb:9: `#
-{command}` command_wrap.rb-10- end command_wrap.rb-11- -- command_wrap.rb-72-
-command = CommandWrap::Config::Xvfb.command(File.dirname(__FILE__) + "/../bin/
-wkhtmltopdf --quiet --print-media-type #{source} #{params} #{target}")
-command_wrap.rb-73- command_wrap.rb:74: `#{command}` Untrusted data is passed
-to the command line.
-CVE-2013-1875
-JSON:Export
-Exploit Code:
-   1.  
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/command-wrap-remoteexec.html
+
+                               Advisory #: 33
+
+   Title: Remote command execution in Ruby Gem Command Wrap
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2013-03-15
+   Download Site: http://rubygems.org/gems/command_wrap
+   Vendor: Stefaan Colman
+   Vendor Notified: 2013-03-15
+   Vendor Contact: slicertje@gmail.com
+   Description: A set of utility classes to extract meta data from
+   different file types
+   Vulnerability:
+   Commands executed if the remote URL or filename contains the shell
+   character ';'. The commands will be executed as the client user if
+   tricked into using the malicious URL or filename. Examining the
+   following lines: command_wrap.rb-7- def self.capture (url, target)
+   command_wrap.rb-8- command =
+   CommandWrap::Config::Xvfb.command(File.dirname(__FILE__) +
+   "/../bin/CutyCapt --min-width=1024 --min-height=768 --url={url}
+   --out={target}") command_wrap.rb:9: `#{command}` command_wrap.rb-10-
+   end command_wrap.rb-11- -- command_wrap.rb-72- command =
+   CommandWrap::Config::Xvfb.command(File.dirname(__FILE__) +
+   "/../bin/wkhtmltopdf --quiet --print-media-type #{source} #{params}
+   #{target}") command_wrap.rb-73- command_wrap.rb:74: `#{command}`
+   Untrusted data is passed to the command line.
+   CVE-2013-1875
+   JSON: Export
+   Exploit Code:
+
+    1.
+
+   Screen Shots:
+   Advisory:
+   http://www.vapid.dhs.org/advisories/command-wrap-remoteexec.html

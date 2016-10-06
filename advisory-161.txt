@@ -1,22 +1,26 @@
+
                                Advisory #: 161
-Title: Wordpress plugin Reflected XSS in connections v8.5.8
-Author:Larry W. Cashdollar, @_larry0
-Date: 2016-01-26
-Download Site: https://wordpress.org/plugins/connections/
-Vendor:https://profiles.wordpress.org/shazahm1hotmailcom/
-Vendor Notified: 2016-01-28
-Vendor Contact:
-Description: An easy to use directory plugin to create an address book,
-business directory, staff directory or church directory.
-Vulnerability:
-Line 320 contains unfiltered user input for the search field being sent
-directly via echo back to the users browser via the ’s’ variable. In file
-includes/admin/pages/manage.php 320: <input type="search" id="entry-search-
-input" name="s" value="<?php if ( isset( $_GET['s'] ) && ! empty( $_GET['s'] )
-) echo $_GET['s'] ; ?>" />
-CVE-2016-0770
-JSON:Export
-Exploit Code:
-   1.  
-Screen Shots:
-Advisory:
+
+   Title: Wordpress plugin Reflected XSS in connections v8.5.8
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2016-01-26
+   Download Site: https://wordpress.org/plugins/connections/
+   Vendor: https://profiles.wordpress.org/shazahm1hotmailcom/
+   Vendor Notified: 2016-01-28
+   Vendor Contact:
+   Description: An easy to use directory plugin to create an address book,
+   business directory, staff directory or church directory.
+   Vulnerability:
+   Line 320 contains unfiltered user input for the search field being sent
+   directly via echo back to the users browser via the ’s’ variable. In
+   file includes/admin/pages/manage.php 320: <input type="search"
+   id="entry-search-input" name="s" value="<?php if ( isset( $_GET['s'] )
+   && ! empty( $_GET['s'] ) ) echo $_GET['s'] ; ?>" />
+   CVE-2016-0770
+   JSON: Export
+   Exploit Code:
+
+    1.
+
+   Screen Shots:
+   Advisory:

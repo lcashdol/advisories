@@ -1,43 +1,52 @@
-                                Advisory #: 111
-Title: Persistent XSS in NextCellent Gallery 1.9.13 WordPress plugin
-Author:Larry W. Cashdollar, @_larry0
-Date: 2014-03-20
-Download Site: http://wpgetready.com/nextcellent-gallery/
-Vendor:Nextcellent
-Vendor Notified: 2014-03-20
-Vendor Contact: http://wpgetready.uservoice.com
-Description: NextCellent Gallery provides a powerful engine for uploading and
-managing galleries of images, with the ability to batch upload, import meta
-data, add/delete/rearrange/sort images, edit thumbnails, group galleries into
-albums, and more. It also provides two front-end display styles (slideshows and
-thumbnail galleries), both of which come with a wide array of options for
-controlling size, style, timing, transitions, controls, lightbox effects, and
-more.
-Vulnerability:
-The user supplied data for the Alt & Title Text field isn't escaped before
-being printed out in the value field: Vulnerability from nextcellent-gallery-
-nextgen-legacy/admin/manage-images.php lines: 503 <td <?php echo $attributes ?
->> 504 <input placeholder=" <?php _e("Alt & title text",'nggallery'); ?>"
-name="alttext[<?php echo $pid ?>]" type="text" style="width:95%; margin-bottom:
-2px;" value="<?php echo stripslashes($picture->alttext) ?>" 505 <textarea
-placeholder="<?php _e("Description",'nggallery'); ?>" name="description[<?php
-echo $pid ?>]" style="width:95%; margin: 1px;" rows="2" ><?php echo
-stripslashes($picture->description) ?></textarea> 506 </td> The HTML code
-produced is: <td class='alt_title_desc column-alt_title_desc'> <input
-placeholder="Alt & title text!" name="alttext[1]" type="text" style="width:95%;
-margin-bottom: 2px;" value=""><script>alert('hi')</script>"<" /><br/> <textarea
-placeholder="Description" name="description[1]" style="width:95%; margin: 1px;"
-rows="2" >"</a><script>alert('hi')</script><a>"</textarea> </td> <td
-class='tags column-tags'><textarea placeholder="Separated by commas"name="tags
-[1]" style="width:95%;" rows="2"></textarea></td> <td class='exclude column-
-exclude'><input name="exclude[1]" type="checkbox" value="1" /></td> Any user
-with "NextGEN Upload images" or "NextGEN Manage gallery" or "NextGEN Manage
-others gallery" access can conduct an XSS attack against a user with the
-Administrator role, in order to gain privileges.
-CVE-2014-3123
-JSON:Export
-Exploit Code:
-   1.  
-Screen Shots: [1.png]
-Advisory: http://www.vapid.dhs.org/advisories/wordpress/plugins/nextCellent-
-gallery-1.9.13/
+
+                               Advisory #: 111
+
+   Title: Persistent XSS in NextCellent Gallery 1.9.13 WordPress plugin
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2014-03-20
+   Download Site: http://wpgetready.com/nextcellent-gallery/
+   Vendor: Nextcellent
+   Vendor Notified: 2014-03-20
+   Vendor Contact: http://wpgetready.uservoice.com
+   Description: NextCellent Gallery provides a powerful engine for
+   uploading and managing galleries of images, with the ability to batch
+   upload, import meta data, add/delete/rearrange/sort images, edit
+   thumbnails, group galleries into albums, and more. It also provides two
+   front-end display styles (slideshows and thumbnail galleries), both of
+   which come with a wide array of options for controlling size, style,
+   timing, transitions, controls, lightbox effects, and more.
+   Vulnerability:
+   The user supplied data for the Alt & Title Text field isn't escaped
+   before being printed out in the value field: Vulnerability from
+   nextcellent-gallery-nextgen-legacy/admin/manage-images.php lines: 503
+   <td <?php echo $attributes ? >> 504 <input placeholder=" <?php _e("Alt
+   & title text",'nggallery'); ?>" name="alttext[<?php echo $pid ?>]"
+   type="text" style="width:95%; margin-bottom: 2px;" value="<?php echo
+   stripslashes($picture->alttext) ?>" 505 <textarea placeholder="<?php
+   _e("Description",'nggallery'); ?>" name="description[<?php echo $pid
+   ?>]" style="width:95%; margin: 1px;" rows="2" ><?php echo
+   stripslashes($picture->description) ?></textarea> 506 </td> The HTML
+   code produced is: <td class='alt_title_desc column-alt_title_desc'>
+   <input placeholder="Alt & title text!" name="alttext[1]" type="text"
+   style="width:95%; margin-bottom: 2px;"
+   value=""><script>alert('hi')</script>"<" /><br/> <textarea
+   placeholder="Description" name="description[1]" style="width:95%;
+   margin: 1px;" rows="2"
+   >"</a><script>alert('hi')</script><a>"</textarea> </td> <td class='tags
+   column-tags'><textarea placeholder="Separated by commas"name="tags[1]"
+   style="width:95%;" rows="2"></textarea></td> <td class='exclude
+   column-exclude'><input name="exclude[1]" type="checkbox" value="1"
+   /></td> Any user with "NextGEN Upload images" or "NextGEN Manage
+   gallery" or "NextGEN Manage others gallery" access can conduct an XSS
+   attack against a user with the Administrator role, in order to gain
+   privileges.
+   CVE-2014-3123
+   JSON: Export
+   Exploit Code:
+
+    1.
+
+   Screen Shots: [1.png]
+   Advisory:
+   http://www.vapid.dhs.org/advisories/wordpress/plugins/nextCellent-galle
+   ry-1.9.13/

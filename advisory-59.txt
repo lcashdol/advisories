@@ -1,40 +1,48 @@
-                                Advisory #: 59
-Title: /tmp Symlink Vulnerability with ZeroG's InstallAnywhere5
-Author:Larry W. Cashdollar, @_larry0
-Date: 2002-12-20
-Download Site: www.zerog.com
-Vendor:http://www.zerog.com/
-Vendor Notified: 2002-12-20
-Vendor Contact:
-Description: InstallAnywhere (www.zerog.com) is a software framework that
-simplifies software installation on multiple client and server platforms. This
-software is utilized by such vendors like LimeWire (www.limewire.org). During
-execution this software insecurely creates two file in /tmp that can be used to
-clobber system files through symlink attacks. During the creation of one file a
-race condition exists to determine the filename the other requires no
-guesswork.
-Vulnerability:
-I noticed InstallAnywhere creates the following files in /tmp: persistent_state
-env.properties.NNNNN Where NNNNN is the current process id or ($$) These files
-can be used to clobber system files if the installation software is run as
-root. A malicious attacker can create a symlink in /tmp to point to a critical
-system file. This system file will be over written with the contents of the
-temporary file. For example ''[nobody $] ln -s /etc/passwd /tmp/
-persistent_state'' Then if root runs software utilizing the InstallAnywhere
-software (in my case it was LimeWire) the contents of /etc/passwd will be
-overwritten with the contents of persistent_state. The env.properties.NNNNN
-file appears to be created during the execution of InstallerData/
-makeExecutable/laxunix.sh The persistent_state file might be created during the
-execution of ./InstallerData/com/zerog/registry/UUID.class A basic check with
-'strings' leads me to believe this. Local attackers can exploit this
-vulnerability to clobber root owned system files, this could possibly lead to a
-denial of service or system compromise. If software utilizes InstallAnywhere
-v5.0.6 to perform system installation then you are vulnerable. I tested the
-enterprise edition that I downloaded from them for a free evaluation.
-CVE-
-JSON:Export
-Exploit Code:
-   1.  
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/
-installanywhere_tmp_symlink_vulnerability.html
+
+                               Advisory #: 59
+
+   Title: /tmp Symlink Vulnerability with ZeroG's InstallAnywhere5
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2002-12-20
+   Download Site: www.zerog.com
+   Vendor: http://www.zerog.com/
+   Vendor Notified: 2002-12-20
+   Vendor Contact:
+   Description: InstallAnywhere (www.zerog.com) is a software framework
+   that simplifies software installation on multiple client and server
+   platforms. This software is utilized by such vendors like LimeWire
+   (www.limewire.org). During execution this software insecurely creates
+   two file in /tmp that can be used to clobber system files through
+   symlink attacks. During the creation of one file a race condition
+   exists to determine the filename the other requires no guesswork.
+   Vulnerability:
+   I noticed InstallAnywhere creates the following files in /tmp:
+   persistent_state env.properties.NNNNN Where NNNNN is the current
+   process id or ($$) These files can be used to clobber system files if
+   the installation software is run as root. A malicious attacker can
+   create a symlink in /tmp to point to a critical system file. This
+   system file will be over written with the contents of the temporary
+   file. For example ''[nobody $] ln -s /etc/passwd
+   /tmp/persistent_state'' Then if root runs software utilizing the
+   InstallAnywhere software (in my case it was LimeWire) the contents of
+   /etc/passwd will be overwritten with the contents of persistent_state.
+   The env.properties.NNNNN file appears to be created during the
+   execution of InstallerData/makeExecutable/laxunix.sh The
+   persistent_state file might be created during the execution of
+   ./InstallerData/com/zerog/registry/UUID.class A basic check with
+   'strings' leads me to believe this. Local attackers can exploit this
+   vulnerability to clobber root owned system files, this could possibly
+   lead to a denial of service or system compromise. If software utilizes
+   InstallAnywhere v5.0.6 to perform system installation then you are
+   vulnerable. I tested the enterprise edition that I downloaded from them
+   for a free evaluation.
+   CVE-
+   JSON: Export
+   Exploit Code:
+
+    1.
+
+   Screen Shots:
+   Advisory:
+   http://www.vapid.dhs.org/advisories/installanywhere_tmp_symlink_vulnera
+   bility.html

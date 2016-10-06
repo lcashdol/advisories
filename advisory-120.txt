@@ -1,25 +1,31 @@
-                                Advisory #: 120
-Title: wow-moodboard-lite v1.1.1.1 Wordpress plugin has an open redirect
-Author:Larry W. Cashdollar, @_larry0
-Date: 2015-05-10
-Download Site: https://wordpress.org/plugins/wow-moodboard-lite/
-Vendor:mschot
-Vendor Notified: 2015-05-19
-Vendor Contact: https://profiles.wordpress.org/mschot/
-Description: A mood board is a type of collage consisting of images, text, and
-samples of objects in a composition. They may be physical or digital, and can
-be "extremely effective" presentation tools.
-Vulnerability:
-wowproxy.php doesn’t require any authentication to the proxy images function.
-Users can be misled to a malicious link via this feature. 26 // Get the url of
-the image to be proxied 27 $url = ( isset( $_POST[ 'url' ] ) ) ? $_POST[ 'url'
-] : ( isset( $_GET[ 'url ' ] ) ? $_GET[ 'url' ] : false ); 39 function
-proxyimages( $url ) 40 { 41 header( "Location: ".$url ); 42 exit; 43 }
-CVE-2015-4070
-JSON:Export
-Exploit Code:
-   1. http://www.vapidlabs.internal/wp-content/plugins/adsense-click-fraud-
-      monitoring/phpwhois/
-      whois.php?query=%27%3Cscript%3Ealert%281%29%3B%3C%2Fscript%3E&output=nice
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisory.php?v=120
+
+                               Advisory #: 120
+
+   Title: wow-moodboard-lite v1.1.1.1 Wordpress plugin has an open
+   redirect
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2015-05-10
+   Download Site: https://wordpress.org/plugins/wow-moodboard-lite/
+   Vendor: mschot
+   Vendor Notified: 2015-05-19
+   Vendor Contact: https://profiles.wordpress.org/mschot/
+   Description: A mood board is a type of collage consisting of images,
+   text, and samples of objects in a composition. They may be physical or
+   digital, and can be "extremely effective" presentation tools.
+   Vulnerability:
+   wowproxy.php doesn’t require any authentication to the proxy images
+   function. Users can be misled to a malicious link via this feature. 26
+   // Get the url of the image to be proxied 27 $url = ( isset( $_POST[
+   'url' ] ) ) ? $_POST[ 'url' ] : ( isset( $_GET[ 'url ' ] ) ? $_GET[
+   'url' ] : false ); 39 function proxyimages( $url ) 40 { 41 header(
+   "Location: ".$url ); 42 exit; 43 }
+   CVE-2015-4070
+   JSON: Export
+   Exploit Code:
+
+    1. http://www.vapidlabs.internal/wp-content/plugins/adsense-click-frau
+       d-monitoring/phpwhois/whois.php?query=%27%3Cscript%3Ealert%281%29%3
+       B%3C%2Fscript%3E&output=nice
+
+   Screen Shots:
+   Advisory: http://www.vapid.dhs.org/advisory.php?v=120

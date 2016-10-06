@@ -1,46 +1,55 @@
-                                Advisory #: 42
-Title: Vulnerability Report For Voyant Technologies Sonata Conferencing product
-Author:Larry W. Cashdollar, @_larry0
-Date: 2000-10-31
-Download Site: http://www.voyanttechnology.com/
-Vendor:Voyant Technologies.
-Vendor Notified: 2000-10-13
-Vendor Contact: vulnhelp@securityfocus.com
-Description: Sonata is a teleconfrencing solution developed by Voyant
-Technologies. This advisory concerns the Sonata application server and bridge
-componet of the Sonata package. The application server is an Ultra Sparc 5
-running Solaris 2.x as required by Voyant technologies. The bridge is an IBM PC
-running OS/2 Warp. These hosts are usually built in house by Voyant personnel
-and installed at customer locations by a field engineer.
-Vulnerability:
-Six vulnerabilities have been found in the application server host and Sonata
-package, they are categorized below: Reused default user accounts and
-passwords. Easily guessable passwords. Poor file permissions. Lack of host
-hardening. X console authentication has been disabled. Hard coded default
-passwords. Sonata v3.x on Solaris 2.x. Sonata bridge OS/2 Warp.
-CVE-
-JSON:Export
-Exploit Code:
-   1. I. Application Server, Solaris 2.x
-   2.  
-   3. By using available default services on the host an attacker can enumerate
-      accounts. Using this easily obtainable account information combined with
-      poor password selection and weak file permissions a remote attacker can
-      gain root access. The passwords guessed are the default for all
-      installations of Sonata.
-   4.  
-   5. By default xhost authentication is disabled allowing a remote attacker to
-      log key strokes and capture screen shots of the X console.
-   6.  
-   7. II. Bridging Server, OS/2 Warp.
-   8.  
-   9. These default passwords are also re-used on the bridging host (OS/2).
-      Which has telnet enabled for remote administration.
-  10.  
-  11. I am not going to detail the exploit because the methods used to access
-      these systems are only the most basic information gathering techniques
-      one would use to audit a host.
-  12.  
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/
-voyant_technologies_sonata_vulnerabilities.html
+
+                               Advisory #: 42
+
+   Title: Vulnerability Report For Voyant Technologies Sonata Conferencing
+   product
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2000-10-31
+   Download Site: http://www.voyanttechnology.com/
+   Vendor: Voyant Technologies.
+   Vendor Notified: 2000-10-13
+   Vendor Contact: vulnhelp@securityfocus.com
+   Description: Sonata is a teleconfrencing solution developed by Voyant
+   Technologies. This advisory concerns the Sonata application server and
+   bridge componet of the Sonata package. The application server is an
+   Ultra Sparc 5 running Solaris 2.x as required by Voyant technologies.
+   The bridge is an IBM PC running OS/2 Warp. These hosts are usually
+   built in house by Voyant personnel and installed at customer locations
+   by a field engineer.
+   Vulnerability:
+   Six vulnerabilities have been found in the application server host and
+   Sonata package, they are categorized below: Reused default user
+   accounts and passwords. Easily guessable passwords. Poor file
+   permissions. Lack of host hardening. X console authentication has been
+   disabled. Hard coded default passwords. Sonata v3.x on Solaris 2.x.
+   Sonata bridge OS/2 Warp.
+   CVE-
+   JSON: Export
+   Exploit Code:
+
+    1. I. Application Server, Solaris 2.x
+    2.
+    3. By using available default services on the host an attacker can
+       enumerate accounts. Using this easily obtainable account
+       information combined with poor password selection and weak file
+       permissions a remote attacker can gain root access. The passwords
+       guessed are the default for all installations of Sonata.
+    4.
+    5. By default xhost authentication is disabled allowing a remote
+       attacker to log key strokes and capture screen shots of the X
+       console.
+    6.
+    7. II. Bridging Server, OS/2 Warp.
+    8.
+    9. These default passwords are also re-used on the bridging host
+       (OS/2). Which has telnet enabled for remote administration.
+   10.
+   11. I am not going to detail the exploit because the methods used to
+       access these systems are only the most basic information gathering
+       techniques one would use to audit a host.
+   12.
+
+   Screen Shots:
+   Advisory:
+   http://www.vapid.dhs.org/advisories/voyant_technologies_sonata_vulnerab
+   ilities.html

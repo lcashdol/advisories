@@ -1,27 +1,33 @@
-                                Advisory #: 91
-Title: Vulnerability Report for Ruby Gem point-cli-0.0.1
-Author:Larry W. Cashdollar, @_larry0
-Date: 2014-06-01
-Download Site: http://rubygems.org/gems/point-cli
-Vendor:Adam Cooke
-Vendor Notified: 2014-06-25
-Vendor Contact: adam[at]atechmedia.com
-Description: CLI client for the PointHQ DNS Hosting System.
-Vulnerability:
-./point-cli-0.0.1/lib/commands/setup.rb Line 19 exposes the username and
-password combination to the process table. If this Gem is used in the context
-of a rails application it is possible to remotely inject commands if the #
-{username} and #{password} are supplied by the user. 016- 18- 19: command =
-"curl -q -s -u \"{username}:{password}\" {Point.site}/api_key" 20- if `
-{command}` =~ /(\w{40})/ 21: api_key = $1 22- else 23- puts "\e[31mAccess was
-denied or the server was unavailable. Please check your username & password is
-correct.\e[0m" 24- Process.exit(1) 25- end 26- 27: config_json = {:username =>
-username, :apitoken => api_key}.to_json 2 8- File.open($point_config_file, w)
-{ |f| f.write(config_json)} 29- puts "\e[32mConfiguration was successfully
-saved to #{$point_config_file}\e[0m" 30-end
-CVE-2014-4997
-JSON:Export
-Exploit Code:
-   1.  
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/point-cli-0.0.1.html
+
+                               Advisory #: 91
+
+   Title: Vulnerability Report for Ruby Gem point-cli-0.0.1
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2014-06-01
+   Download Site: http://rubygems.org/gems/point-cli
+   Vendor: Adam Cooke
+   Vendor Notified: 2014-06-25
+   Vendor Contact: adam[at]atechmedia.com
+   Description: CLI client for the PointHQ DNS Hosting System.
+   Vulnerability:
+   ./point-cli-0.0.1/lib/commands/setup.rb Line 19 exposes the username
+   and password combination to the process table. If this Gem is used in
+   the context of a rails application it is possible to remotely inject
+   commands if the #{username} and #{password} are supplied by the user.
+   016- 18- 19: command = "curl -q -s -u \"{username}:{password}\"
+   {Point.site}/api_key" 20- if `{command}` =~ /(\w{40})/ 21: api_key = $1
+   22- else 23- puts "\e[31mAccess was denied or the server was
+   unavailable. Please check your username & password is correct.\e[0m"
+   24- Process.exit(1) 25- end 26- 27: config_json = {:username =>
+   username, :apitoken => api_key}.to_json 2 8-
+   File.open($point_config_file, w) { |f| f.write(config_json)} 29- puts
+   "\e[32mConfiguration was successfully saved to
+   #{$point_config_file}\e[0m" 30-end
+   CVE-2014-4997
+   JSON: Export
+   Exploit Code:
+
+    1.
+
+   Screen Shots:
+   Advisory: http://www.vapid.dhs.org/advisories/point-cli-0.0.1.html

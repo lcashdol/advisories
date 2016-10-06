@@ -1,27 +1,35 @@
-                                Advisory #: 82
-Title: Persistent XSS in Wordpress 3.3.1+dfsg-1 (Packaged with Ubuntu 12.04.4)
-Author:Larry W. Cashdollar, @_larry0
-Date: 2014-02-01
-Download Site: http://wordpress.org/download
-Vendor:Wordpress.org
-Vendor Notified: 2014-02-01
-Vendor Contact: This was reported 17 months ago to WP, https://
-core.trac.wordpress.org/ticket/21917
-Description: The word press CMS.
-Vulnerability:
-Persistent XSS injection with admin user in description field for Media
-Library. This was reported 17 months ago to WP, https://
-core.trac.wordpress.org/ticket/21917. Notes: Line 235 of upload.php renders the
-'View' option: 235 <?php $wp_list_table->display(); ?> Trace wp_list_table-
->display back to find unsantized html out. Lines 100-102 of wp-includes/
-canonical.php call functions to render vulnerable page: I'll need to
-investigate further to find vulnerable code once I return from vacation. 100 if
-( is_attachment() && !empty($_GET['attachment_id']) && ! $redirect_url ) { 101
-if ( $redirect_url = get_attachment_link(get_query_var('attachment_id')) ) 102
-$redirect['query'] = remove_query_arg('attachment_id', $redirect['query']);
-CVE-
-JSON:Export
-Exploit Code:
-   1.  
-Screen Shots: [1.jpg][2.jpg][3.jpg][4.png]
-Advisory: http://www.vapid.dhs.org/advisories/wordpress/XSS/
+
+                               Advisory #: 82
+
+   Title: Persistent XSS in Wordpress 3.3.1+dfsg-1 (Packaged with Ubuntu
+   12.04.4)
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2014-02-01
+   Download Site: http://wordpress.org/download
+   Vendor: Wordpress.org
+   Vendor Notified: 2014-02-01
+   Vendor Contact: This was reported 17 months ago to WP,
+   https://core.trac.wordpress.org/ticket/21917
+   Description: The word press CMS.
+   Vulnerability:
+   Persistent XSS injection with admin user in description field for Media
+   Library. This was reported 17 months ago to WP,
+   https://core.trac.wordpress.org/ticket/21917. Notes: Line 235 of
+   upload.php renders the 'View' option: 235 <?php
+   $wp_list_table->display(); ?> Trace wp_list_table->display back to find
+   unsantized html out. Lines 100-102 of wp-includes/canonical.php call
+   functions to render vulnerable page: I'll need to investigate further
+   to find vulnerable code once I return from vacation. 100 if (
+   is_attachment() && !empty($_GET['attachment_id']) && ! $redirect_url )
+   { 101 if ( $redirect_url =
+   get_attachment_link(get_query_var('attachment_id')) ) 102
+   $redirect['query'] = remove_query_arg('attachment_id',
+   $redirect['query']);
+   CVE-
+   JSON: Export
+   Exploit Code:
+
+    1.
+
+   Screen Shots: [1.jpg][2.jpg][3.jpg][4.png]
+   Advisory: http://www.vapid.dhs.org/advisories/wordpress/XSS/

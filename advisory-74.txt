@@ -1,37 +1,44 @@
-                                Advisory #: 74
-Title: Format String Vulnerablity in Lynx
-Author:Larry W. Cashdollar, @_larry0
-Date: 2001-12-27
-Download Site: http://lynx.browser.org/
-Vendor:Lynx
-Vendor Notified: 2001-12-27
-Vendor Contact: bugtraq
-Description: Lynx is a text browser for the World Wide Web
-Vulnerability:
-lynx has a format string vulnerability in LYUtils.c line 7995 due to a bad call
-to syslog(), where the format argument is omitted. Risk: Low Version: Lynx
-compiled from FreeBSD ports collection. Also tested in 2.8.5dev.5.gz
-[larryc@harod ~ $] lynx --version Lynx Version 2.8.4rel.1 (17 Jul 2001) Built
-on freebsd4.4 Dec 25 2001 23:04:31 Details line 7995 in LYUtils.c reads: syslog
-(LOG_INFO|LOG_LOCAL5, buf); The reason this is low priority is the bug can only
-big triggered if sysloging URL's is enabled. (./configure --enable-syslog)
-CVE-
-JSON:Export
-Exploit Code:
-   1. The following url triggers the bug:
-   2.  
-   3. [larryc@harod ~ $] lynx http://lwc%d%d:hsVd632k@vapid.dhs.org/bleh:80
-   4.  
-   5. Results in the following logged to syslog.
-   6.  
-   7. Dec 25 23:11:00 vapid lynx[5160]: http://lwc-1077939384134744128:
-      ******@vapid.dhs.org/bleh:80
-   8.  
-   9. Fix
-  10. line 7995: --syslog (LOG_INFO|LOG_LOCAL5, buf); +syslog
-      (LOG_INFO|LOG_LOCAL5,"%s", buf);
-  11.  
-  12.  
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/
-lynx_format_string_vulnerability.html
+
+                               Advisory #: 74
+
+   Title: Format String Vulnerablity in Lynx
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2001-12-27
+   Download Site: http://lynx.browser.org/
+   Vendor: Lynx
+   Vendor Notified: 2001-12-27
+   Vendor Contact: bugtraq
+   Description: Lynx is a text browser for the World Wide Web
+   Vulnerability:
+   lynx has a format string vulnerability in LYUtils.c line 7995 due to a
+   bad call to syslog(), where the format argument is omitted. Risk: Low
+   Version: Lynx compiled from FreeBSD ports collection. Also tested in
+   2.8.5dev.5.gz [larryc@harod ~ $] lynx --version Lynx Version 2.8.4rel.1
+   (17 Jul 2001) Built on freebsd4.4 Dec 25 2001 23:04:31 Details line
+   7995 in LYUtils.c reads: syslog (LOG_INFO|LOG_LOCAL5, buf); The reason
+   this is low priority is the bug can only big triggered if sysloging
+   URL's is enabled. (./configure --enable-syslog)
+   CVE-
+   JSON: Export
+   Exploit Code:
+
+    1. The following url triggers the bug:
+    2.
+    3. [larryc@harod ~ $] lynx
+       http://lwc%d%d:hsVd632k@vapid.dhs.org/bleh:80
+    4.
+    5. Results in the following logged to syslog.
+    6.
+    7. Dec 25 23:11:00 vapid lynx[5160]:
+       http://lwc-1077939384134744128:******@vapid.dhs.org/bleh:80
+    8.
+    9. Fix
+   10. line 7995: --syslog (LOG_INFO|LOG_LOCAL5, buf); +syslog
+       (LOG_INFO|LOG_LOCAL5,"%s", buf);
+   11.
+   12.
+
+   Screen Shots:
+   Advisory:
+   http://www.vapid.dhs.org/advisories/lynx_format_string_vulnerability.ht
+   ml

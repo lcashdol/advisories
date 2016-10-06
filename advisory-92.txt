@@ -1,47 +1,55 @@
-                                Advisory #: 92
-Title: PrimeBase Database Poor File Permissions and Crypt() Hash
-Author:Larry W. Cashdollar, @_larry0
-Date: 2003-10-20
-Download Site: http://www.firebirdsql.org_http://www.ibphoenix.com
-Vendor:Primebase SQL
-Vendor Notified: 2003-10-20
-Vendor Contact: http://www.primebase.de/index.html
-Description: The Firebird(tm) database engine is derived from the InterBase(r)
-product currently owned by Borland. The documentation forInterBase v 6.0
-applies also to the current FireBird release. InterBase documentation is
-available in Adobe Acrobat format from http://info.borland.com/techpubs/
-interbase/." The "information database" stored in the file isc4.gdb is read and
-writeable for all users with the default rpm installation of Firebird-1.0.3 for
-Linux.
-Vulnerability:
-[root@Fester interbase]# ls -l /opt/interbase/isc4.gdb -rw-rw-rw- 1 root root
-618497 Jun 8 14:44 /opt/interbase/isc4.gdb This file contains the password
-hashes and usernames for the firebird database. The passwords are hashed twice,
-once with the static salt "9z" and a second time with the returned crypt text
-minus the salt. crypt(&amp;crypt(user_password,"9z")[2],"9z") The PrimeBase SQL
-Database Server 4.2 stores passwords in clear text, and based on the
-installation users umask settings maybe readable by all local users. From the
-readme.txt file: "The Admin server will require you to enter your password in a
-text file called 'password.adm' (in the server folder), before you can
-continue. NOTE: This is the password for access to the Admin Server only."
-Depending on your umask settings (default 022 for root) the "Admin Server"
-password maybe readable by local users. Also the password is not stored as a
-hash or encrypted. A malicious user could uses this password to access the web
-based administration server and compromise the system. The database also comes
-with a default "Administrator" account with no password, the documentation does
-recommend the installer set the Administrator password during installation.
-Recommendations: Store the password as a hash in a file read-only by the Admin
-Server. Disable the Administrator account until a password has been set for it.
-This is still a problem for the symlink attack during installation for the
-primebase products. See previous link above for more detal. They just changed
-the format of the filename to something just as trivial as a static filename.
-Not going to bother reporting or posting this. LOG="/tmp/PrimeBase_"`date
-'+%y%m%d%H%M'`".log" Just as easy to ln -s /tmp/PrimeBase_$date.log to /etc/
-shadow.
-CVE-
-JSON:Export
-Exploit Code:
-   1.  
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/
-primebase_sql_database_stored_cleartext_password.html
+
+                               Advisory #: 92
+
+   Title: PrimeBase Database Poor File Permissions and Crypt() Hash
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2003-10-20
+   Download Site: http://www.firebirdsql.org http://www.ibphoenix.com
+   Vendor: Primebase SQL
+   Vendor Notified: 2003-10-20
+   Vendor Contact: http://www.primebase.de/index.html
+   Description: The Firebird(tm) database engine is derived from the
+   InterBase(r) product currently owned by Borland. The documentation
+   forInterBase v 6.0 applies also to the current FireBird release.
+   InterBase documentation is available in Adobe Acrobat format from
+   http://info.borland.com/techpubs/interbase/." The "information
+   database" stored in the file isc4.gdb is read and writeable for all
+   users with the default rpm installation of Firebird-1.0.3 for Linux.
+   Vulnerability:
+   [root@Fester interbase]# ls -l /opt/interbase/isc4.gdb -rw-rw-rw- 1
+   root root 618497 Jun 8 14:44 /opt/interbase/isc4.gdb This file contains
+   the password hashes and usernames for the firebird database. The
+   passwords are hashed twice, once with the static salt "9z" and a second
+   time with the returned crypt text minus the salt.
+   crypt(&amp;crypt(user_password,"9z")[2],"9z") The PrimeBase SQL
+   Database Server 4.2 stores passwords in clear text, and based on the
+   installation users umask settings maybe readable by all local users.
+   From the readme.txt file: "The Admin server will require you to enter
+   your password in a text file called 'password.adm' (in the server
+   folder), before you can continue. NOTE: This is the password for access
+   to the Admin Server only." Depending on your umask settings (default
+   022 for root) the "Admin Server" password maybe readable by local
+   users. Also the password is not stored as a hash or encrypted. A
+   malicious user could uses this password to access the web based
+   administration server and compromise the system. The database also
+   comes with a default "Administrator" account with no password, the
+   documentation does recommend the installer set the Administrator
+   password during installation. Recommendations: Store the password as a
+   hash in a file read-only by the Admin Server. Disable the Administrator
+   account until a password has been set for it. This is still a problem
+   for the symlink attack during installation for the primebase products.
+   See previous link above for more detal. They just changed the format of
+   the filename to something just as trivial as a static filename. Not
+   going to bother reporting or posting this. LOG="/tmp/PrimeBase_"`date
+   '+%y%m%d%H%M'`".log" Just as easy to ln -s /tmp/PrimeBase_$date.log to
+   /etc/shadow.
+   CVE-
+   JSON: Export
+   Exploit Code:
+
+    1.
+
+   Screen Shots:
+   Advisory:
+   http://www.vapid.dhs.org/advisories/primebase_sql_database_stored_clear
+   text_password.html

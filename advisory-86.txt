@@ -1,25 +1,32 @@
-                                Advisory #: 86
-Title: Paratrooper-newrelic 1.0.1 Ruby Gem exposes API key
-Author:Larry W. Cashdollar, @_larry0
-Date: 2014-01-08
-Download Site: http://rubygems.org/gems/paratrooper-newrelic
-Vendor:Brandon Farmer, Matt Polito
-Vendor Notified: 2014-01-08
-Vendor Contact: matt.polito@gmail.com
-Description: Send deploy notifications to Newrelic service when deploying with
-Paratrooper.
-Vulnerability:
-From paratrooper-newrelic-1.0.1/lib/paratrooper-newrelic.rb: lines 25 and 29
-expose the API key to the command line where a malicious user can monitor the
-process tree and steal the login credentials. 24 def setup(options = {}) 25 %x
-[curl https://heroku.newrelic.com/accounts/#{account_id}/applications/#
-{application_id}/ping_targets/disable -X POST -H "X-Api-Key: {api_key} "] 26
-end 27 28 def teardown(options = {}) 29 %x[curl https://heroku.newrelic.com/
-accounts/#{account_id}/applications/#{application_id}/ping_targets/enable -
-X POST -H "X-Api-Key: #{api_key}" ] 30 end
-CVE-2014-1234
-JSON:Export
-Exploit Code:
-   1.  
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/paratrooper-newrelic-api.html
+
+                               Advisory #: 86
+
+   Title: Paratrooper-newrelic 1.0.1 Ruby Gem exposes API key
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2014-01-08
+   Download Site: http://rubygems.org/gems/paratrooper-newrelic
+   Vendor: Brandon Farmer, Matt Polito
+   Vendor Notified: 2014-01-08
+   Vendor Contact: matt.polito@gmail.com
+   Description: Send deploy notifications to Newrelic service when
+   deploying with Paratrooper.
+   Vulnerability:
+   From paratrooper-newrelic-1.0.1/lib/paratrooper-newrelic.rb: lines 25
+   and 29 expose the API key to the command line where a malicious user
+   can monitor the process tree and steal the login credentials. 24 def
+   setup(options = {}) 25 %x[curl
+   https://heroku.newrelic.com/accounts/#{account_id}/applications/#{appli
+   cation_id}/ping_targets/disable -X POST -H "X-Api-Key: {api_key} "] 26
+   end 27 28 def teardown(options = {}) 29 %x[curl
+   https://heroku.newrelic.com/accounts/#{account_id}/applications/#{appli
+   cation_id}/ping_targets/enable -X POST -H "X-Api-Key: #{api_key}" ] 30
+   end
+   CVE-2014-1234
+   JSON: Export
+   Exploit Code:
+
+    1.
+
+   Screen Shots:
+   Advisory:
+   http://www.vapid.dhs.org/advisories/paratrooper-newrelic-api.html

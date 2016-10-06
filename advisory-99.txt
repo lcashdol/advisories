@@ -1,25 +1,32 @@
-                                Advisory #: 99
-Title: Remote command injection in Screen Capture v0.0.0
-Author:Larry W. Cashdollar, @_larry0
-Date: 2014-06-07
-Download Site: https://rubygems.org/gems/screen_capture
-Vendor:Jason Amster
-Vendor Notified: 2014-06-07
-Vendor Contact: jayamster@gmail.com
-Description: Captures screenshots of web pages.
-Vulnerability:
-This gem used via command line could have commands injected via the un-
-sanitized variables being passed to command line. if this gem is used in the
-context of a rails application a malicious user could inject commands by
-specially crafted input. from screen_capture/blob/master/lib/screen_capture.rb:
-1 class ScreenCapture 2 def self.capture(url, file, width=1024, height=800) 3
-script = RUBY_PLATFORM =~ /darwin/ ? 'phantomjs' : 'phantomx11' 4 command = "#
-{script} #{File.expand_path(File.dirname(__FILE__)+'/..')}/src/
-screen_capture.js #{url} #{file} #{width} #{height}" 5 puts "Executing:
-{command}" 6 value = `{command}` 7 puts "Command: #{value}" 8 end 9 end
-CVE-
-JSON:Export
-Exploit Code:
-   1.  
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/screen_capture_cmd_inj.html
+
+                               Advisory #: 99
+
+   Title: Remote command injection in Screen Capture v0.0.0
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2014-06-07
+   Download Site: https://rubygems.org/gems/screen_capture
+   Vendor: Jason Amster
+   Vendor Notified: 2014-06-07
+   Vendor Contact: jayamster@gmail.com
+   Description: Captures screenshots of web pages.
+   Vulnerability:
+   This gem used via command line could have commands injected via the
+   un-sanitized variables being passed to command line. if this gem is
+   used in the context of a rails application a malicious user could
+   inject commands by specially crafted input. from
+   screen_capture/blob/master/lib/screen_capture.rb: 1 class ScreenCapture
+   2 def self.capture(url, file, width=1024, height=800) 3 script =
+   RUBY_PLATFORM =~ /darwin/ ? 'phantomjs' : 'phantomx11' 4 command =
+   "#{script}
+   #{File.expand_path(File.dirname(__FILE__)+'/..')}/src/screen_capture.js
+   #{url} #{file} #{width} #{height}" 5 puts "Executing: {command}" 6
+   value = `{command}` 7 puts "Command: #{value}" 8 end 9 end
+   CVE-
+   JSON: Export
+   Exploit Code:
+
+    1.
+
+   Screen Shots:
+   Advisory:
+   http://www.vapid.dhs.org/advisories/screen_capture_cmd_inj.html

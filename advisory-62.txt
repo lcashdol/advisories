@@ -1,36 +1,45 @@
-                                Advisory #: 62
-Title: Report for Ruby Gem kajam-1.0.3.rc2
-Author:Larry W. Cashdollar, @_larry0
-Date: 2014-06-01
-Download Site: http://rubygems.org/gems/kajam
-Vendor:The ResetTech Dev Team
-Vendor Notified: 2014-06-25
-Vendor Contact: scienceblock@gmail.com
-Description: Lightweight content management system for middle and small teams.
-Vulnerability:
-From: ./kajam-1.0.3.rc2/vendor/plugins/dataset/lib/dataset/database/mysql.rb
-Lines 18 and 24 expose the mysql user password to the process table via #
-{@password}. If this Gem is used in the context of a rails application it maybe
-possible to inject commands via user supplied input as these variables are not
-sanitized before being passed to the shell. 015- 16- def capture(datasets) 17-
-return if datasets.nil? || datasets.empty? 18: `mysqldump -u {@username} --
-password={@password} --compact --extended-insert --no-create-db --add-drop-
-table --quick --quote-names #{@database} > #{storage_path(datasets)}` 19- end
-20- 21- def restore(datasets) 22- store = storage_path(datasets) 23- if
-File.file?(store) 24: `mysql -u {@username} --password={@password} --database=#
-{@database} < #{store}` 25- true 26- end 27- end From: ./kajam-1.0.3.rc2/
-vendor/plugins/dataset/lib/dataset/database/postgresql.rb Lines 18 and 24
-expose the postqresql user password to the process table via #{@password}. If
-this Gem is used in the context of a rails application it maybe possible to
-inject commands via user supplied input as these variables are not sanitized
-before being passed to the shell. 015- 16- def capture(datasets) 17- return if
-datasets.nil? || datasets.empty? 18: `pg_dump -c #{@database} > #{storage_path
-(datasets)}` 19- end 20- 21- def restore(datasets) 22- store = storage_path
-(datasets) 23- if File.file?(store) 24: `psql -U #{@username} -p #{@password} -
-e #{@database} < #{store}` 25- true 26- end 27- end
-CVE-2014-4999
-JSON:Export
-Exploit Code:
-   1.  
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/kajam-1.0.3.rc2.html
+
+                               Advisory #: 62
+
+   Title: Report for Ruby Gem kajam-1.0.3.rc2
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2014-06-01
+   Download Site: http://rubygems.org/gems/kajam
+   Vendor: The ResetTech Dev Team
+   Vendor Notified: 2014-06-25
+   Vendor Contact: scienceblock@gmail.com
+   Description: Lightweight content management system for middle and small
+   teams.
+   Vulnerability:
+   From:
+   ./kajam-1.0.3.rc2/vendor/plugins/dataset/lib/dataset/database/mysql.rb
+   Lines 18 and 24 expose the mysql user password to the process table via
+   #{@password}. If this Gem is used in the context of a rails application
+   it maybe possible to inject commands via user supplied input as these
+   variables are not sanitized before being passed to the shell. 015- 16-
+   def capture(datasets) 17- return if datasets.nil? || datasets.empty?
+   18: `mysqldump -u {@username} --password={@password} --compact
+   --extended-insert --no-create-db --add-drop-table --quick --quote-names
+   #{@database} > #{storage_path(datasets)}` 19- end 20- 21- def
+   restore(datasets) 22- store = storage_path(datasets) 23- if
+   File.file?(store) 24: `mysql -u {@username} --password={@password}
+   --database=#{@database} < #{store}` 25- true 26- end 27- end From:
+   ./kajam-1.0.3.rc2/vendor/plugins/dataset/lib/dataset/database/postgresq
+   l.rb Lines 18 and 24 expose the postqresql user password to the process
+   table via #{@password}. If this Gem is used in the context of a rails
+   application it maybe possible to inject commands via user supplied
+   input as these variables are not sanitized before being passed to the
+   shell. 015- 16- def capture(datasets) 17- return if datasets.nil? ||
+   datasets.empty? 18: `pg_dump -c #{@database} >
+   #{storage_path(datasets)}` 19- end 20- 21- def restore(datasets) 22-
+   store = storage_path(datasets) 23- if File.file?(store) 24: `psql -U
+   #{@username} -p #{@password} -e #{@database} < #{store}` 25- true 26-
+   end 27- end
+   CVE-2014-4999
+   JSON: Export
+   Exploit Code:
+
+    1.
+
+   Screen Shots:
+   Advisory: http://www.vapid.dhs.org/advisories/kajam-1.0.3.rc2.html

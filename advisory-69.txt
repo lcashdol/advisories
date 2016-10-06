@@ -1,23 +1,27 @@
-                                Advisory #: 69
-Title: Remote command execution ldoce 0.0.2
-Author:Larry W. Cashdollar, @_larry0
-Date: 2013-03-28
-Download Site: https://github.com/markburns/ldoce
-Vendor:https://github.com/markburns
-Vendor Notified: 2013-03-28
-Vendor Contact: https://github.com/markburns
-Description: Easily interface with the Longman Dictionary of Contemporary
-English API from Ruby
-Vulnerability:
-Ldoce passes an mp3 url to commandline for audio output of the pronunciation of
-a dictonary word: If the URL or filename for the mp3 files contain shell
-metacharacters code can be executed remotely as the client: [./ldoce-0.0.2/lib/
-ldoce/word.rb] if mp3? unless File.exists? filename command = &quot;curl #
-{mp3_url} -silent &gt; {filename}&quot; `{command}` end `afplay #{filename}`
-end
-CVE-2013-1911
-JSON:Export
-Exploit Code:
-   1.  
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/ldoce-0.0.2-cmd-exec.html
+
+                               Advisory #: 69
+
+   Title: Remote command execution ldoce 0.0.2
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2013-03-28
+   Download Site: https://github.com/markburns/ldoce
+   Vendor: https://github.com/markburns
+   Vendor Notified: 2013-03-28
+   Vendor Contact: https://github.com/markburns
+   Description: Easily interface with the Longman Dictionary of
+   Contemporary English API from Ruby
+   Vulnerability:
+   Ldoce passes an mp3 url to commandline for audio output of the
+   pronunciation of a dictonary word: If the URL or filename for the mp3
+   files contain shell metacharacters code can be executed remotely as the
+   client: [./ldoce-0.0.2/lib/ldoce/word.rb] if mp3? unless File.exists?
+   filename command = &quot;curl #{mp3_url} -silent &gt; {filename}&quot;
+   `{command}` end `afplay #{filename}` end
+   CVE-2013-1911
+   JSON: Export
+   Exploit Code:
+
+    1.
+
+   Screen Shots:
+   Advisory: http://www.vapid.dhs.org/advisories/ldoce-0.0.2-cmd-exec.html

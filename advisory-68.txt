@@ -1,24 +1,28 @@
-                                Advisory #: 68
-Title: Vulnerability Report for Ruby Gem lawn-login-0.0.7
-Author:Larry W. Cashdollar, @_larry0
-Date: 2014-06-01
-Download Site: http://rubygems.org/gems/lawn-login
-Vendor:Mike Skalnik
-Vendor Notified: 2014-06-25
-Vendor Contact: mike.skalnik@gmail.com
-Description: A small gem which provides a secure method of logging into the
-GATech LAWN network.
-Vulnerability:
-From: ./lawn-login-0.0.7/lib/lawn.rb Line 24 exposes the password to the
-process table via the #{password} variable. If this Gem is used in the context
-of a rails application it maybe possible to inject commands remotely into the
-shell as these variables are not sanitized. 021- end 22- 23- def login
-(username, password) 24: `curl -s -f -F username=\{username}\ -F password=\
-{password}\ -F iss=\false\ -F output=\binary\ https://auth.lawn.gatech.edu/
-index.php` 25- end 26-end
-CVE-2014-5000
-JSON:Export
-Exploit Code:
-   1.  
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/lawn-login-0.0.7.html
+
+                               Advisory #: 68
+
+   Title: Vulnerability Report for Ruby Gem lawn-login-0.0.7
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2014-06-01
+   Download Site: http://rubygems.org/gems/lawn-login
+   Vendor: Mike Skalnik
+   Vendor Notified: 2014-06-25
+   Vendor Contact: mike.skalnik@gmail.com
+   Description: A small gem which provides a secure method of logging into
+   the GATech LAWN network.
+   Vulnerability:
+   From: ./lawn-login-0.0.7/lib/lawn.rb Line 24 exposes the password to
+   the process table via the #{password} variable. If this Gem is used in
+   the context of a rails application it maybe possible to inject commands
+   remotely into the shell as these variables are not sanitized. 021- end
+   22- 23- def login(username, password) 24: `curl -s -f -F
+   username=\{username}\ -F password=\{password}\ -F iss=\false\ -F
+   output=\binary\ https://auth.lawn.gatech.edu/index.php` 25- end 26-end
+   CVE-2014-5000
+   JSON: Export
+   Exploit Code:
+
+    1.
+
+   Screen Shots:
+   Advisory: http://www.vapid.dhs.org/advisories/lawn-login-0.0.7.html

@@ -1,29 +1,35 @@
-                                Advisory #: 103
-Title: Command Injection in Ruby Gem Sprout 0.7.246
-Author:Larry W. Cashdollar, @_larry0
-Date: 2013-11-10
-Download Site: http://rubygems.org/gems/sprout_http://http://
-projectsprouts.org/
-Vendor:Luke Bayes
-Vendor Notified: 2013-11-10
-Vendor Contact: lbayes@patternpark.com
-Description: Sprout is a modular set of tools that take the tedium and
-frustration out of creating and managing programming projects by automatically
-installing and configuring external tools, libraries, commands and build tasks.
-Bundles are currently available to support ActionScript 2, ActionScript 3, Flex
-and AIR development.
-Vulnerability:
-The unpack_zip() function contains the following code: sprout-0.7.246/lib/
-sprout/archive_unpacker.rb 60 zip_dir = File.expand_path(File.dirname
-(zip_file)) 61 zip_name = File.basename(zip_file) 62 output = File.expand_path
-(dir) 63 # puts ">> zip_dir: #{zip_dir} zip_name: #{zip_name} output: #{output}
-" 64 %x(cd #{zip_dir};unzip #{zip_name} -d #{output}) If the attacker can
-control zip_dir, zip_name or output then they can possibly execute shell
-commands by injecting shell meta characters as input. For example:
-filename;id;.zip
-CVE-2013-6421
-JSON:Export
-Exploit Code:
-   1.  
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/sprout-0.7.246-command-inj.html
+
+                               Advisory #: 103
+
+   Title: Command Injection in Ruby Gem Sprout 0.7.246
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2013-11-10
+   Download Site: http://rubygems.org/gems/sprout
+   http://http://projectsprouts.org/
+   Vendor: Luke Bayes
+   Vendor Notified: 2013-11-10
+   Vendor Contact: lbayes@patternpark.com
+   Description: Sprout is a modular set of tools that take the tedium and
+   frustration out of creating and managing programming projects by
+   automatically installing and configuring external tools, libraries,
+   commands and build tasks. Bundles are currently available to support
+   ActionScript 2, ActionScript 3, Flex and AIR development.
+   Vulnerability:
+   The unpack_zip() function contains the following code:
+   sprout-0.7.246/lib/sprout/archive_unpacker.rb 60 zip_dir =
+   File.expand_path(File.dirname(zip_file)) 61 zip_name =
+   File.basename(zip_file) 62 output = File.expand_path(dir) 63 # puts ">>
+   zip_dir: #{zip_dir} zip_name: #{zip_name} output: #{output} " 64 %x(cd
+   #{zip_dir};unzip #{zip_name} -d #{output}) If the attacker can control
+   zip_dir, zip_name or output then they can possibly execute shell
+   commands by injecting shell meta characters as input. For example:
+   filename;id;.zip
+   CVE-2013-6421
+   JSON: Export
+   Exploit Code:
+
+    1.
+
+   Screen Shots:
+   Advisory:
+   http://www.vapid.dhs.org/advisories/sprout-0.7.246-command-inj.html

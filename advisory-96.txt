@@ -1,20 +1,24 @@
-                                Advisory #: 96
- Title: Rooted SSH/SFTP Daemon Default Login Credentials
- Author:Larry W. Cashdollar, @_larry0
- Date: 2014-09-02
- Download Site: https://play.google.com/store/apps/
- details?id=web.oss.sshsftpDaemon
- Vendor:open.software.solutions[4t]gmail.com
- Vendor Notified: 2014-09-03
- Vendor Contact: open.software.solutions[4t]gmail.com
- Description: This app is a SSH terminal server AND an SFTP file server.
- Vulnerability:
- The software comes preconfigured with a default login of User: root Password:
- abc123. This weak password would easily be guessed leading to root compromise
- of the android system
- CVE-
- JSON:Export
- Exploit Code:
-    1.  
- Screen Shots:
- Advisory: http://www.vapid.dhs.org/advisories/rooted-sshd-android.html
+
+                               Advisory #: 96
+
+   Title: Rooted SSH/SFTP Daemon Default Login Credentials
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2014-09-02
+   Download Site:
+   https://play.google.com/store/apps/details?id=web.oss.sshsftpDaemon
+   Vendor: open.software.solutions[4t]gmail.com
+   Vendor Notified: 2014-09-03
+   Vendor Contact: open.software.solutions[4t]gmail.com
+   Description: This app is a SSH terminal server AND an SFTP file server.
+   Vulnerability:
+   The software comes preconfigured with a default login of User: root
+   Password: abc123. This weak password would easily be guessed leading to
+   root compromise of the android system
+   CVE-
+   JSON: Export
+   Exploit Code:
+
+    1.
+
+   Screen Shots:
+   Advisory: http://www.vapid.dhs.org/advisories/rooted-sshd-android.html

@@ -1,27 +1,35 @@
-                                Advisory #: 21
-Title: Ruby Gem backup_checksum-3.0.23 exposes password to the process table
-Author:Larry W. Cashdollar, @_larry0
-Date: 2014-06-01
-Download Site: http://rubygems.org/gems/backup_checksum
-Vendor:Lukasz Kaniowski
-Vendor Notified: 2014-06-25
-Vendor Contact: lukasz.kaniowski[at]gmail.com
-Description: It is a clone of http://rubygems.org/gems/backup with checksum
-added.
-Vulnerability:
-From: ./backup_checksum-3.0.23/lib/backup/cli/utility.rb Lines 178 exposes the
-password to the process table, their is also remote command injection points if
-this gem is used in the context of a rails application as the user input isn't
-properly sanitized for #{password}. 0175- base64 = options[:base64] ? -base64 :
-176- password = options[:password_file] ? "-pass file:#{options[:
-password_file]}" : 177- salt = options[:salt] ? -salt : 178: %x[openssl aes-
-256-cbc -d #{base64} #{password} #{salt} -in #{options[:in]} -out #{options[:
-out]}] 179- when gpg 180: %x[gpg -o #{options[:out]} -d #{options[:in]}] 181-
-else 182- puts "Unknown encryptor: #{options[:encryptor]}" 183- puts "Use
-either openssl or gpg." -- 220- puts "Please wait..\n\n" 222- end 223- end 224-
-CVE-2014-4993
-JSON:Export
-Exploit Code:
-   1.  
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/backup_checksum-3.0.23.html
+
+                               Advisory #: 21
+
+   Title: Ruby Gem backup_checksum-3.0.23 exposes password to the process
+   table
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2014-06-01
+   Download Site: http://rubygems.org/gems/backup_checksum
+   Vendor: Lukasz Kaniowski
+   Vendor Notified: 2014-06-25
+   Vendor Contact: lukasz.kaniowski[at]gmail.com
+   Description: It is a clone of http://rubygems.org/gems/backup with
+   checksum added.
+   Vulnerability:
+   From: ./backup_checksum-3.0.23/lib/backup/cli/utility.rb Lines 178
+   exposes the password to the process table, their is also remote command
+   injection points if this gem is used in the context of a rails
+   application as the user input isn't properly sanitized for #{password}.
+   0175- base64 = options[:base64] ? -base64 : 176- password =
+   options[:password_file] ? "-pass file:#{options[:password_file]}" :
+   177- salt = options[:salt] ? -salt : 178: %x[openssl aes-256-cbc -d
+   #{base64} #{password} #{salt} -in #{options[:in]} -out
+   #{options[:out]}] 179- when gpg 180: %x[gpg -o #{options[:out]} -d
+   #{options[:in]}] 181- else 182- puts "Unknown encryptor:
+   #{options[:encryptor]}" 183- puts "Use either openssl or gpg." -- 220-
+   puts "Please wait..\n\n" 222- end 223- end 224-
+   CVE-2014-4993
+   JSON: Export
+   Exploit Code:
+
+    1.
+
+   Screen Shots:
+   Advisory:
+   http://www.vapid.dhs.org/advisories/backup_checksum-3.0.23.html

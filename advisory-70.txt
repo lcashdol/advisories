@@ -1,27 +1,32 @@
-                                Advisory #: 70
-Title: Vulnerability Report for Ruby Gem lean-ruport-0.3.8
-Author:Larry W. Cashdollar, @_larry0
-Date: 2014-06-01
-Download Site: http://rubygems.org/gems/lean-ruport
-Vendor:james[at]yob.id.au
-Vendor Notified: 2014-06-25
-Vendor Contact: https://rubygems.org/gems/lean-ruport
-Description: Ruport is a powerful report generation engine that allows users to
-generate custom ERb templates and easily query various forms of SQL databases
-via DBI. It provides helper methods and utilities to generate professional
-reports quickly and cleanly.
-Vulnerability:
-From: ./lean-ruport-0.3.8/test/tc_database.rb Line 21 exposes the mysql
-password to the process table, if this Gem is used in the context of a rails
-application it might be possible to inject commands via the #{ user } and #
-{ password } variables if those are supplied by the user as they are not
-sanitized before being passed to the shell. 018- tmp_sql = /tmp/compare.sql 19-
-md_command = 20- "mysqldump -u{ user } -p{ password } --databases
-stonecodeblog" 21: `#{ md_command } > #{ tmp_sql }` 22: diff = `diff #
-{ orig_sql } #{ tmp_sql }` 23- assert( diff == , diff[0..500] ) 24- end 25-end
-CVE-2014-4998
-JSON:Export
-Exploit Code:
-   1.  
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/lean-ruport-0.3.8.html
+
+                               Advisory #: 70
+
+   Title: Vulnerability Report for Ruby Gem lean-ruport-0.3.8
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2014-06-01
+   Download Site: http://rubygems.org/gems/lean-ruport
+   Vendor: james[at]yob.id.au
+   Vendor Notified: 2014-06-25
+   Vendor Contact: https://rubygems.org/gems/lean-ruport
+   Description: Ruport is a powerful report generation engine that allows
+   users to generate custom ERb templates and easily query various forms
+   of SQL databases via DBI. It provides helper methods and utilities to
+   generate professional reports quickly and cleanly.
+   Vulnerability:
+   From: ./lean-ruport-0.3.8/test/tc_database.rb Line 21 exposes the mysql
+   password to the process table, if this Gem is used in the context of a
+   rails application it might be possible to inject commands via the #{
+   user } and #{ password } variables if those are supplied by the user as
+   they are not sanitized before being passed to the shell. 018- tmp_sql =
+   /tmp/compare.sql 19- md_command = 20- "mysqldump -u{ user } -p{
+   password } --databases stonecodeblog" 21: `#{ md_command } > #{ tmp_sql
+   }` 22: diff = `diff #{ orig_sql } #{ tmp_sql }` 23- assert( diff == ,
+   diff[0..500] ) 24- end 25-end
+   CVE-2014-4998
+   JSON: Export
+   Exploit Code:
+
+    1.
+
+   Screen Shots:
+   Advisory: http://www.vapid.dhs.org/advisories/lean-ruport-0.3.8.html

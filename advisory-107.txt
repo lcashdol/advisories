@@ -1,22 +1,28 @@
+
                                Advisory #: 107
-Title: Thumbshooter 0.1.5 remote code execution
-Author:Larry W. Cashdollar, @_larry0
-Date: 2013-03-25
-Download Site: https://github.com/digineo/thumbshooter
-Vendor:http://www.digineo.de/
-Vendor Notified: 2013-03-25
-Vendor Contact: http://www.digineo.de/
-Description: Generates thumbshots of URLs by using Webkit and QT4.
-Vulnerability:
-Specially crafted URLs can result in remote code execution if the URL contains
-shell metacharacters. We see that the url is passed directly to the shell in
-the following code snippet from ./thumbshooter-0.1.5/lib/thumbshooter.rb: 1012
-command << "xvfb-run -a --server-args='-screen 0, #{screen}x24' " 1015 command
-<< "{WEBKIT2PNG} '{url}' {args}" 1016 1017 img = `{command} 2>&1`
-CVE-2013-1898
-JSON:Export
-Exploit Code:
-   1.  
-Screen Shots:
-Advisory: http://www.vapid.dhs.org/advisories/thumbshooter-ruby-gem-
-remoteexec.html
+
+   Title: Thumbshooter 0.1.5 remote code execution
+   Author: Larry W. Cashdollar, @_larry0
+   Date: 2013-03-25
+   Download Site: https://github.com/digineo/thumbshooter
+   Vendor: http://www.digineo.de/
+   Vendor Notified: 2013-03-25
+   Vendor Contact: http://www.digineo.de/
+   Description: Generates thumbshots of URLs by using Webkit and QT4.
+   Vulnerability:
+   Specially crafted URLs can result in remote code execution if the URL
+   contains shell metacharacters. We see that the url is passed directly
+   to the shell in the following code snippet from
+   ./thumbshooter-0.1.5/lib/thumbshooter.rb: 1012 command << "xvfb-run -a
+   --server-args='-screen 0, #{screen}x24' " 1015 command << "{WEBKIT2PNG}
+   '{url}' {args}" 1016 1017 img = `{command} 2>&1`
+   CVE-2013-1898
+   JSON: Export
+   Exploit Code:
+
+    1.
+
+   Screen Shots:
+   Advisory:
+   http://www.vapid.dhs.org/advisories/thumbshooter-ruby-gem-remoteexec.ht
+   ml
